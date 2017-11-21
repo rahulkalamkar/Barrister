@@ -24,8 +24,27 @@
     <string name="terms_of_use">Terms of use</string>
     <string name="privacy_policy">Privacy Policy</string>
 
+    <string name="no_account">No account? Create new!</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password_title">Forgot Password</string>
+
+    <string name="menu_profile">Profile</string>
+    <string name="menu_love_app">Love Zpp</string>
+    <string name="menu_important_link">Important Link</string>
+    <string name="menu_log_out">Logout</string>
+    <string name="menu_change_password">Change Password</string>
+    <string name="menu_contact_us">Contact Us</string>
+
+    <string name="enter_email_id">Enter your register email id to get password</string>
+    <string name="get_password">Get Password</string>
     <string name="tab1">Today\'s</string>
     <string name="tab2">Cases</string>
     <string name="tab3">Courts</string>
     <string name="tab4">Clients</string>
+    <string name="title_activity_home_screen_left_drawer">HomeScreenLeftDrawer</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
