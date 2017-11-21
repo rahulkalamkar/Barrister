@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Barrister</string>
+    <string name="title_activity_home_screen">HomeScreen</string>
+
+    <string name="logo">B</string>
+    <string name="app_title_bold">BARRISTER</string>
+    <string name="your_online_diary">YOUR ONLINE DIARY</string>
+    <string name="your_online_diary_small">Your online diary</string>
+
+    <string name="create_account">Create Account</string>
+    <string name="sign_in">Sign in</string>
+    <string name="log_in">Log in</string>
+
+    <string name="hint_number">Phone number</string>
+    <string name="hint_email_id">Email id</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_first_name">First name</string>
+    <string name="hint_last_name">Last name</string>
+    <string name="hint_referral_code">Referral code</string>
+    <string name="create">Create</string>
+
+    <string name="company_name">Singulars soft</string>
+    <string name="terms_and_condition_acceptance">Choosing register means you are agree to terms of use and privacy policy of Singulars soft service</string>
+    <string name="terms_of_use">Terms of use</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
+    <string name="tab1">Today\'s</string>
+    <string name="tab2">Cases</string>
+    <string name="tab3">Courts</string>
+    <string name="tab4">Clients</string>
+</resources>

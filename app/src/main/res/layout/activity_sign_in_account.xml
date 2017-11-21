@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/fab_margin"
+    tools:context="com.singular.barrister.SignInAccount">
+
+    <EditText
+        android:id="@+id/editTextPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="@string/hint_number"
+        android:inputType="phone"
+        android:maxLines="1"
+        android:singleLine="true" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextPhoneNumber"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:singleLine="true" />
+
+    <Button
+        android:id="@+id/textViewRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/circular_corner_button"
+        android:paddingBottom="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="10dp"
+        android:text="@string/log_in"
+        android:textColor="#ffffff" />
+
+</RelativeLayout>
