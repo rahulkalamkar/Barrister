@@ -29,8 +29,11 @@
         <activity
             android:name=".CreateAccount"
             android:theme="@style/AppTheme" />
-        <activity android:name=".SignInAccount"
-            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".SignInAccount"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ForgotPassword" />
+        <activity android:name=".PrivacyPolicy" />
     </application>
 
 </manifest>

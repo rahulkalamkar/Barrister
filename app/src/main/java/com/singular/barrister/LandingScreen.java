@@ -9,7 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class LandingScreen extends AppCompatActivity implements View.OnClickListener {
-    private Button createAccountButton;
+    private Button createAccountButton,signInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,18 +17,27 @@ public class LandingScreen extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_landing_screen);
 
         createAccountButton = (Button) findViewById(R.id.button_create_account);
-        createAccountButton.setOnClickListener(this);
-    }
+        signInButton=(Button)findViewById(R.id.button_sign_in);
 
-    private void goToRegisterScreen() {
-        Intent intent = new Intent(LandingScreen.this, CreateAccount.class);
-        startActivity(intent);
+        signInButton.setOnClickListener(this);
+        createAccountButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.button_create_account) {
-            goToRegisterScreen();
+
+        switch (view.getId())
+        {
+            case R.id.button_create_account :
+                Intent intent = new Intent(LandingScreen.this, CreateAccount.class);
+                startActivity(intent);
+                break;
+
+            case R.id.button_sign_in :
+                Intent  intent1=new Intent(LandingScreen.this,SignInAccount.class);
+                startActivity(intent1);
+                break;
         }
+
     }
 }

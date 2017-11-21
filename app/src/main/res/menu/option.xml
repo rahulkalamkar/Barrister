@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
     <item
-        android:id="@+id/profile"
-        android:title="Profile"/>
+        android:id="@+id/menuProfile"
+        android:title="@string/menu_profile"
+        android:icon="@mipmap/ic_profile"/>
     <item
-        android:id="@+id/invitefriends"
-        android:title="Invite Friends"/>
+        android:id="@+id/menuChangePassword"
+        android:title="@string/menu_change_password"
+        android:icon="@mipmap/ic_profile"/>
 
     <item
-        android:id="@+id/aboutus"
-        android:title="Invite Friends"/>
+        android:id="@+id/menuImportantWebSite"
+        android:title="@string/menu_important_link"
+        android:icon="@mipmap/ic_profile"/>
+    <item
+        android:id="@+id/menuLoveApp"
+        android:title="@string/menu_love_app"
+        android:icon="@mipmap/ic_profile"/>
+    <item
+        android:id="@+id/menuContactUs"
+        android:title="@string/menu_contact_us"
+        android:icon="@mipmap/ic_profile"/>
 
     <item
-        android:id="@+id/logout"
-        android:title="Invite Friends"/>
+        android:id="@+id/menuLogout"
+        android:title="@string/menu_log_out"
+        android:icon="@mipmap/ic_profile"/>
 
 </menu>
