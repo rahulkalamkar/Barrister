@@ -1,32 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menuProfile"
-        android:title="@string/menu_profile"
-        android:icon="@mipmap/ic_profile"/>
+        android:title="@string/menu_profile" />
     <item
         android:id="@+id/menuChangePassword"
-        android:title="@string/menu_change_password"
-        android:icon="@mipmap/ic_profile"/>
+        android:title="@string/menu_change_password" />
 
     <item
         android:id="@+id/menuImportantWebSite"
-        android:title="@string/menu_important_link"
-        android:icon="@mipmap/ic_profile"/>
+        android:title="@string/menu_important_link" />
     <item
         android:id="@+id/menuLoveApp"
-        android:title="@string/menu_love_app"
-        android:icon="@mipmap/ic_profile"/>
+        android:title="@string/menu_love_app" />
     <item
         android:id="@+id/menuContactUs"
-        android:title="@string/menu_contact_us"
-        android:icon="@mipmap/ic_profile"/>
+        android:title="@string/menu_contact_us" />
 
     <item
         android:id="@+id/menuLogout"
         android:title="@string/menu_log_out"
-        android:icon="@mipmap/ic_profile"/>
+        />
 
 </menu>

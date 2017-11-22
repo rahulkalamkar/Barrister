@@ -34,6 +34,8 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".ForgotPassword" />
         <activity android:name=".PrivacyPolicy" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".ContactUsActivity"></activity>
     </application>
 
 </manifest>

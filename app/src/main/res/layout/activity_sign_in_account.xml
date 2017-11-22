@@ -44,49 +44,51 @@
         android:paddingRight="30dp"
         android:paddingTop="10dp"
         android:text="@string/log_in"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textViewNoAccountCreateNew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_account"
+        android:layout_below="@+id/editTextPassword"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textViewLogin"
         android:layout_marginTop="@dimen/fab_margin"
+        android:text="@string/no_account"
         android:textColor="#000000"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textViewForgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/forgot_password"
+        android:layout_below="@+id/editTextPassword"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textViewNoAccountCreateNew"
         android:layout_marginTop="@dimen/fab_margin"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:textSize="16sp"/>
+        android:text="@string/forgot_password"
+        android:textColor="@color/textColorLightTitle"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewPrivacyPolicy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/privacy_policy"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/textViewForgotPassword"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/fab_margin"
+        android:text="@string/privacy_policy"
         android:textColor="#000000"
-        android:textSize="14sp"/>
+        android:textSize="14sp"
+        android:visibility="gone" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/company_name"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textViewPrivacyPolicy"
-        android:layout_marginTop="10dp"
+        android:text="@string/company_name"
         android:textColor="#000000"
-        android:textSize="12sp"/>
+        android:textSize="12sp" />
 </RelativeLayout>

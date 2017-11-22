@@ -1,28 +1,27 @@
 package com.singular.barrister;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class ForgotPassword extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity {
+    private MenuItem btnEdit, btnSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forgot_password);
+        setContentView(R.layout.activity_profile);
 
         if (getActionBar() != null) {
-            getActionBar().setTitle(getResources().getString(R.string.forgot_password_title));
+            getActionBar().setTitle(getResources().getString(R.string.menu_profile));
             getActionBar().setDisplayHomeAsUpEnabled(true);
-        } else {
-            getSupportActionBar().setTitle(getResources().getString(R.string.forgot_password_title));
+        } else if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getResources().getString(R.string.menu_profile));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -32,14 +31,18 @@ public class ForgotPassword extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        btnEdit = menu.findItem(R.id.menuEdit);
+        btnSubmit = menu.findItem(R.id.menuSubmit);
+
+        btnSubmit.setVisible(false);
+        btnEdit.setVisible(true);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menuSubmit:
-                Intent intent1 = new Intent(ForgotPassword.this, SignInAccount.class);
-                startActivity(intent1);
-                finish();
-                break;
-
             case android.R.id.home:
                 finish();
                 break;

@@ -1,8 +1,9 @@
 package com.singular.barrister;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -13,83 +14,40 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TabHost;
+import android.widget.Toast;
 
-public class HomeScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_screen_right_drawer);
+        setContentView(R.layout.activity_home_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if(getActionBar()!=null)
-        getActionBar().setTitle(getResources().getString(R.string.app_name));
-        else
-            getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
 
-        Toolbar toolbar1=(Toolbar)findViewById(R.id.toolbar);
-        toolbar1.setTitle(getResources().getString(R.string.app_name));
+        if (getActionBar() != null)
+            getActionBar().setTitle(R.string.app_name);
+        else if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(R.string.app_name);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
             }
         });
-
         initializeTab();
-
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-    ImageButton menuRight = (ImageButton) findViewById(R.id.menuRight);
-
-
-    menuRight.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (drawer.isDrawerOpen(GravityCompat.END)) {
-                drawer.closeDrawer(GravityCompat.END);
-            } else {
-                drawer.openDrawer(GravityCompat.END);
-            }
-        }
-    });
-
-    NavigationView navigationView2 = (NavigationView) findViewById(R.id.nav_view2);
-    navigationView2.setNavigationItemSelectedListener(this);
-}
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else if (drawer.isDrawerOpen(GravityCompat.END)) {
-            drawer.closeDrawer(GravityCompat.END);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        String text = "";
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        drawer.closeDrawer(GravityCompat.END);
-        return true;
     }
 
     private TabLayout tabLayout;
 
     private void initializeTab() {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setTabTextColors(Color.parseColor("#55FFFFFF"), Color.parseColor("#FFFFFF"));
+        tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#FFFFFF"));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab1));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab2));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab3));
@@ -97,4 +55,47 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        String text = "";
+
+        Intent intent;
+        switch (id) {
+            case R.id.menuProfile:
+                intent = new Intent(HomeScreen.this, ProfileActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.menuChangePassword:
+                Toast.makeText(getApplicationContext(), "Change password", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.menuContactUs:
+                intent = new Intent(HomeScreen.this, ContactUsActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.menuImportantWebSite:
+                Toast.makeText(getApplicationContext(), "Important web site", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.menuLogout:
+                Toast.makeText(getApplicationContext(), "Log out", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.menuLoveApp:
+                Toast.makeText(getApplicationContext(), "Love app", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+        return true;
+    }
 }
