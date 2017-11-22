@@ -20,6 +20,13 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppThemeRefer" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary_Refer</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark_Refer</item>
+        <item name="colorAccent">@color/colorAccent_Refer</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

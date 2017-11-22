@@ -8,4 +8,9 @@
     <color name="textColorLightTitle">#55021815</color>
     <color name="textColorLight">#09776a</color>
     <color name="textColorFaint">#e7fdfb</color>
+
+
+    <color name="colorPrimary_Refer">#DFE5CC</color>
+    <color name="colorPrimaryDark_Refer">#DFE5CC</color>
+    <color name="colorAccent_Refer">#DFE5CC</color>
 </resources>

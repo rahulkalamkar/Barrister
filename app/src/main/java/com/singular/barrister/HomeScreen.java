@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,6 +60,14 @@ public class HomeScreen extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.menuSearch).getActionView();
+
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         return true;
     }
 
@@ -75,7 +84,8 @@ public class HomeScreen extends AppCompatActivity {
                 break;
 
             case R.id.menuChangePassword:
-                Toast.makeText(getApplicationContext(), "Change password", Toast.LENGTH_SHORT).show();
+                intent = new Intent(HomeScreen.this, ChangePassword.class);
+                startActivity(intent);
                 break;
 
             case R.id.menuContactUs:
@@ -84,7 +94,8 @@ public class HomeScreen extends AppCompatActivity {
                 break;
 
             case R.id.menuImportantWebSite:
-                Toast.makeText(getApplicationContext(), "Important web site", Toast.LENGTH_SHORT).show();
+                intent = new Intent(HomeScreen.this, ImportantLink.class);
+                startActivity(intent);
                 break;
 
             case R.id.menuLogout:
@@ -92,7 +103,8 @@ public class HomeScreen extends AppCompatActivity {
                 break;
 
             case R.id.menuLoveApp:
-                Toast.makeText(getApplicationContext(), "Love app", Toast.LENGTH_SHORT).show();
+                intent = new Intent(HomeScreen.this, ReferralActivity.class);
+                startActivity(intent);
                 break;
         }
 

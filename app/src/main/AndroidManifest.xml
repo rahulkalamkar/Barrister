@@ -12,6 +12,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithoutActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,20 +23,38 @@
         <activity
             android:name=".HomeScreen"
             android:label="@string/title_activity_home_screen"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LandingScreen"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithoutActionBar" />
         <activity
             android:name=".CreateAccount"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".SignInAccount"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ForgotPassword" />
-        <activity android:name=".PrivacyPolicy" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".ContactUsActivity"></activity>
+        <activity
+            android:name=".ForgotPassword"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PrivacyPolicy"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ContactUsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChangePassword"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ImportantLink" />
+        <activity
+            android:name=".ReferralActivity"></activity>
     </application>
 
 </manifest>
