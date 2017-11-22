@@ -1,4 +1,8 @@
 <resources>
+
+    <string name="FACEBOOK_APP_ID">1634259326593400</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">322f900a551bd4c92347e6b9dc868548</string>
+
     <string name="app_name">Barrister</string>
     <string name="title_activity_home_screen">HomeScreen</string>
 
