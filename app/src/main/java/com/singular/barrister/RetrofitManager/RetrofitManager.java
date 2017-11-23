@@ -1,5 +1,8 @@
 package com.singular.barrister.RetrofitManager;
 
+import com.singular.barrister.Model.Cases.CasesResponse;
+import com.singular.barrister.Model.Client.ClientResponse;
+import com.singular.barrister.Model.Court.CourtResponse;
 import com.singular.barrister.Model.RegisterResponse;
 import com.singular.barrister.Util.IDataChangeListener;
 import com.singular.barrister.Util.IModel;
@@ -90,7 +93,7 @@ public class RetrofitManager {
 
     public void setLogOut(final IDataChangeListener<IModel> callbackListener, String token) {
         HashMap<String, String> hashMap = new HashMap<String, String>();
-        hashMap.put("AuthorizationBearer", token);
+        hashMap.put("Authorization", "Bearer "+token);
         hashMap.put("deviceType", "android");
 
         try {
@@ -117,4 +120,97 @@ public class RetrofitManager {
             e.printStackTrace();
         }
     }
+
+    public void getCourtList(final IDataChangeListener<IModel> callbackListener, String token)
+    {
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("Authorization", "Bearer "+token);
+
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/courts");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<CourtResponse> call = api.getCourtList(apiName, hashMap);
+            call.enqueue(new Callback<CourtResponse>() {
+                @Override
+                public void onResponse(Call<CourtResponse> call, Response<CourtResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<CourtResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
+    public void getClientList(final IDataChangeListener<IModel> callbackListener, String token)
+    {
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("Authorization", "Bearer "+token);
+
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/clients");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<ClientResponse> call = api.getClientList(apiName, hashMap);
+            call.enqueue(new Callback<ClientResponse>() {
+                @Override
+                public void onResponse(Call<ClientResponse> call, Response<ClientResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<ClientResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
+
+    public void getCasesList(final IDataChangeListener<IModel> callbackListener, String token)
+    {
+
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("Authorization", "Bearer "+token);
+
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/case");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<CasesResponse> call = api.getCasesList(apiName, hashMap);
+            call.enqueue(new Callback<CasesResponse>() {
+                @Override
+                public void onResponse(Call<CasesResponse> call, Response<CasesResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<CasesResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
 }

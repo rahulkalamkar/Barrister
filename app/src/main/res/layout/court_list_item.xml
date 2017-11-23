@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/fab_margin"
+    android:paddingRight="@dimen/fab_margin"
+    android:paddingTop="@dimen/fab_margin">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewCourtName"
+        android:textSize="16sp"
+        android:text="Rahul Kalamkar"
+        android:textColor="#000000"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Jalna"
+        android:id="@+id/textViewState"
+        android:layout_marginTop="3dp"
+        android:textColor="#777777"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
+    android:layout_marginTop="@dimen/fab_margin"
+        android:background="#55777777"/>
+
+</LinearLayout>

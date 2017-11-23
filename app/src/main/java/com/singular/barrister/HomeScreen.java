@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -15,19 +17,31 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import com.singular.barrister.Fragment.CasesFragment;
+import com.singular.barrister.Fragment.ClientFragment;
+import com.singular.barrister.Fragment.CourtFragment;
 import com.singular.barrister.Preferance.UserPreferance;
 
 public class HomeScreen extends AppCompatActivity {
 
+    FrameLayout frameLayout;
+    CourtFragment courtFragment;
+    CasesFragment casesFragment;
+    ClientFragment clientFragment;
+    FragmentManager fragmentManager;
+    FragmentTransaction transaction;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        frameLayout=(FrameLayout)findViewById(R.id.fragmentContainer);
 
         if (getActionBar() != null)
             getActionBar().setTitle(R.string.app_name);
@@ -43,6 +57,15 @@ public class HomeScreen extends AppCompatActivity {
             }
         });
         initializeTab();
+       // initializeFragments();
+    }
+
+    public void initializeFragments()
+    {
+        courtFragment=new CourtFragment();
+        fragmentManager=getSupportFragmentManager();
+        transaction=fragmentManager.beginTransaction();
+        transaction.add(R.id.fragmentContainer,courtFragment,"Court Fragment").commit();
     }
 
     private TabLayout tabLayout;
@@ -56,6 +79,43 @@ public class HomeScreen extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab3));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab4));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getPosition()==1)
+                {
+                    casesFragment=new CasesFragment();
+                    fragmentManager=getSupportFragmentManager();
+                    transaction=fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragmentContainer,casesFragment,"Cases Fragment").commit();
+                }else if(tab.getPosition()==2)
+                {
+                    courtFragment=new CourtFragment();
+                    fragmentManager=getSupportFragmentManager();
+                    transaction=fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragmentContainer,courtFragment,"Court Fragment").commit();
+                }
+                else if(tab.getPosition()==3)
+                {
+                    clientFragment=new ClientFragment();
+                    fragmentManager=getSupportFragmentManager();
+                    transaction=fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragmentContainer,clientFragment,"Client Fragment").commit();
+
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     @Override

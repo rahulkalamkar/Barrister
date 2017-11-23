@@ -6,9 +6,10 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.singular.barrister.HomeScreen"
-    tools:showIn="@layout/activity_home_screen">
+    tools:showIn="@layout/activity_home_screen"
+    android:background="#FAFAFA">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -23,7 +24,15 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             android:background="@color/colorPrimary"/>
 
-    </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/fragmentContainer"
+            android:layout_below="@+id/tabs"/>
+
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
