@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIClient {
 
-    public static String BASE_URL = "https://n-pvtstag.hungama.com/";
+    public static String BASE_URL = "http://singularsacademy.com/";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient(String baseUrl) {

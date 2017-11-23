@@ -18,6 +18,8 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import com.singular.barrister.Preferance.UserPreferance;
+
 public class HomeScreen extends AppCompatActivity {
 
     @Override
@@ -99,7 +101,10 @@ public class HomeScreen extends AppCompatActivity {
                 break;
 
             case R.id.menuLogout:
-                Toast.makeText(getApplicationContext(), "Log out", Toast.LENGTH_SHORT).show();
+                new UserPreferance(getApplicationContext()).logOut();
+                intent = new Intent(HomeScreen.this, LandingScreen.class);
+                startActivity(intent);
+                finish();
                 break;
 
             case R.id.menuLoveApp:

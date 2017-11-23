@@ -45,11 +45,13 @@ public class LandingScreen extends AppCompatActivity implements View.OnClickList
             case R.id.button_create_account :
                 Intent intent = new Intent(LandingScreen.this, CreateAccount.class);
                 startActivity(intent);
+                finish();
                 break;
 
             case R.id.button_sign_in :
                 Intent  intent1=new Intent(LandingScreen.this,SignInAccount.class);
                 startActivity(intent1);
+                finish();
                 break;
         }
 

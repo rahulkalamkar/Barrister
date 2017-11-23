@@ -31,14 +31,13 @@ public class RetrofitManager {
         hashMap.put("deviceToken", deviceToken);
         hashMap.put("deviceType", "android");
 
-        API api = APIClient.getClient("www.singularsacademy.com").create(API.class);
-
         try {
-            URL url = new URL("www.singularsacademy.com/lawyer/public/api/signup");
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/signup");
             String baseUrl = url.getProtocol() + "://" + url.getHost();
             String apiName = url.getPath();
             String parameters = url.getQuery();
 
+            API api = APIClient.getClient(baseUrl).create(API.class);
             Call<RegisterResponse> call = api.registerUser(apiName, hashMap);
             call.enqueue(new Callback<RegisterResponse>() {
                 @Override
@@ -57,7 +56,65 @@ public class RetrofitManager {
         }
     }
 
-    public void setLogin(final IDataChangeListener<IModel> callbackListener) {
+    public void setLogin(final IDataChangeListener<IModel> callbackListener, String number, String password, String token) {
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("mobile", number);
+        hashMap.put("password", password);
+        hashMap.put("deviceToken", token);
+        hashMap.put("deviceType", "android");
 
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/login");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<RegisterResponse> call = api.loginUser(apiName, hashMap);
+            call.enqueue(new Callback<RegisterResponse>() {
+                @Override
+                public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
+    public void setLogOut(final IDataChangeListener<IModel> callbackListener, String token) {
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("AuthorizationBearer", token);
+        hashMap.put("deviceType", "android");
+
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/logout");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<RegisterResponse> call = api.loginUser(apiName, hashMap);
+            call.enqueue(new Callback<RegisterResponse>() {
+                @Override
+                public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
     }
 }

@@ -4,6 +4,7 @@
     <string name="ACCOUNT_KIT_CLIENT_TOKEN">322f900a551bd4c92347e6b9dc868548</string>
 
     <string name="GCM_Sender_Id">142465509587</string>
+    <string name="network_error">Please check your internet connection</string>
 
     <string name="app_name">Barrister</string>
     <string name="title_activity_home_screen">HomeScreen</string>

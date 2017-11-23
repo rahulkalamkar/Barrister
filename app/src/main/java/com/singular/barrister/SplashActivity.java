@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.singular.barrister.Preferance.UserPreferance;
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override
@@ -15,8 +17,13 @@ public class SplashActivity extends AppCompatActivity {
         int secondsDelayed = 1;
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                startActivity(new Intent(SplashActivity.this,
-                        LandingScreen.class));
+                if (new UserPreferance(getApplicationContext()).isUserLoggedIn()) {
+                    startActivity(new Intent(SplashActivity.this,
+                            HomeScreen.class));
+                } else {
+                    startActivity(new Intent(SplashActivity.this,
+                            LandingScreen.class));
+                }
                 finish();
             }
         }, secondsDelayed * 1000);

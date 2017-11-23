@@ -8,6 +8,7 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
@@ -16,7 +17,13 @@ import retrofit2.http.QueryMap;
  */
 
 public interface API {
-    @GET("{SIGN_UP}")
-    Call<RegisterResponse> registerUser(@Path(value = "SIGN_UP", encoded = true) String path, @HeaderMap Map<String, String> headers);
+    @POST("{SIGN_UP}")
+    Call<RegisterResponse> registerUser(@Path(value = "SIGN_UP", encoded = true) String path, @QueryMap Map<String, String> headers);
+
+    @POST("{LOGIN}")
+    Call<RegisterResponse> loginUser(@Path(value = "LOGIN", encoded = true) String path, @QueryMap Map<String, String> headers);
+
+    @POST("{LOGOUT}")
+    Call<RegisterResponse> logoutUser(@Path(value = "LOGOUT", encoded = true) String path, @QueryMap Map<String, String> headers);
 
 }
