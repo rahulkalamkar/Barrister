@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
+
     defaultConfig {
         applicationId "com.singular.barrister"
         minSdkVersion 15
@@ -13,7 +14,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -21,6 +22,7 @@ android {
 
 repositories {
     jcenter()
+    mavenCentral()
 }
 
 
@@ -33,5 +35,10 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:26.+'
     compile 'com.facebook.android:account-kit-sdk:4.+'
+
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+   // compile "com.google.android.gms:play-services-gcm:11.0.4"
     testCompile 'junit:junit:4.12'
 }
