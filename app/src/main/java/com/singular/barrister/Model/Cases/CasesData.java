@@ -9,15 +9,15 @@ import java.util.List;
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class CasesData implements IModel{
-    public List<Case> getCases() {
-        return cases;
+public class CasesData implements IModel {
+    public List<Case> getCaseList() {
+        return caseList;
     }
 
-    public void setCases(List<Case> cases) {
-        this.cases = cases;
+    public void setCaseList(List<Case> caseList) {
+        this.caseList = caseList;
     }
 
     @SerializedName("case")
-    List<Case> cases;
+    List<Case> caseList;
 }

@@ -3,13 +3,14 @@ package com.singular.barrister.Model.Cases;
 import com.singular.barrister.Model.Court.CourtData;
 import com.singular.barrister.Util.IModel;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class Case implements IModel{
+public class Case implements IModel, Serializable {
     String id;
     String client_id;
     String client_type;
@@ -25,6 +26,15 @@ public class Case implements IModel{
     CaseType casetype;
     SubCaseType subCasetype;
     CourtData court;
+    String diff;
+
+    public String getDiff() {
+        return diff;
+    }
+
+    public void setDiff(String diff) {
+        this.diff = diff;
+    }
 
     public String getId() {
         return id;

@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.singular.barrister.Fragment.CasesFragment;
 import com.singular.barrister.Fragment.ClientFragment;
 import com.singular.barrister.Fragment.CourtFragment;
+import com.singular.barrister.Fragment.TodaysFragment;
 import com.singular.barrister.Preferance.UserPreferance;
 
 public class HomeScreen extends AppCompatActivity {
@@ -32,8 +33,10 @@ public class HomeScreen extends AppCompatActivity {
     CourtFragment courtFragment;
     CasesFragment casesFragment;
     ClientFragment clientFragment;
+    TodaysFragment todaysFragment;
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +44,7 @@ public class HomeScreen extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        frameLayout=(FrameLayout)findViewById(R.id.fragmentContainer);
+        frameLayout = (FrameLayout) findViewById(R.id.fragmentContainer);
 
         if (getActionBar() != null)
             getActionBar().setTitle(R.string.app_name);
@@ -57,15 +60,14 @@ public class HomeScreen extends AppCompatActivity {
             }
         });
         initializeTab();
-       // initializeFragments();
+         initializeFragments();
     }
 
-    public void initializeFragments()
-    {
-        courtFragment=new CourtFragment();
-        fragmentManager=getSupportFragmentManager();
-        transaction=fragmentManager.beginTransaction();
-        transaction.add(R.id.fragmentContainer,courtFragment,"Court Fragment").commit();
+    public void initializeFragments() {
+        todaysFragment = new TodaysFragment();
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragmentContainer, todaysFragment, "Today's Fragment").commit();
     }
 
     private TabLayout tabLayout;
@@ -83,25 +85,26 @@ public class HomeScreen extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if(tab.getPosition()==1)
-                {
-                    casesFragment=new CasesFragment();
-                    fragmentManager=getSupportFragmentManager();
-                    transaction=fragmentManager.beginTransaction();
-                    transaction.replace(R.id.fragmentContainer,casesFragment,"Cases Fragment").commit();
-                }else if(tab.getPosition()==2)
-                {
-                    courtFragment=new CourtFragment();
-                    fragmentManager=getSupportFragmentManager();
-                    transaction=fragmentManager.beginTransaction();
-                    transaction.replace(R.id.fragmentContainer,courtFragment,"Court Fragment").commit();
-                }
-                else if(tab.getPosition()==3)
-                {
-                    clientFragment=new ClientFragment();
-                    fragmentManager=getSupportFragmentManager();
-                    transaction=fragmentManager.beginTransaction();
-                    transaction.replace(R.id.fragmentContainer,clientFragment,"Client Fragment").commit();
+                if (tab.getPosition() == 0) {
+                    todaysFragment = new TodaysFragment();
+                    fragmentManager = getSupportFragmentManager();
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragmentContainer, todaysFragment, "Today's Fragment").commit();
+                } else if (tab.getPosition() == 1) {
+                    casesFragment = new CasesFragment();
+                    fragmentManager = getSupportFragmentManager();
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragmentContainer, casesFragment, "Cases Fragment").commit();
+                } else if (tab.getPosition() == 2) {
+                    courtFragment = new CourtFragment();
+                    fragmentManager = getSupportFragmentManager();
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragmentContainer, courtFragment, "Court Fragment").commit();
+                } else if (tab.getPosition() == 3) {
+                    clientFragment = new ClientFragment();
+                    fragmentManager = getSupportFragmentManager();
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragmentContainer, clientFragment, "Client Fragment").commit();
 
                 }
             }

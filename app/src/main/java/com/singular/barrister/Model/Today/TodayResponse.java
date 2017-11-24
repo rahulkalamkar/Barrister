@@ -1,13 +1,14 @@
-package com.singular.barrister.Model.Cases;
+package com.singular.barrister.Model.Today;
 
 import com.google.gson.annotations.SerializedName;
+import com.singular.barrister.Model.Cases.CasesData;
 import com.singular.barrister.Util.IModel;
 
 /**
- * Created by rahulbabanaraokalamkar on 11/23/17.
+ * Created by rahul.kalamkar on 11/24/2017.
  */
 
-public class CasesResponse implements IModel {
+public class TodayResponse implements IModel {
     public CasesData getData() {
         return data;
     }

@@ -4,6 +4,7 @@ import com.singular.barrister.Model.Cases.CasesResponse;
 import com.singular.barrister.Model.Client.ClientResponse;
 import com.singular.barrister.Model.Court.CourtResponse;
 import com.singular.barrister.Model.RegisterResponse;
+import com.singular.barrister.Model.Today.TodayResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,8 @@ public interface API {
     @GET("{GET_CLIENT_LIST}")
     Call<ClientResponse> getClientList(@Path(value = "GET_CLIENT_LIST", encoded = true) String path, @HeaderMap Map<String, String> headers);
 
-
+    @GET("{GET_TODAY_CASES_LIST}")
+    Call<TodayResponse> getTodayCasesList(@Path(value = "GET_TODAY_CASES_LIST", encoded = true) String path, @HeaderMap Map<String, String> headers);
 
     @GET("{GET_CASES_LIST}")
     Call<CasesResponse> getCasesList(@Path(value = "GET_CASES_LIST", encoded = true) String path, @HeaderMap Map<String, String> headers);

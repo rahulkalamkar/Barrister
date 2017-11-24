@@ -89,11 +89,11 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
 
     @Override
     public void onDataReceived(IModel response) {
-        if(response!=null && response instanceof CourtResponse)
+        if(response!=null && response instanceof CasesResponse)
         {
             CasesResponse casesResponse =(CasesResponse) response;
-            if(casesResponse.getData().getCases()!=null) {
-                caseList.addAll(casesResponse.getData().getCases());
+            if(casesResponse.getData().getCaseList()!=null) {
+                caseList.addAll(casesResponse.getData().getCaseList());
                 CasesListAdapter courtListAdapter = new CasesListAdapter(getActivity(), caseList);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecycleView.setLayoutManager(linearLayoutManager);

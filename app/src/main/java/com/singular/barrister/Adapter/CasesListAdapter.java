@@ -21,9 +21,10 @@ import java.util.ArrayList;
 public class CasesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<Case> casesList;
     Context context;
-    public CasesListAdapter(Context context, ArrayList<Case> casesList){
-        this.casesList=casesList;
-        this.context=context;
+
+    public CasesListAdapter(Context context, ArrayList<Case> casesList) {
+        this.casesList = casesList;
+        this.context = context;
     }
 
 
@@ -40,23 +41,23 @@ public class CasesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof CourtListAdapter.CourtViewHolder)
-        {
-            CasesViewHolder courtViewHolder=(CasesViewHolder)holder;
-            courtViewHolder.txtCourtName.setText(casesList.get(position).getPersons().get(0).getOpp_name()+" VS "+
+        if (holder instanceof CasesViewHolder) {
+            CasesViewHolder courtViewHolder = (CasesViewHolder) holder;
+            courtViewHolder.txtCourtName.setText(casesList.get(position).getPersons().get(0).getOpp_name() + " VS " +
                     casesList.get(position).getPersons().get(1).getOpp_name());
-            courtViewHolder.txtStateName.setText(casesList.get(position).getCourt().getSubdistrict() +", "+
-                    casesList.get(position).getCourt().getDistrict()+", "+casesList.get(position).getCourt().getState());
+            courtViewHolder.txtStateName.setText(casesList.get(position).getCourt().getSubdistrict() != null ? casesList.get(position).getCourt().getSubdistrict().getName() + ", " : "" +
+                    casesList.get(position).getCourt().getDistrict().getName() + ", " + casesList.get(position).getCourt().getState().getName());
 
         }
     }
 
-    public class CasesViewHolder extends RecyclerView.ViewHolder{
-        TextView txtCourtName,txtStateName;
-        public CasesViewHolder(View itemView)
-        {   super(itemView);
-            txtCourtName=(TextView)itemView.findViewById(R.id.textViewCourtName);
-            txtStateName=(TextView)itemView.findViewById(R.id.textViewState);
+    public class CasesViewHolder extends RecyclerView.ViewHolder {
+        TextView txtCourtName, txtStateName;
+
+        public CasesViewHolder(View itemView) {
+            super(itemView);
+            txtCourtName = (TextView) itemView.findViewById(R.id.textViewCourtName);
+            txtStateName = (TextView) itemView.findViewById(R.id.textViewState);
         }
     }
 }

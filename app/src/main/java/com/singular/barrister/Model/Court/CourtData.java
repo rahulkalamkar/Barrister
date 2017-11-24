@@ -1,6 +1,9 @@
 package com.singular.barrister.Model.Court;
 
 import com.google.gson.annotations.SerializedName;
+import com.singular.barrister.Model.Cases.CaseDistrict;
+import com.singular.barrister.Model.Cases.CaseState;
+import com.singular.barrister.Model.Cases.CaseSubDistrict;
 import com.singular.barrister.Model.District;
 import com.singular.barrister.Model.State;
 import com.singular.barrister.Model.SubDistrict;
@@ -26,11 +29,11 @@ public class CourtData implements IModel{
     @SerializedName("sub_district_id")
     String sub_district_id;
     @SerializedName("state")
-    State state;
+    CaseState state;
     @SerializedName("district")
-    District district;
+    CaseDistrict district;
     @SerializedName("subdistrict")
-    SubDistrict subdistrict;
+    CaseSubDistrict subdistrict;
 
     public String getId() {
         return id;
@@ -88,27 +91,27 @@ public class CourtData implements IModel{
         this.sub_district_id = sub_district_id;
     }
 
-    public State getState() {
+    public CaseState getState() {
         return state;
     }
 
-    public void setState(State state) {
+    public void setState(CaseState state) {
         this.state = state;
     }
 
-    public District getDistrict() {
+    public CaseDistrict getDistrict() {
         return district;
     }
 
-    public void setDistrict(District district) {
+    public void setDistrict(CaseDistrict district) {
         this.district = district;
     }
 
-    public SubDistrict getSubdistrict() {
+    public CaseSubDistrict getSubdistrict() {
         return subdistrict;
     }
 
-    public void setSubdistrict(SubDistrict subdistrict) {
+    public void setSubdistrict(CaseSubDistrict subdistrict) {
         this.subdistrict = subdistrict;
     }
 }
