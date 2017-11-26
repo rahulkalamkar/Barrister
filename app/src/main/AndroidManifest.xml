@@ -14,7 +14,6 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.facebook.accountkit.ApplicationName"
             android:value="@string/app_name" />
@@ -29,7 +28,6 @@
             android:name="com.facebook.accountkit.ui.AccountKitActivity"
             android:theme="@style/AppLoginTheme"
             tools:replace="android:theme" />
-
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait"
@@ -73,7 +71,9 @@
             android:name=".ChangePassword"
             android:screenOrientation="portrait" />
         <activity android:name=".ImportantLink" />
-        <activity android:name=".ReferralActivity"></activity>
+        <activity android:name=".ReferralActivity" />
+        <activity android:name=".DisplayCaseActivity" />
+        <activity android:name=".DisplayCourtActivity"></activity>
     </application>
 
 </manifest>

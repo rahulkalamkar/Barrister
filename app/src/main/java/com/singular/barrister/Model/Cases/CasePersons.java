@@ -2,11 +2,13 @@ package com.singular.barrister.Model.Cases;
 
 import com.singular.barrister.Util.IModel;
 
+import java.io.Serializable;
+
 /**
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class CasePersons implements IModel {
+public class CasePersons implements IModel,Serializable {
     String case_id;
     String opp_name;
     String mobile;

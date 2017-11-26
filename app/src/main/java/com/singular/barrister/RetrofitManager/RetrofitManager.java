@@ -4,6 +4,7 @@ import com.singular.barrister.Model.Cases.CasesResponse;
 import com.singular.barrister.Model.Client.ClientResponse;
 import com.singular.barrister.Model.Court.CourtResponse;
 import com.singular.barrister.Model.RegisterResponse;
+import com.singular.barrister.Model.SimpleMessageResponse;
 import com.singular.barrister.Model.Today.TodayResponse;
 import com.singular.barrister.Util.IDataChangeListener;
 import com.singular.barrister.Util.IModel;
@@ -240,5 +241,72 @@ public class RetrofitManager {
         }
     }
 
+
+    public void changePassword(final IDataChangeListener<IModel> callbackListener, String token,String currentPassword,
+                               String newPassword,String confirmNewPassword)
+    {
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("Authorization", "Bearer " + token);
+
+        HashMap<String, String> queryMap = new HashMap<String, String>();
+        queryMap.put("nowpassword", currentPassword);
+        queryMap.put("password", currentPassword);
+        queryMap.put("password_confirmation", currentPassword);
+
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/changepassword");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<SimpleMessageResponse> call = api.getPasswordChange(apiName, hashMap,queryMap);
+            call.enqueue(new Callback<SimpleMessageResponse>() {
+                @Override
+                public void onResponse(Call<SimpleMessageResponse> call, Response<SimpleMessageResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<SimpleMessageResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
+
+    public void forgotPassword(final IDataChangeListener<IModel> callbackListener,String emailId)
+    {
+        HashMap<String, String> queryMap = new HashMap<String, String>();
+        queryMap.put("email", emailId);
+
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/recovery");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<SimpleMessageResponse> call = api.forgotPassword(apiName,queryMap);
+            call.enqueue(new Callback<SimpleMessageResponse>() {
+                @Override
+                public void onResponse(Call<SimpleMessageResponse> call, Response<SimpleMessageResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<SimpleMessageResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
 
 }

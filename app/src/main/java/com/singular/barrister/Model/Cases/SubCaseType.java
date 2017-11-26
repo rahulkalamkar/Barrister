@@ -2,11 +2,13 @@ package com.singular.barrister.Model.Cases;
 
 import com.singular.barrister.Util.IModel;
 
+import java.io.Serializable;
+
 /**
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class SubCaseType implements IModel{
+public class SubCaseType implements IModel,Serializable{
     String subcase_type_id;
 
     public String getSubcase_type_id() {

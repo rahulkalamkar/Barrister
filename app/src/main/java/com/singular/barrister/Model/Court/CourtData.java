@@ -9,16 +9,18 @@ import com.singular.barrister.Model.State;
 import com.singular.barrister.Model.SubDistrict;
 import com.singular.barrister.Util.IModel;
 
+import java.io.Serializable;
+
 /**
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class CourtData implements IModel{
+public class CourtData implements IModel,Serializable{
     @SerializedName("id")
     String id;
     @SerializedName("court_name")
     String court_name;
-    @SerializedName("court_typw")
+    @SerializedName("court_type")
     String court_type;
     @SerializedName("court_number")
     String court_number;

@@ -1,0 +1,138 @@
+package com.singular.barrister;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.singular.barrister.Model.Cases.Case;
+import com.singular.barrister.Model.Cases.CasePersons;
+
+import org.w3c.dom.Text;
+
+public class DisplayCaseActivity extends AppCompatActivity {
+
+    TextView txtStatus,txtType,txtCourtName,txtCRNNumber,txtRegisterNumber,txtRegisterDate,
+    txtHearing,txtClientName,txtClientEmailId,txtPhone,txtAddress,txtClientType,txtOppositionName,
+            txtOppositionNumber,txtOppositionLawyerName,txtOppositionLawyerNumber;
+
+    Case aCaseDetail;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_display_case);
+
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        initialization();
+
+        aCaseDetail =(Case)getIntent().getExtras().getSerializable("Case");
+
+        setTitle(aCaseDetail.getClient().getFirst_name()+" "+ aCaseDetail.getClient().getLast_name() + " Vs "+
+                getPerson("Client").getOpp_name());
+        setData();
+    }
+
+    public CasePersons getPerson(String type){
+        if(aCaseDetail.getPersons().get(0).getType().equalsIgnoreCase(type))
+            return aCaseDetail.getPersons().get(0);
+        else
+            return aCaseDetail.getPersons().get(1);
+    }
+
+    public void setData()
+    {
+        txtStatus.setText(aCaseDetail.getCase_status());
+        txtType.setText(aCaseDetail.getCasetype().getCase_type_name());
+        txtCourtName.setText(aCaseDetail.getCourt().getCourt_name());
+        txtCRNNumber.setText(aCaseDetail.getCase_cnr_number());
+        txtRegisterNumber.setText(aCaseDetail.getCase_register_number());
+        txtRegisterDate.setText(aCaseDetail.getCase_register_date());
+
+
+        txtHearing.setText(aCaseDetail.getHearing().getCase_decision());
+
+        txtClientName.setText(aCaseDetail.getClient().getFirst_name() +" " + aCaseDetail.getClient().getLast_name());
+        txtClientEmailId.setText(aCaseDetail.getClient().getEmail());
+        txtPhone.setText(aCaseDetail.getClient().getMobile());
+        txtAddress.setText(getAddress());
+        txtClientType.setText(aCaseDetail.getClient_type());
+
+        txtOppositionName.setText(getPerson("Client").getOpp_name());
+        txtOppositionNumber.setText(getPerson("Client").getMobile());
+        txtOppositionLawyerName.setText(getPerson("Lawyer").getOpp_name());
+        txtOppositionNumber.setText(getPerson("Lawyer").getMobile());
+
+    }
+
+    public void initialization()
+    {
+        txtStatus=(TextView)findViewById(R.id.textViewCaseStatus);
+        txtType=(TextView)findViewById(R.id.textViewCaseType);
+        txtCourtName=(TextView)findViewById(R.id.textViewCourtName);
+        txtCRNNumber=(TextView)findViewById(R.id.textViewCNRNumber);
+        txtRegisterNumber=(TextView)findViewById(R.id.textViewCaseRegistrationNumber);
+        txtRegisterDate=(TextView)findViewById(R.id.textViewCaseRegisterDate);
+        txtHearing=(TextView)findViewById(R.id.textViewCaseNextHearing);
+        txtClientName=(TextView)findViewById(R.id.textViewClientName);
+        txtClientEmailId=(TextView)findViewById(R.id.textViewClientEmailId);
+        txtPhone=(TextView)findViewById(R.id.textViewClientPhone);
+        txtAddress=(TextView)findViewById(R.id.textViewClientAddress);
+        txtClientType=(TextView)findViewById(R.id.textViewClientType);
+        txtOppositionName=(TextView)findViewById(R.id.textViewOPOName);
+        txtOppositionNumber=(TextView)findViewById(R.id.textViewOPOPhone);
+        txtOppositionLawyerName=(TextView)findViewById(R.id.textViewOPOLawyerName);
+        txtOppositionLawyerNumber=(TextView)findViewById(R.id.textViewOPOLawyerPhone);
+    }
+
+    public String getAddress()
+    {
+        String address ="";
+        if(aCaseDetail.getCourt().getSubdistrict() !=null && aCaseDetail.getCourt().getSubdistrict().getName()!=null)
+        {
+            address=aCaseDetail.getCourt().getSubdistrict().getName()+", ";
+        }
+
+
+        if(aCaseDetail.getCourt().getDistrict() !=null && aCaseDetail.getCourt().getDistrict().getName()!=null)
+        {
+            address=address+aCaseDetail.getCourt().getDistrict().getName()+", ";
+        }
+
+
+        if(aCaseDetail.getCourt().getState() !=null && aCaseDetail.getCourt().getState().getName()!=null)
+        {
+            address=address+aCaseDetail.getCourt().getState().getName();
+        }
+        return address;
+        }
+
+    public void setTitle(String title)
+    {
+        if (getActionBar() != null) {
+            getActionBar().setTitle(title);
+        } else {
+            getSupportActionBar().setTitle(title);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.casemenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home)
+            finish();
+        return true;
+    }
+}

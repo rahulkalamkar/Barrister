@@ -56,6 +56,7 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
         retrofitManager=new RetrofitManager();
         caseList=new ArrayList<Case>();
         getCasesList();
+        
     }
 
     public void getCasesList()

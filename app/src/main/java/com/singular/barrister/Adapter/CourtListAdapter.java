@@ -1,15 +1,19 @@
 package com.singular.barrister.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.singular.barrister.DisplayCourtActivity;
 import com.singular.barrister.Model.Court.CourtData;
 import com.singular.barrister.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -53,6 +57,17 @@ public class CourtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         {   super(itemView);
             txtCourtName=(TextView)itemView.findViewById(R.id.textViewCourtName);
             txtStateName=(TextView)itemView.findViewById(R.id.textViewState);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable("Court",(Serializable)courtList.get(getAdapterPosition()));
+                    Intent intent=new Intent(context, DisplayCourtActivity.class);
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }

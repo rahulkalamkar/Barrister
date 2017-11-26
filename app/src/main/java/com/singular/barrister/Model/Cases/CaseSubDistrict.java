@@ -2,11 +2,13 @@ package com.singular.barrister.Model.Cases;
 
 import com.singular.barrister.Util.IModel;
 
+import java.io.Serializable;
+
 /**
  * Created by rahul.kalamkar on 11/24/2017.
  */
 
-public class CaseSubDistrict implements IModel{
+public class CaseSubDistrict implements IModel,Serializable{
     String id;
     String name;
     String parent_id;
