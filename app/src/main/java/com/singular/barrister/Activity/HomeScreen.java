@@ -51,12 +51,19 @@ public class HomeScreen extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
+                if (tabLayout.getSelectedTabPosition() == 0) {
+
+                } else if (tabLayout.getSelectedTabPosition() == 1) {
+
+                } else if (tabLayout.getSelectedTabPosition() == 2) {
+
+                } else {
+
+                }
             }
         });
         initializeTab();
-         initializeFragments();
+        initializeFragments();
     }
 
     public void initializeFragments() {
