@@ -1,16 +1,21 @@
 package com.singular.barrister.Activity;
 
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.singular.barrister.Fragment.EditProfileFragment;
 import com.singular.barrister.Model.RegisterResponse;
 import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.R;
@@ -25,8 +30,10 @@ public class ProfileActivity extends AppCompatActivity implements IDataChangeLis
     TextView txtName, txtNumber, txtAddress, txtEmailId;
     LinearLayout linearLayout;
     ProgressBar mProgressBar;
-
+    FrameLayout mFragmentContainer;
     RetrofitManager retrofitManager;
+    FragmentManager fragmentManager;
+    FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +51,22 @@ public class ProfileActivity extends AppCompatActivity implements IDataChangeLis
         txtEmailId = (TextView) findViewById(R.id.textViewEmailId);
         txtNumber = (TextView) findViewById(R.id.textViewNumber);
         txtAddress = (TextView) findViewById(R.id.textViewAddress);
+        mFragmentContainer = (FrameLayout) findViewById(R.id.fragmentContainer);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         linearLayout = (LinearLayout) findViewById(R.id.profileContainer);
 
         retrofitManager = new RetrofitManager();
         getProfile();
+    }
+
+    EditProfileFragment editProfileFragment;
+
+    public void showFragment() {
+        editProfileFragment = new EditProfileFragment();
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragmentContainer, editProfileFragment, "Edit Profile Fragment").commit();
     }
 
     public void getProfile() {
@@ -94,8 +111,37 @@ public class ProfileActivity extends AppCompatActivity implements IDataChangeLis
             case android.R.id.home:
                 finish();
                 break;
+            case R.id.menuEdit:
+                btnSubmit.setVisible(true);
+                btnEdit.setVisible(false);
+                linearLayout.setVisibility(View.GONE);
+                mFragmentContainer.setVisibility(View.VISIBLE);
+                showFragment();
+                break;
+            case R.id.menuSubmit:
+                updateProfile();
+                break;
         }
         return true;
+    }
+
+    public void updateProfile() {
+        if (!TextUtils.isEmpty(editProfileFragment.getFirstName()) &&
+                !TextUtils.isEmpty(editProfileFragment.getLastName()) &&
+                !TextUtils.isEmpty(editProfileFragment.getAddress())) {
+            if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                retrofitManager = new RetrofitManager();
+                retrofitManager.updateProfile(this, new UserPreferance(getApplicationContext()).getToken(),
+                        editProfileFragment.getFirstName(), editProfileFragment.getLastName(), editProfileFragment.getAddress());
+                btnSubmit.setVisible(false);
+                btnEdit.setVisible(true);
+                linearLayout.setVisibility(View.VISIBLE);
+                mFragmentContainer.setVisibility(View.GONE);
+            } else {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -118,10 +164,10 @@ public class ProfileActivity extends AppCompatActivity implements IDataChangeLis
                     , registerResponse.getData().getStart_date()
                     , registerResponse.getData().getEnd_date()
                     , registerResponse.getData().getUser_type()
-                    , registerResponse.getToken(), false);
+                    , new UserPreferance(getApplicationContext()).getToken(), true);
             setDataWithoutNetwork();
         } else {
-
+            setDataWithoutNetwork();
         }
         mProgressBar.setVisibility(View.GONE);
     }

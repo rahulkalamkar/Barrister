@@ -44,15 +44,15 @@ public interface API {
     @GET("{GET_CASES_LIST}")
     Call<CasesResponse> getCasesList(@Path(value = "GET_CASES_LIST", encoded = true) String path, @HeaderMap Map<String, String> headers);
 
-    @POST("GET_USER_PROFILE")
+    @GET("{GET_USER_PROFILE}")
     Call<RegisterResponse> getProfile(@Path(value = "GET_USER_PROFILE", encoded = true) String path, @HeaderMap Map<String, String> headers);
 
-    @GET("{GET_PASSWORD}")
+    @POST("{GET_PASSWORD}")
     Call<SimpleMessageResponse> getPasswordChange(@Path(value = "GET_PASSWORD", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
 
     @GET("{FORGOT_PASSWORD}")
     Call<SimpleMessageResponse> forgotPassword(@Path(value = "FORGOT_PASSWORD", encoded = true) String path, @QueryMap Map<String, String> query);
 
-    @POST("UPDATE_PROFILE")
+    @POST("{UPDATE_PROFILE}")
     Call<RegisterResponse> updateProfile(@Path(value = "UPDATE_PROFILE", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
 }

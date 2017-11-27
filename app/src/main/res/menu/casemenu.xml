@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menuChangeCaseStatus"
-        android:title="Chnage case status" />
+        android:title="Change case status" />
     <item
         android:id="@+id/menuAddNewHearingDates"
         android:title="Add next hearing dates" />

@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.singular.barrister.ForgotPassword;
 import com.singular.barrister.Model.RegisterResponse;
 import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.R;
@@ -82,13 +81,14 @@ public class SignInAccount extends AppCompatActivity implements View.OnClickList
                 finish();*/
                 break;
             case R.id.textViewNoAccountCreateNew:
-                Intent intent1 = new Intent(SignInAccount.this,CreateAccount.class);
+                Intent intent1 = new Intent(SignInAccount.this, CreateAccount.class);
                 startActivity(intent1);
                 finish();
                 break;
             case R.id.textViewForgotPassword:
-                Intent intent2 = new Intent(SignInAccount.this, ForgotPassword.class);
-                startActivity(intent2);
+                Intent intent = new Intent(SignInAccount.this, ForgotPassword.class);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.textViewPrivacyPolicy:
                 Intent intent3 = new Intent(SignInAccount.this, PrivacyPolicy.class);

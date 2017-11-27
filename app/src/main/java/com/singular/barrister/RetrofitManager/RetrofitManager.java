@@ -313,8 +313,8 @@ public class RetrofitManager {
 
         HashMap<String, String> queryMap = new HashMap<String, String>();
         queryMap.put("nowpassword", currentPassword);
-        queryMap.put("password", currentPassword);
-        queryMap.put("password_confirmation", currentPassword);
+        queryMap.put("password", newPassword);
+        queryMap.put("password_confirmation", confirmNewPassword);
 
         try {
             URL url = new URL("http://singularsacademy.com/lawyer/public/api/changepassword");
