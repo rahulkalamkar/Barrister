@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/fab_margin"
-        tools:context="com.singular.barrister.CreateAccount">
+        tools:context="com.singular.barrister.Activity.CreateAccount">
 
         <LinearLayout
             android:id="@+id/linearLayout"

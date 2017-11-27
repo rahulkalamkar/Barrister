@@ -2,11 +2,13 @@ package com.singular.barrister.Model;
 
 import com.singular.barrister.Util.IModel;
 
+import java.io.Serializable;
+
 /**
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class District implements IModel{
+public class District implements IModel,Serializable {
     String id;
     String parent_id;
     String external_id;

@@ -1,34 +1,31 @@
-package com.singular.barrister;
+package com.singular.barrister.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-public class ImportantLink extends AppCompatActivity {
+import com.singular.barrister.R;
+
+public class ContactUsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_important_link);
+        setContentView(R.layout.activity_contact_us);
+
         if (getActionBar() != null) {
-            getActionBar().setTitle(getResources().getString(R.string.menu_important_link));
+            getActionBar().setTitle(getResources().getString(R.string.menu_contact_us));
             getActionBar().setDisplayHomeAsUpEnabled(true);
         } else if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(getResources().getString(R.string.menu_important_link));
+            getSupportActionBar().setTitle(getResources().getString(R.string.menu_contact_us));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
+        if (item.getItemId() == android.R.id.home)
+            finish();
         return true;
     }
 }

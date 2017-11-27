@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.singular.barrister.Activity.SignInAccount;
 import com.singular.barrister.Model.SimpleMessageResponse;
 import com.singular.barrister.RetrofitManager.RetrofitManager;
 import com.singular.barrister.Util.IDataChangeListener;

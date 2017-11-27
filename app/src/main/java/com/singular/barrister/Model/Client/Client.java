@@ -2,11 +2,13 @@ package com.singular.barrister.Model.Client;
 
 import com.singular.barrister.Util.IModel;
 
+import java.io.Serializable;
+
 /**
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class Client implements IModel{
+public class Client implements IModel,Serializable {
     String id;
     String created_at;
     String client_id;

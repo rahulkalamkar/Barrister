@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#DFE5CC"
     android:padding="@dimen/fab_margin"
-    tools:context="com.singular.barrister.ReferralActivity">
+    tools:context="com.singular.barrister.Activity.ReferralActivity">
 
     <LinearLayout
         android:layout_width="0dp"

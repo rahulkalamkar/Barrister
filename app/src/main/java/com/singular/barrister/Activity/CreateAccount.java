@@ -1,4 +1,4 @@
-package com.singular.barrister;
+package com.singular.barrister.Activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +26,7 @@ import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
 import com.singular.barrister.Model.RegisterResponse;
 import com.singular.barrister.Preferance.UserPreferance;
+import com.singular.barrister.R;
 import com.singular.barrister.RetrofitManager.RetrofitManager;
 import com.singular.barrister.Util.IDataChangeListener;
 import com.singular.barrister.Util.IModel;

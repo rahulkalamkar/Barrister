@@ -1,4 +1,4 @@
-package com.singular.barrister;
+package com.singular.barrister.Activity;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.singular.barrister.Preferance.UserPreferance;
+import com.singular.barrister.R;
 
 public class SplashActivity extends AppCompatActivity {
 

@@ -1,9 +1,11 @@
-package com.singular.barrister;
+package com.singular.barrister.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.singular.barrister.R;
 
 public class ReferralActivity extends AppCompatActivity {
 

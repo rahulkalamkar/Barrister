@@ -1,4 +1,4 @@
-package com.singular.barrister;
+package com.singular.barrister.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,13 +11,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.facebook.accountkit.AccountKitLoginResult;
-import com.facebook.accountkit.ui.AccountKitActivity;
-import com.facebook.accountkit.ui.AccountKitConfiguration;
-import com.facebook.accountkit.ui.LoginType;
+import com.singular.barrister.R;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

@@ -2,11 +2,13 @@ package com.singular.barrister.Model;
 
 import com.singular.barrister.Util.IModel;
 
+import java.io.Serializable;
+
 /**
  * Created by rahul.kalamkar on 11/23/2017.
  */
 
-public class RegisterData implements IModel {
+public class RegisterData implements IModel,Serializable {
 
     String first_name;
     String last_name;

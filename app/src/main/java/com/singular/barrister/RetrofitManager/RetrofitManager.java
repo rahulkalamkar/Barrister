@@ -241,6 +241,69 @@ public class RetrofitManager {
         }
     }
 
+    public void getProfile(final IDataChangeListener<IModel> callbackListener, String token) {
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("Authorization", "Bearer " + token);
+
+        try {
+            URL url = new URL("http://www.singularsacademy.com/lawyer/public/api/profile");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<RegisterResponse> call = api.getProfile(apiName, hashMap);
+            call.enqueue(new Callback<RegisterResponse>() {
+                @Override
+                public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
+    public void updateProfile(final IDataChangeListener<IModel> callbackListener, String token, String first_name, String last_name, String address) {
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("Authorization", "Bearer " + token);
+
+        HashMap<String, String> queryMap = new HashMap<String, String>();
+        queryMap.put("first_name", first_name);
+        queryMap.put("last_name", last_name);
+        queryMap.put("address", address);
+
+        try {
+            URL url = new URL("http://www.singularsacademy.com/lawyer/public/api/profile");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<RegisterResponse> call = api.updateProfile(apiName, hashMap, queryMap);
+            call.enqueue(new Callback<RegisterResponse>() {
+                @Override
+                public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
 
     public void changePassword(final IDataChangeListener<IModel> callbackListener, String token,String currentPassword,
                                String newPassword,String confirmNewPassword)

@@ -1,11 +1,12 @@
 package com.singular.barrister.Fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
-import com.singular.barrister.HomeScreen;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.R;
 import com.singular.barrister.Util.CarouselLinearLayout;
@@ -17,12 +18,12 @@ public class CarouselPagerAdapter extends FragmentPagerAdapter implements ViewPa
     public final static float BIG_SCALE = 1.0f;
     public final static float SMALL_SCALE = 0.7f;
     public final static float DIFF_SCALE = BIG_SCALE - SMALL_SCALE;
-    private TodaysFragment context;
+    private Activity context;
     private FragmentManager fragmentManager;
     private float scale;
     ArrayList<Case> caseList;
 
-    public CarouselPagerAdapter(TodaysFragment context, FragmentManager fm, ArrayList<Case> caseList) {
+    public CarouselPagerAdapter(Activity context, FragmentManager fm, ArrayList<Case> caseList) {
         super(fm);
         this.fragmentManager = fm;
         this.context = context;
@@ -38,12 +39,12 @@ public class CarouselPagerAdapter extends FragmentPagerAdapter implements ViewPa
             else
                 scale = SMALL_SCALE;
 
-            position = position % TodaysFragment.count;
+            position = position % caseList.size();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ItemFragment.newInstance(context.getActivity(), position, scale, caseList);
+        return ItemFragment.newInstance(context, position, scale, caseList);
     }
 
     @Override
@@ -90,6 +91,6 @@ public class CarouselPagerAdapter extends FragmentPagerAdapter implements ViewPa
     }
 
     private String getFragmentTag(int position) {
-        return "android:switcher:" + context.mViewPager.getId() + ":" + position;
+        return "android:switcher:" + TodaysFragment.mViewPager.getId() + ":" + position;
     }
 }

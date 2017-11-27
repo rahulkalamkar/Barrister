@@ -1,19 +1,17 @@
 package com.singular.barrister.Fragment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.singular.barrister.HomeScreen;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.R;
 import com.singular.barrister.Util.CarouselLinearLayout;
@@ -81,13 +79,17 @@ public class ItemFragment extends Fragment {
         txtCourtAddress = (TextView) linearLayout.findViewById(R.id.textViewCourtAddress);
 
 
-        txtClientOne.setText(caseList.get(postion).getPersons().get(0).getOpp_name());
-        txtClientTwo.setText(caseList.get(postion).getPersons().get(1).getOpp_name());
-        txtCourtName.setText(caseList.get(postion).getCourt().getCourt_name());
-        txtCourtAddress.setText(caseList.get(postion).getCourt().getSubdistrict() != null ? caseList.get(postion).getCourt().getSubdistrict().getName() + ", " : "" +
-                caseList.get(postion).getCourt().getDistrict() != null ? caseList.get(postion).getCourt().getDistrict().getName() + ", " : "" +
-                caseList.get(postion).getCourt().getState() != null ? caseList.get(postion).getCourt().getState().getName() : ""
-        );
+        try {
+            txtClientOne.setText(caseList.get(postion).getPersons().get(0).getOpp_name());
+            txtClientTwo.setText(caseList.get(postion).getPersons().get(1).getOpp_name());
+            txtCourtName.setText(caseList.get(postion).getCourt().getCourt_name());
+            txtCourtAddress.setText(caseList.get(postion).getCourt().getSubdistrict() != null ? caseList.get(postion).getCourt().getSubdistrict().getName() + ", " : "" +
+                    caseList.get(postion).getCourt().getDistrict() != null ? caseList.get(postion).getCourt().getDistrict().getName() + ", " : "" +
+                    caseList.get(postion).getCourt().getState() != null ? caseList.get(postion).getCourt().getState().getName() : ""
+            );
+        } catch (Exception e) {
+            Log.e("ItemFragment ", "" + e);
+        }
 
         root.setScaleBoth(scale);
 

@@ -1,4 +1,4 @@
-package com.singular.barrister;
+package com.singular.barrister.Activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -14,15 +14,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.singular.barrister.ForgotPassword;
 import com.singular.barrister.Model.RegisterResponse;
 import com.singular.barrister.Preferance.UserPreferance;
+import com.singular.barrister.R;
 import com.singular.barrister.RetrofitManager.RetrofitManager;
 import com.singular.barrister.Util.IDataChangeListener;
 import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
-
-import retrofit2.Retrofit;
 
 public class SignInAccount extends AppCompatActivity implements View.OnClickListener, IDataChangeListener<IModel> {
 
@@ -82,7 +82,7 @@ public class SignInAccount extends AppCompatActivity implements View.OnClickList
                 finish();*/
                 break;
             case R.id.textViewNoAccountCreateNew:
-                Intent intent1 = new Intent(SignInAccount.this, CreateAccount.class);
+                Intent intent1 = new Intent(SignInAccount.this,CreateAccount.class);
                 startActivity(intent1);
                 finish();
                 break;

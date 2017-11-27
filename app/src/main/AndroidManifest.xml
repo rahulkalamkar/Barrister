@@ -29,7 +29,7 @@
             android:theme="@style/AppLoginTheme"
             tools:replace="android:theme" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".Activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithoutActionBar">
             <intent-filter>
@@ -39,37 +39,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeScreen"
+            android:name=".Activity.HomeScreen"
             android:label="@string/title_activity_home_screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".LandingScreen"
+            android:name=".Activity.LandingScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithoutActionBar" />
         <activity
-            android:name=".CreateAccount"
+            android:name=".Activity.CreateAccount"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".SignInAccount"
+            android:name=".Activity.SignInAccount"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ForgotPassword"
+            android:name=".Activity.ForgotPassword"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PrivacyPolicy"
+            android:name=".Activity.PrivacyPolicy"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".Activity.ProfileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ContactUsActivity"
+            android:name=".Activity.ContactUsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ChangePassword"
+            android:name=".Activity.ChangePassword"
             android:screenOrientation="portrait" />
+        <activity android:name=".Activity.ImportantLink" />
+        <activity android:name=".Activity.ReferralActivity"></activity>
         <activity android:name=".ImportantLink" />
         <activity android:name=".ReferralActivity" />
         <activity android:name=".DisplayCaseActivity" />

@@ -38,11 +38,13 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
     TextView errorTextView;
     private RetrofitManager retrofitManager;
     private ArrayList<Case> caseList;
-    public ViewPager mViewPager;
+    public static ViewPager mViewPager;
     public final static int LOOPS = 1;
     public CarouselPagerAdapter adapter;
     private FragmentActivity myContext;
-    public static int count = 1; //ViewPager items size
+    public static int count = 1;
+    boolean isItemLoaded = false;
+    //ViewPager items size
     /**
      * You shouldn't define first page = 0.
      * Let define firstpage = 'number viewpager size' to make endless carousel
@@ -76,8 +78,10 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int pageMargin = ((metrics.widthPixels / 4) * 2);
         mViewPager.setPageMargin(-pageMargin);
-
-        getCasesList();
+        if (!isItemLoaded) {
+            getCasesList();
+            caseList.clear();
+        }
     }
 
     public void getCasesList() {
@@ -111,14 +115,11 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
                 caseList.addAll(todayResponse.getData().getCaseList());
                 caseList.addAll(todayResponse.getData().getCaseList());
                 count = caseList.size();
-                adapter = new CarouselPagerAdapter(this, myContext.getSupportFragmentManager(), caseList);
+                adapter = new CarouselPagerAdapter(getActivity(), myContext.getSupportFragmentManager(), caseList);
                 mViewPager.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-
+                isItemLoaded = true;
                 mViewPager.addOnPageChangeListener(adapter);
-
-                // Set current item to the middle page so we can fling to both
-                // directions left and right
                 mViewPager.setCurrentItem(FIRST_PAGE);
                 mViewPager.setOffscreenPageLimit(3);
                 progressBar.setVisibility(View.GONE);
@@ -126,6 +127,14 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
                 showError();
         } else
             showError();
+    }
+
+    @Override
+    public void onDestroy() {
+        caseList.clear();
+        adapter = null;
+        mViewPager = null;
+        super.onDestroy();
     }
 
     @Override
