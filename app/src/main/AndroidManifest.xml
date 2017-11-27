@@ -71,11 +71,12 @@
             android:name=".Activity.ChangePassword"
             android:screenOrientation="portrait" />
         <activity android:name=".Activity.ImportantLink" />
-        <activity android:name=".Activity.ReferralActivity"></activity>
+        <activity android:name=".Activity.ReferralActivity" />
         <activity android:name=".ImportantLink" />
         <activity android:name=".ReferralActivity" />
         <activity android:name=".DisplayCaseActivity" />
-        <activity android:name=".DisplayCourtActivity"></activity>
+        <activity android:name=".DisplayCourtActivity" />
+        <activity android:name=".Activity.SubActivity.CasesNewHearingActivity"></activity>
     </application>
 
 </manifest>

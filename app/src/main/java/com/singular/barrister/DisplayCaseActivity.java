@@ -1,12 +1,23 @@
 package com.singular.barrister;
 
+import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.singular.barrister.Activity.SubActivity.CasesNewHearingActivity;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Cases.CasePersons;
 
@@ -18,7 +29,9 @@ public class DisplayCaseActivity extends AppCompatActivity {
     txtHearing,txtClientName,txtClientEmailId,txtPhone,txtAddress,txtClientType,txtOppositionName,
             txtOppositionNumber,txtOppositionLawyerName,txtOppositionLawyerNumber;
 
+    LinearLayout layout;
     Case aCaseDetail;
+    PopupWindow changeStatusWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +43,7 @@ public class DisplayCaseActivity extends AppCompatActivity {
         } else {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        layout=(LinearLayout)findViewById(R.id.linearLayout);
         initialization();
 
         aCaseDetail =(Case)getIntent().getExtras().getSerializable("Case");
@@ -131,8 +145,56 @@ public class DisplayCaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home)
-            finish();
+        switch (item.getItemId()){
+            case android.R.id.home :
+                finish();
+                break;
+
+            case R.id.menuChangeCaseStatus :
+                showChangeStatusWindow();
+                break;
+
+            case R.id.menuAddNewHearingDates :
+                Intent intent=new Intent(getApplicationContext(), CasesNewHearingActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.menuViewAllPastHearingDates :
+                break;
+        }
         return true;
+    }
+
+    public void showChangeStatusWindow()
+    {
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+View customView = inflater.inflate(R.layout.change_case_status_window,null);
+
+        changeStatusWindow = new PopupWindow(
+                customView,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        if(Build.VERSION.SDK_INT>=21){
+            changeStatusWindow.setElevation(5.0f);
+        }
+
+        Button cancelButton=(Button)customView.findViewById(R.id.buttonCancel);
+        Button submitButton=(Button)customView.findViewById(R.id.buttonSave);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeStatusWindow.dismiss();
+            }
+        });
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeStatusWindow.dismiss();
+            }
+        });
+        changeStatusWindow.showAtLocation(layout, Gravity.CENTER,0,0);
     }
 }
