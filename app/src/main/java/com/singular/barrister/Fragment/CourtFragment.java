@@ -1,6 +1,7 @@
 package com.singular.barrister.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.singular.barrister.Activity.HomeScreen;
+import com.singular.barrister.Activity.LandingScreen;
 import com.singular.barrister.Adapter.CourtListAdapter;
 import com.singular.barrister.Model.Court.CourtData;
 import com.singular.barrister.Model.Court.CourtResponse;
@@ -87,12 +90,23 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
                 mRecycleView.setAdapter(courtListAdapter);
                 progressBar.setVisibility(View.GONE);
             }
+            else if(courtResponse.getError()!=null && courtResponse.getError().getStatus_code() ==401)
+            {
+                Toast.makeText(getActivity(),"Your session is Expired",Toast.LENGTH_SHORT).show();
+                new UserPreferance(getActivity()).logOut();
+                Intent intent = new Intent(getActivity(), LandingScreen.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
             else
                 showError();
         }
-        else {
-            showError();
-        }
+        else
+        {Toast.makeText(getActivity(),"Your session is Expired",Toast.LENGTH_SHORT).show();
+            new UserPreferance(getActivity()).logOut();
+            Intent intent = new Intent(getActivity(), LandingScreen.class);
+            startActivity(intent);
+            getActivity().finish();}
     }
 
     @Override

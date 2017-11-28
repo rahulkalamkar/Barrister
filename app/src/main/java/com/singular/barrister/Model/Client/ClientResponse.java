@@ -1,5 +1,7 @@
 package com.singular.barrister.Model.Client;
 
+import com.google.gson.annotations.SerializedName;
+import com.singular.barrister.Model.Error;
 import com.singular.barrister.Util.IModel;
 
 /**
@@ -15,5 +17,18 @@ public class ClientResponse implements IModel{
 
     public void setData(ClientData data) {
         this.data = data;
+    }
+
+
+    @SerializedName("error")
+    Error error;
+
+
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
     }
 }

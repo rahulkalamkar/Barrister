@@ -1,6 +1,7 @@
 package com.singular.barrister.Model.Cases;
 
 import com.google.gson.annotations.SerializedName;
+import com.singular.barrister.Model.Error;
 import com.singular.barrister.Util.IModel;
 
 import java.io.Serializable;
@@ -20,4 +21,16 @@ public class CasesResponse implements IModel,Serializable {
 
     @SerializedName("data")
     CasesData data;
+
+
+    @SerializedName("error")
+    Error error;
+
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
+    }
 }

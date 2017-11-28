@@ -16,6 +16,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -67,4 +68,8 @@ public interface API {
 
     @DELETE("{DELETE_CLIENT}")
     Call<SimpleMessageResponse> deleteClient(@Path(value = "DELETE_CLIENT", encoded = true) String path, @HeaderMap Map<String, String> headers);
+
+    @PUT("{EDIT_CLIENT}")
+    Call<SimpleMessageResponse> editClient(@Path(value = "EDIT_CLIENT", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
+
 }

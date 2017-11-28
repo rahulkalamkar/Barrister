@@ -2,6 +2,7 @@ package com.singular.barrister.Model.Today;
 
 import com.google.gson.annotations.SerializedName;
 import com.singular.barrister.Model.Cases.CasesData;
+import com.singular.barrister.Model.Error;
 import com.singular.barrister.Util.IModel;
 
 /**
@@ -19,4 +20,15 @@ public class TodayResponse implements IModel {
 
     @SerializedName("data")
     CasesData data;
+
+    @SerializedName("error")
+    Error error;
+
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
+    }
 }

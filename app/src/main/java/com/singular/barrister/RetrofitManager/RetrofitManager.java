@@ -470,4 +470,38 @@ public class RetrofitManager {
         }
     }
 
+    public void updateClient(final IDataChangeListener<IModel> callbackListener,String token,String clientId,String first_name,String last_name)
+    {
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Authorization", "Bearer " + token);
+
+        HashMap<String, String> queryMap = new HashMap<String, String>();
+        queryMap.put("first_name",first_name);
+        queryMap.put("last_name",last_name);
+
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/clients/" + clientId);
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<SimpleMessageResponse> call = api.editClient(apiName, headerMap,queryMap);
+            call.enqueue(new Callback<SimpleMessageResponse>() {
+                @Override
+                public void onResponse(Call<SimpleMessageResponse> call, Response<SimpleMessageResponse> response) {
+                      callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<SimpleMessageResponse> call, Throwable t) {
+                       callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+              callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
 }

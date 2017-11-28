@@ -1,6 +1,9 @@
 package com.singular.barrister.Fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -9,15 +12,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.singular.barrister.Activity.LandingScreen;
+import com.singular.barrister.Activity.SubActivity.DisplayClientActivity;
 import com.singular.barrister.Adapter.ClientListAdapter;
 import com.singular.barrister.Adapter.CourtListAdapter;
+import com.singular.barrister.Interface.RecycleItem;
 import com.singular.barrister.Model.Client.Client;
 import com.singular.barrister.Model.Client.ClientResponse;
 import com.singular.barrister.Model.Court.CourtResponse;
@@ -36,7 +46,7 @@ import java.util.ArrayList;
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class ClientFragment extends Fragment implements IDataChangeListener<IModel> {
+public class ClientFragment extends Fragment implements IDataChangeListener<IModel>,RecycleItem {
 
     private RecyclerView mRecycleView;
     private ProgressBar progressBar;
@@ -59,42 +69,8 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         retrofitManager = new RetrofitManager();
         clientList = new ArrayList<Client>();
         getClientList();
-       // swipeEvent();
     }
 
-   /* public void swipeEvent() {
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                if (viewHolder instanceof ClientListAdapter.ClientViewHolder && direction == 4) {
-                    ((ClientListAdapter.ClientViewHolder) viewHolder).txtDelete.setVisibility(View.VISIBLE);
-                } else {
-                    ((ClientListAdapter.ClientViewHolder) viewHolder).txtDelete.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onChildDraw(Canvas c, RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-                ((ClientListAdapter.ClientViewHolder) viewHolder).txtDelete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Log.e("ClientListAdapter ", "" + ((ClientListAdapter.ClientViewHolder) viewHolder).getAdapterPosition());
-                     //   removeItem(position);
-                    }
-                });
-            }
-        };
-
-        // attaching the touch helper to recycler view
-        new ItemTouchHelper(simpleCallback).attachToRecyclerView(mRecycleView);
-    }
-*/
     public void showError() {
         errorTextView.setText("There is no client added yet!");
         errorTextView.setVisibility(View.VISIBLE);
@@ -126,17 +102,60 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             ClientResponse clientResponse = (ClientResponse) response;
             if (clientResponse.getData().getClient() != null) {
                 clientList.addAll(clientResponse.getData().getClient());
-                ClientListAdapter clientListAdapter = new ClientListAdapter(getActivity(), clientList);
+                ClientListAdapter clientListAdapter = new ClientListAdapter(getActivity(), clientList,this);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecycleView.setLayoutManager(linearLayoutManager);
                 mRecycleView.setAdapter(clientListAdapter);
                 progressBar.setVisibility(View.GONE);
-            } else
+            }
+            else if(clientResponse.getError()!=null && clientResponse.getError().getStatus_code() ==401)
+            {
+                Toast.makeText(getActivity(),"Your session is Expired",Toast.LENGTH_SHORT).show();
+                new UserPreferance(getActivity()).logOut();
+                Intent intent = new Intent(getActivity(), LandingScreen.class);
+                startActivity(intent);
+                getActivity().finish();
+            }else
                 showError();
-        } else {
-            showError();
-        }
+        } else
+        {Toast.makeText(getActivity(),"Your session is Expired",Toast.LENGTH_SHORT).show();
+            new UserPreferance(getActivity()).logOut();
+            Intent intent = new Intent(getActivity(), LandingScreen.class);
+            startActivity(intent);
+            getActivity().finish();}
     }
 
+    @Override
+    public void onItemClick(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Client", clientList.get(position));
+        Intent intent = new Intent(getActivity(), DisplayClientActivity.class);
+        intent.putExtras(bundle);
+        getActivity().startActivity(intent);
+    }
+
+    private int newPosition;
+    @Override
+    public void onItemLongClick(int position) {
+        showMenu(position);
+    }
+
+    public void showMenu(int position)
+    {
+        LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.simple_list, null);
+
+        PopupWindow menuWindow = new PopupWindow(
+                customView,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        menuWindow.setOutsideTouchable(false);
+        menuWindow.setFocusable(true);
+        if (Build.VERSION.SDK_INT >= 21) {
+            menuWindow.setElevation(5.0f);
+        }
+        menuWindow.showAtLocation(mRecycleView, Gravity.CENTER, 0, 0);
+    }
 
 }

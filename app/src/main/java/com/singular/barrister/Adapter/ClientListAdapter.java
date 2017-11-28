@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.singular.barrister.Activity.SubActivity.DisplayClientActivity;
+import com.singular.barrister.Interface.RecycleItem;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Client.Client;
 import com.singular.barrister.Preferance.UserPreferance;
@@ -28,10 +29,12 @@ import java.util.ArrayList;
 public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<Client> clientList;
     Context context;
+    RecycleItem recycleItem;
 
-    public ClientListAdapter(Context context, ArrayList<Client> clientList) {
+    public ClientListAdapter(Context context, ArrayList<Client> clientList, RecycleItem recycleItem) {
         this.clientList = clientList;
         this.context = context;
+    this.recycleItem=recycleItem;
     }
 
 
@@ -73,11 +76,15 @@ public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Client", clientList.get(getAdapterPosition()));
-                    Intent intent = new Intent(context, DisplayClientActivity.class);
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
+                    recycleItem.onItemClick(getAdapterPosition());
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    recycleItem.onItemLongClick(getAdapterPosition());
+                    return false;
                 }
             });
         }

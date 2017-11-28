@@ -1,6 +1,8 @@
 package com.singular.barrister.Model.Court;
 
+import com.google.gson.annotations.SerializedName;
 import com.singular.barrister.Model.District;
+import com.singular.barrister.Model.Error;
 import com.singular.barrister.Model.State;
 import com.singular.barrister.Model.SubDistrict;
 import com.singular.barrister.Util.IModel;
@@ -22,4 +24,16 @@ public class CourtResponse implements IModel{
     public void setData(CourtNode data) {
         this.data = data;
     }
+
+
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
+    }
+
+    @SerializedName("error")
+    Error error;
 }

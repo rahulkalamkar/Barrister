@@ -45,4 +45,14 @@ public class SimpleMessageResponse implements IModel {
     public void setAlready_created(boolean already_created) {
         this.already_created = already_created;
     }
+
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
+    }
+
+    Error error;
 }

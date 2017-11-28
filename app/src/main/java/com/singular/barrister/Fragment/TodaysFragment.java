@@ -1,6 +1,7 @@
 package com.singular.barrister.Fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.singular.barrister.Activity.LandingScreen;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Today.TodayResponse;
 import com.singular.barrister.Preferance.UserPreferance;
@@ -122,10 +124,22 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
                 mViewPager.setCurrentItem(FIRST_PAGE);
                 mViewPager.setOffscreenPageLimit(3);
                 progressBar.setVisibility(View.GONE);
-            } else
+            }
+            else if(todayResponse.getError()!=null && todayResponse.getError().getStatus_code() ==401)
+            {
+                Toast.makeText(getActivity(),"Your session is Expired",Toast.LENGTH_SHORT).show();
+                new UserPreferance(getActivity()).logOut();
+                Intent intent = new Intent(getActivity(), LandingScreen.class);
+                startActivity(intent);
+                getActivity().finish();
+            }else
                 showError();
         } else
-            showError();
+        {Toast.makeText(getActivity(),"Your session is Expired",Toast.LENGTH_SHORT).show();
+            new UserPreferance(getActivity()).logOut();
+            Intent intent = new Intent(getActivity(), LandingScreen.class);
+            startActivity(intent);
+            getActivity().finish();}
     }
 
     @Override

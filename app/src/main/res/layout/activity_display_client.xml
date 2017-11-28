@@ -61,7 +61,7 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="Rahul"
+                        android:hint="First name"
                         android:textColor="#777777"
                         android:textSize="16sp" />
 
@@ -80,7 +80,7 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="Kalamkar"
+                        android:hint="Last name"
                         android:textColor="#777777"
                         android:textSize="16sp" />
 
@@ -172,7 +172,8 @@
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
         </RelativeLayout>
 
     </LinearLayout>
