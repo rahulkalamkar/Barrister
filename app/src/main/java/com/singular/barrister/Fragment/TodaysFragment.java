@@ -26,7 +26,6 @@ import com.singular.barrister.Util.WebServiceError;
 
 import java.util.ArrayList;
 
-import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
 
 /**
  * Created by rahul.kalamkar on 11/24/2017.

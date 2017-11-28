@@ -1,31 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#FAFAFA"
     android:paddingLeft="@dimen/fab_margin"
     android:paddingRight="@dimen/fab_margin"
     android:paddingTop="@dimen/fab_margin">
 
-    <TextView
+    <RelativeLayout
+        android:id="@+id/view_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:background="#ff0000"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/textViewDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/fab_margin"
+                android:text="Delete"
+                android:textColor="#FAFAFA"
+                android:textSize="13dp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/view_foreground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textViewCourtName"
-        android:textSize="16sp"
-        android:text="Rahul Kalamkar"
-        android:textColor="#000000"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="Jalna"
-        android:id="@+id/textViewState"
-        android:layout_marginTop="3dp"
-        android:textColor="#777777"/>
+        android:background="#FAFAFA"
+        android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.2dp"
-    android:layout_marginTop="@dimen/fab_margin"
-        android:background="#55777777"/>
+        <TextView
+            android:id="@+id/textViewCourtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rahul Kalamkar"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/textViewState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="Jalna"
+            android:textColor="#777777"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="#55777777" />
+    </LinearLayout>
+</FrameLayout>

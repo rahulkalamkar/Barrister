@@ -76,7 +76,11 @@
         <activity android:name=".ReferralActivity" />
         <activity android:name=".DisplayCaseActivity" />
         <activity android:name=".DisplayCourtActivity" />
-        <activity android:name=".Activity.SubActivity.CasesNewHearingActivity"></activity>
+        <activity android:name=".Activity.SubActivity.CasesNewHearingActivity" />
+        <activity android:name=".Activity.SubActivity.HearingDateActivity" />
+        <activity android:name=".Activity.SubActivity.AddCaseActivity" />
+        <activity android:name=".Activity.SubActivity.AddClientActivity" />
+        <activity android:name=".Activity.SubActivity.DisplayClientActivity"></activity>
     </application>
 
 </manifest>

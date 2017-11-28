@@ -1,5 +1,6 @@
 package com.singular.barrister.RetrofitManager;
 
+import com.singular.barrister.Model.CaseHearingResponse;
 import com.singular.barrister.Model.Cases.CasesResponse;
 import com.singular.barrister.Model.Client.ClientResponse;
 import com.singular.barrister.Model.Court.CourtResponse;
@@ -11,10 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 /**
@@ -55,4 +58,13 @@ public interface API {
 
     @POST("{UPDATE_PROFILE}")
     Call<RegisterResponse> updateProfile(@Path(value = "UPDATE_PROFILE", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
+
+    @GET("{GET_HEARING_LIST}")
+    Call<CaseHearingResponse> getHearingList(@Path(value = "GET_HEARING_LIST", encoded = true) String path, @HeaderMap Map<String, String> headers);
+
+    @POST("{ADD_CLIENT}")
+    Call<SimpleMessageResponse> addClient(@Path(value = "ADD_CLIENT", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
+
+    @DELETE("{DELETE_CLIENT}")
+    Call<SimpleMessageResponse> deleteClient(@Path(value = "DELETE_CLIENT", encoded = true) String path, @HeaderMap Map<String, String> headers);
 }

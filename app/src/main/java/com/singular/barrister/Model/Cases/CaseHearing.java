@@ -13,6 +13,16 @@ public class CaseHearing implements IModel,Serializable{
     String case_id;
     String case_hearing_date;
 
+    public String getCase_disposed() {
+        return case_disposed;
+    }
+
+    public void setCase_disposed(String case_disposed) {
+        this.case_disposed = case_disposed;
+    }
+
+    String case_disposed;
+
     public String getId() {
         return id;
     }

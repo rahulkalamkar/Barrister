@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.singular.barrister.Activity.SubActivity.AddCaseActivity;
+import com.singular.barrister.Activity.SubActivity.AddClientActivity;
 import com.singular.barrister.Fragment.CasesFragment;
 import com.singular.barrister.Fragment.ClientFragment;
 import com.singular.barrister.Fragment.CourtFragment;
@@ -51,14 +53,17 @@ public class HomeScreen extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent;
                 if (tabLayout.getSelectedTabPosition() == 0) {
 
                 } else if (tabLayout.getSelectedTabPosition() == 1) {
-
+                    intent = new Intent(getApplicationContext(), AddCaseActivity.class);
+                    startActivity(intent);
                 } else if (tabLayout.getSelectedTabPosition() == 2) {
 
                 } else {
-
+                    intent = new Intent(getApplicationContext(), AddClientActivity.class);
+                    startActivityForResult(intent, 1);
                 }
             }
         });
@@ -67,10 +72,10 @@ public class HomeScreen extends AppCompatActivity {
     }
 
     public void initializeFragments() {
-        todaysFragment = new TodaysFragment();
+        /*todaysFragment = new TodaysFragment();
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragmentContainer, todaysFragment, "Today's Fragment").commit();
+        transaction.replace(R.id.fragmentContainer, todaysFragment, "Today's Fragment").commit();*/
     }
 
     private TabLayout tabLayout;
@@ -89,10 +94,10 @@ public class HomeScreen extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
-                    todaysFragment = new TodaysFragment();
+                   /* todaysFragment = new TodaysFragment();
                     fragmentManager = getSupportFragmentManager();
                     transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.fragmentContainer, todaysFragment, "Today's Fragment").commit();
+                    transaction.replace(R.id.fragmentContainer, todaysFragment, "Today's Fragment").commit();*/
                 } else if (tab.getPosition() == 1) {
                     casesFragment = new CasesFragment();
                     fragmentManager = getSupportFragmentManager();
@@ -180,5 +185,36 @@ public class HomeScreen extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == requestCode) {
+            if (tabLayout.getSelectedTabPosition() == 0) {
+                   /* todaysFragment = new TodaysFragment();
+                    fragmentManager = getSupportFragmentManager();
+                    transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragmentContainer, todaysFragment, "Today's Fragment").commit();*/
+            } else if (tabLayout.getSelectedTabPosition() == 1) {
+                casesFragment = new CasesFragment();
+                fragmentManager = getSupportFragmentManager();
+                transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragmentContainer, casesFragment, "Cases Fragment").commit();
+            } else if (tabLayout.getSelectedTabPosition() == 2) {
+                courtFragment = new CourtFragment();
+                fragmentManager = getSupportFragmentManager();
+                transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragmentContainer, courtFragment, "Court Fragment").commit();
+            } else if (tabLayout.getSelectedTabPosition() == 3) {
+                clientFragment = new ClientFragment();
+                fragmentManager = getSupportFragmentManager();
+                transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragmentContainer, clientFragment, "Client Fragment").commit();
+
+            }
+        } else {
+
+        }
     }
 }
