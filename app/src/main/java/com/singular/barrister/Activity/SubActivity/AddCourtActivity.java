@@ -2,6 +2,7 @@ package com.singular.barrister.Activity.SubActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -315,20 +317,21 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
         }
         showOtherError();
     }
-
+    PopupWindow courtTypeWindow;
     public void selectCourtType(View layout) {
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.activity_select_state, null);
 
-        PopupWindow courtTypeWindow = new PopupWindow(
+        courtTypeWindow = new PopupWindow(
                 customView,
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT
         );
         if (Build.VERSION.SDK_INT >= 21) {
             courtTypeWindow.setElevation(5.0f);
         }
-
+        LinearLayout linearLayout=(LinearLayout)customView.findViewById(R.id.layout);
+        linearLayout.setBackgroundColor(Color.parseColor("#99777777"));
         RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recycleView);
         SimpleRecycleAdapter simpleRecycleAdapter = new SimpleRecycleAdapter(getApplicationContext(), courtTypeList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -349,7 +352,7 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.state_item, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.simple_list_item, parent, false);
             return new SimpleViewHolder(v);
         }
 
@@ -372,7 +375,20 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
             public SimpleViewHolder(View itemView) {
                 super(itemView);
                 txtName = (TextView) itemView.findViewById(R.id.textViewName);
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        selectedCourtType(list.get(getAdapterPosition()));
+                        courtTypeWindow.dismiss();
+                    }
+                });
             }
         }
+    }
+
+    public void selectedCourtType(String name)
+    {
+        edtCourtType.setText(name);
     }
 }
