@@ -84,7 +84,8 @@
         <activity android:name=".Activity.SubActivity.AddCourtActivity" />
         <activity android:name=".Adapter.SelectStateActivity" />
         <activity android:name=".Activity.SubActivity.SelectDistrictActivity" />
-        <activity android:name=".Activity.SubActivity.SelectSubDistrictActivity"></activity>
+        <activity android:name=".Activity.SubActivity.SelectSubDistrictActivity" />
+        <activity android:name=".Activity.SubActivity.DateActivity"></activity>
     </application>
 
 </manifest>

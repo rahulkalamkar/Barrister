@@ -70,7 +70,7 @@ public class DisplayCaseActivity extends AppCompatActivity {
         txtRegisterDate.setText(aCaseDetail.getCase_register_date());
 
 
-        txtHearing.setText(aCaseDetail.getHearing().getCase_decision());
+        txtHearing.setText(aCaseDetail.getHearing() !=null ? (aCaseDetail.getHearing().getCase_decision()!=null ? aCaseDetail.getHearing().getCase_decision() : "") : "");
 
         txtClientName.setText(aCaseDetail.getClient().getFirst_name() + " " + aCaseDetail.getClient().getLast_name());
         txtClientEmailId.setText(aCaseDetail.getClient().getEmail());
@@ -170,8 +170,8 @@ public class DisplayCaseActivity extends AppCompatActivity {
 
         changeStatusWindow = new PopupWindow(
                 customView,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
         );
         if (Build.VERSION.SDK_INT >= 21) {
             changeStatusWindow.setElevation(5.0f);

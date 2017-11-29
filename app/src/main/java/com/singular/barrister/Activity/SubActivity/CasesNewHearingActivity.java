@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.singular.barrister.R;
+import com.singular.barrister.Util.DatePickerWindow;
 
 import java.util.Calendar;
 
@@ -40,7 +41,7 @@ public class CasesNewHearingActivity extends AppCompatActivity {
         edtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                DatePickerWindow datePickerWindow=new DatePickerWindow(getApplicationContext(),edtDate);
             }
         });
     }

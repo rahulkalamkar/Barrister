@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#99777777">
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:background="#FAFAFA">
+    <RelativeLayout android:id="@+id/pickerLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <DatePicker
+        android:id="@+id/datePicker"
+            android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FAFAFA"/>
+
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/textViewSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ok"
+        android:padding="@dimen/fab_margin"
+        android:background="#ff0000"
+        android:layout_below="@+id/pickerLayout"
+        android:layout_alignRight="@+id/pickerLayout"
+        android:layout_alignEnd="@+id/pickerLayout" />
+
+    <TextView
+        android:id="@+id/textViewCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Canecl"
+        android:padding="@dimen/fab_margin"
+        android:background="#00ff00"
+        android:layout_below="@+id/pickerLayout"
+        android:layout_toLeftOf="@+id/textViewSave"
+        android:layout_toStartOf="@+id/textViewSave" />
+</RelativeLayout>
+</RelativeLayout>
