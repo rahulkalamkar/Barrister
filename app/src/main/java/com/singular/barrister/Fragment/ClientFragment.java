@@ -46,7 +46,7 @@ import java.util.ArrayList;
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class ClientFragment extends Fragment implements IDataChangeListener<IModel>,RecycleItem {
+public class ClientFragment extends Fragment implements IDataChangeListener<IModel>, RecycleItem {
 
     private RecyclerView mRecycleView;
     private ProgressBar progressBar;
@@ -96,33 +96,34 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
 
     }
 
+    ClientListAdapter clientListAdapter;
+
     @Override
     public void onDataReceived(IModel response) {
         if (response != null && response instanceof ClientResponse) {
             ClientResponse clientResponse = (ClientResponse) response;
             if (clientResponse.getData().getClient() != null) {
                 clientList.addAll(clientResponse.getData().getClient());
-                ClientListAdapter clientListAdapter = new ClientListAdapter(getActivity(), clientList,this);
+                clientListAdapter = new ClientListAdapter(getActivity(), clientList, this);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecycleView.setLayoutManager(linearLayoutManager);
                 mRecycleView.setAdapter(clientListAdapter);
                 progressBar.setVisibility(View.GONE);
-            }
-            else if(clientResponse.getError()!=null && clientResponse.getError().getStatus_code() ==401)
-            {
-                Toast.makeText(getActivity(),"Your session is Expired",Toast.LENGTH_SHORT).show();
+            } else if (clientResponse.getError() != null && clientResponse.getError().getStatus_code() == 401) {
+                Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
                 new UserPreferance(getActivity()).logOut();
                 Intent intent = new Intent(getActivity(), LandingScreen.class);
                 startActivity(intent);
                 getActivity().finish();
-            }else
+            } else
                 showError();
-        } else
-        {Toast.makeText(getActivity(),"Your session is Expired",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
             new UserPreferance(getActivity()).logOut();
             Intent intent = new Intent(getActivity(), LandingScreen.class);
             startActivity(intent);
-            getActivity().finish();}
+            getActivity().finish();
+        }
     }
 
     @Override
@@ -135,19 +136,19 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
     }
 
     private int newPosition;
+
     @Override
     public void onItemLongClick(int position) {
         showMenu(position);
     }
 
-    public void showMenu(int position)
-    {
+    public void showMenu(final int position) {
         LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.simple_list, null);
 
-        PopupWindow menuWindow = new PopupWindow(
+        final PopupWindow menuWindow = new PopupWindow(
                 customView,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
         menuWindow.setOutsideTouchable(false);
@@ -155,6 +156,35 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         if (Build.VERSION.SDK_INT >= 21) {
             menuWindow.setElevation(5.0f);
         }
+
+        TextView textViewDelete = (TextView) customView.findViewById(R.id.menuDeleteButton);
+        TextView textViewCall = (TextView) customView.findViewById(R.id.menuCallButton);
+        TextView textViewMessage = (TextView) customView.findViewById(R.id.menuMessageButton);
+
+        textViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                retrofitManager.deleteClient(new UserPreferance(getActivity()).getToken(), clientList.get(position).getClient_id());
+                clientList.remove(position);
+                clientListAdapter.notifyDataSetChanged();
+                menuWindow.dismiss();
+            }
+        });
+
+        textViewCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuWindow.dismiss();
+            }
+        });
+
+        textViewMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuWindow.dismiss();
+            }
+        });
+
         menuWindow.showAtLocation(mRecycleView, Gravity.CENTER, 0, 0);
     }
 

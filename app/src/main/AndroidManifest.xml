@@ -80,7 +80,11 @@
         <activity android:name=".Activity.SubActivity.HearingDateActivity" />
         <activity android:name=".Activity.SubActivity.AddCaseActivity" />
         <activity android:name=".Activity.SubActivity.AddClientActivity" />
-        <activity android:name=".Activity.SubActivity.DisplayClientActivity"></activity>
+        <activity android:name=".Activity.SubActivity.DisplayClientActivity" />
+        <activity android:name=".Activity.SubActivity.AddCourtActivity" />
+        <activity android:name=".Adapter.SelectStateActivity" />
+        <activity android:name=".Activity.SubActivity.SelectDistrictActivity" />
+        <activity android:name=".Activity.SubActivity.SelectSubDistrictActivity"></activity>
     </application>
 
 </manifest>

@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 
 import com.singular.barrister.Activity.SubActivity.AddCaseActivity;
 import com.singular.barrister.Activity.SubActivity.AddClientActivity;
+import com.singular.barrister.Activity.SubActivity.AddCourtActivity;
 import com.singular.barrister.Fragment.CasesFragment;
 import com.singular.barrister.Fragment.ClientFragment;
 import com.singular.barrister.Fragment.CourtFragment;
@@ -60,7 +61,8 @@ public class HomeScreen extends AppCompatActivity {
                     intent = new Intent(getApplicationContext(), AddCaseActivity.class);
                     startActivity(intent);
                 } else if (tabLayout.getSelectedTabPosition() == 2) {
-
+                    intent = new Intent(getApplicationContext(), AddCourtActivity.class);
+                    startActivityForResult(intent, 2);
                 } else {
                     intent = new Intent(getApplicationContext(), AddClientActivity.class);
                     startActivityForResult(intent, 1);

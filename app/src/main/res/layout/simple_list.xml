@@ -1,37 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="@dimen/fab_margin"
-    android:background="@drawable/pop_background">
+    android:orientation="vertical"
+    android:padding="@dimen/fab_margin">
 
-    <TextView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete"
-        android:textSize="16sp"
-        android:textColor="#000000"
-        android:paddingLeft="@dimen/fab_margin"
-        android:paddingRight="@dimen/fab_margin"/>
+        android:background="@drawable/pop_background"
+        android:orientation="vertical"
+        android:padding="@dimen/fab_margin">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Call"
-        android:textSize="16sp"
-        android:layout_marginTop="16dp"
-        android:textColor="#000000"
-        android:paddingLeft="@dimen/fab_margin"
-        android:paddingRight="@dimen/fab_margin"/>
+        <TextView
+            android:id="@+id/menuDeleteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/fab_margin"
+            android:paddingRight="@dimen/fab_margin"
+            android:text="Delete"
+            android:background="@drawable/button_click_transperent"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="@dimen/fab_margin"/>
+
+        <TextView
+            android:id="@+id/menuCallButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingLeft="@dimen/fab_margin"
+            android:paddingRight="@dimen/fab_margin"
+            android:text="Call"
+            android:background="@drawable/button_click_transperent"
+            android:textColor="#000000"
+            android:textSize="18sp" />
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Message"
-        android:textSize="16sp"
-        android:layout_marginTop="16dp"
-        android:textColor="#000000"
-        android:paddingLeft="@dimen/fab_margin"
-        android:paddingRight="@dimen/fab_margin"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="@dimen/fab_margin" />
+
+        <TextView
+            android:id="@+id/menuMessageButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingLeft="@dimen/fab_margin"
+            android:paddingRight="@dimen/fab_margin"
+            android:text="Message"
+            android:background="@drawable/button_click_transperent"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+    </LinearLayout>
 </LinearLayout>

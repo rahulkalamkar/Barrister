@@ -30,12 +30,13 @@ import com.singular.barrister.Util.WebServiceError;
 
 import java.util.ArrayList;
 
-public class CourtFragment extends Fragment implements IDataChangeListener<IModel>{
+public class CourtFragment extends Fragment implements IDataChangeListener<IModel> {
 
     private RecyclerView mRecycleView;
     private ProgressBar progressBar;
     TextView errorTextView;
     private ArrayList<CourtData> courtList;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,32 +44,29 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
     }
 
     private RetrofitManager retrofitManager;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRecycleView=(RecyclerView)getView().findViewById(R.id.courtRecycleView);
-        progressBar=(ProgressBar)getView().findViewById(R.id.progressBar);
-        errorTextView=(TextView)getView().findViewById(R.id.textViewErrorText);
-        courtList=new ArrayList<CourtData>();
-        retrofitManager=new RetrofitManager();
+        mRecycleView = (RecyclerView) getView().findViewById(R.id.courtRecycleView);
+        progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
+        errorTextView = (TextView) getView().findViewById(R.id.textViewErrorText);
+        courtList = new ArrayList<CourtData>();
+        retrofitManager = new RetrofitManager();
         getCourtList();
     }
 
-    public void showError()
-    {
+    public void showError() {
         errorTextView.setVisibility(View.VISIBLE);
         mRecycleView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
     }
 
-    public void getCourtList()
-    {
-        if(new NetworkConnection(getActivity()).isNetworkAvailable())
-        {
+    public void getCourtList() {
+        if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
             retrofitManager.getCourtList(this, new UserPreferance(getActivity()).getToken());
-        }
-        else {
-            Toast.makeText(getActivity(),getActivity().getResources().getString(R.string.network_error),Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -79,34 +77,30 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
 
     @Override
     public void onDataReceived(IModel response) {
-        if(response!=null && response instanceof CourtResponse)
-        {
-            CourtResponse courtResponse =(CourtResponse)response;
-            if(courtResponse.getData().getCourt()!=null) {
+        if (response != null && response instanceof CourtResponse) {
+            CourtResponse courtResponse = (CourtResponse) response;
+            if (courtResponse.getData().getCourt() != null) {
                 courtList.addAll(courtResponse.getData().getCourt());
                 CourtListAdapter courtListAdapter = new CourtListAdapter(getActivity(), courtList);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecycleView.setLayoutManager(linearLayoutManager);
                 mRecycleView.setAdapter(courtListAdapter);
                 progressBar.setVisibility(View.GONE);
-            }
-            else if(courtResponse.getError()!=null && courtResponse.getError().getStatus_code() ==401)
-            {
-                Toast.makeText(getActivity(),"Your session is Expired",Toast.LENGTH_SHORT).show();
+            } else if (courtResponse.getError() != null && courtResponse.getError().getStatus_code() == 401) {
+                Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
                 new UserPreferance(getActivity()).logOut();
                 Intent intent = new Intent(getActivity(), LandingScreen.class);
                 startActivity(intent);
                 getActivity().finish();
-            }
-            else
+            } else
                 showError();
-        }
-        else
-        {Toast.makeText(getActivity(),"Your session is Expired",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
             new UserPreferance(getActivity()).logOut();
             Intent intent = new Intent(getActivity(), LandingScreen.class);
             startActivity(intent);
-            getActivity().finish();}
+            getActivity().finish();
+        }
     }
 
     @Override

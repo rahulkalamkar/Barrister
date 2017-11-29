@@ -2,10 +2,12 @@ package com.singular.barrister.RetrofitManager;
 
 import com.singular.barrister.Model.CaseHearingResponse;
 import com.singular.barrister.Model.Cases.CasesResponse;
+import com.singular.barrister.Model.CasesTypeResponse;
 import com.singular.barrister.Model.Client.ClientResponse;
 import com.singular.barrister.Model.Court.CourtResponse;
 import com.singular.barrister.Model.RegisterResponse;
 import com.singular.barrister.Model.SimpleMessageResponse;
+import com.singular.barrister.Model.States.StateResponse;
 import com.singular.barrister.Model.Today.TodayResponse;
 
 import java.util.HashMap;
@@ -71,5 +73,22 @@ public interface API {
 
     @PUT("{EDIT_CLIENT}")
     Call<SimpleMessageResponse> editClient(@Path(value = "EDIT_CLIENT", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
+
+    @GET("{GET_STATE_LIST}")
+    Call<StateResponse> getStateList(@Path(value = "GET_STATE_LIST", encoded = true) String path, @HeaderMap Map<String, String> headers);
+
+
+    @GET("{GET_DISTRICT_LIST}")
+    Call<StateResponse> getDistrictList(@Path(value = "GET_DISTRICT_LIST", encoded = true) String path, @HeaderMap Map<String, String> headers, @Query("stateId") String stateId);
+
+    @GET("{GET_SUBDISTRICT_LIST}")
+    Call<StateResponse> getSubDistrictList(@Path(value = "GET_SUBDISTRICT_LIST", encoded = true) String path, @HeaderMap Map<String, String> headers, @Query("districtId") String districtId);
+
+    @POST("{ADD_COURT}")
+    Call<SimpleMessageResponse> addCourt(@Path(value = "ADD_COURT", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
+
+
+    @GET("{GET_CASES_TYPE}")
+    Call<CasesTypeResponse> getCaseType(@Path(value = "GET_CASES_TYPE", encoded = true) String path, @HeaderMap Map<String, String> headers);
 
 }

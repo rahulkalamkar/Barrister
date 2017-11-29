@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.singular.barrister.DisplayCourtActivity;
+import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Court.CourtData;
 import com.singular.barrister.R;
 
@@ -23,9 +24,10 @@ import java.util.ArrayList;
 public class CourtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<CourtData> courtList;
     Context context;
-    public CourtListAdapter(Context context, ArrayList<CourtData> courtList){
-        this.courtList=courtList;
-        this.context=context;
+
+    public CourtListAdapter(Context context, ArrayList<CourtData> courtList) {
+        this.courtList = courtList;
+        this.context = context;
     }
 
     @Override
@@ -41,29 +43,46 @@ public class CourtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof CourtViewHolder)
-        {
-            CourtViewHolder courtViewHolder=(CourtViewHolder)holder;
-        courtViewHolder.txtCourtName.setText(courtList.get(position).getCourt_name());
-            courtViewHolder.txtStateName.setText(courtList.get(position).getDistrict().getName() +", "+
-            courtList.get(position).getState().getName());
+        if (holder instanceof CourtViewHolder) {
+            CourtViewHolder courtViewHolder = (CourtViewHolder) holder;
+            courtViewHolder.txtCourtName.setText(courtList.get(position).getCourt_name());
+            courtViewHolder.txtStateName.setText(getAddress(courtList.get(position)));
 
         }
     }
 
-    public class CourtViewHolder extends RecyclerView.ViewHolder{
-        TextView txtCourtName,txtStateName;
-        public CourtViewHolder(View itemView)
-        {   super(itemView);
-            txtCourtName=(TextView)itemView.findViewById(R.id.textViewCourtName);
-            txtStateName=(TextView)itemView.findViewById(R.id.textViewState);
+    public String getAddress(CourtData aCaseDetail) {
+        String address = "";
+        if (aCaseDetail.getSubdistrict() != null && aCaseDetail.getSubdistrict().getName() != null) {
+            address = aCaseDetail.getSubdistrict().getName() + ", ";
+        }
+
+
+        if (aCaseDetail.getDistrict() != null && aCaseDetail.getDistrict().getName() != null) {
+            address = address + aCaseDetail.getDistrict().getName() + ", ";
+        }
+
+
+        if (aCaseDetail.getState() != null && aCaseDetail.getState().getName() != null) {
+            address = address + aCaseDetail.getState().getName();
+        }
+        return address;
+    }
+
+    public class CourtViewHolder extends RecyclerView.ViewHolder {
+        TextView txtCourtName, txtStateName;
+
+        public CourtViewHolder(View itemView) {
+            super(itemView);
+            txtCourtName = (TextView) itemView.findViewById(R.id.textViewCourtName);
+            txtStateName = (TextView) itemView.findViewById(R.id.textViewState);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle=new Bundle();
-                    bundle.putSerializable("Court",(Serializable)courtList.get(getAdapterPosition()));
-                    Intent intent=new Intent(context, DisplayCourtActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Court", (Serializable) courtList.get(getAdapterPosition()));
+                    Intent intent = new Intent(context, DisplayCourtActivity.class);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }

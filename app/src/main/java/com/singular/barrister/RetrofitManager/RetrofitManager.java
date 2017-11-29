@@ -2,10 +2,12 @@ package com.singular.barrister.RetrofitManager;
 
 import com.singular.barrister.Model.CaseHearingResponse;
 import com.singular.barrister.Model.Cases.CasesResponse;
+import com.singular.barrister.Model.CasesTypeResponse;
 import com.singular.barrister.Model.Client.ClientResponse;
 import com.singular.barrister.Model.Court.CourtResponse;
 import com.singular.barrister.Model.RegisterResponse;
 import com.singular.barrister.Model.SimpleMessageResponse;
+import com.singular.barrister.Model.States.StateResponse;
 import com.singular.barrister.Model.Today.TodayResponse;
 import com.singular.barrister.Util.IDataChangeListener;
 import com.singular.barrister.Util.IModel;
@@ -456,28 +458,27 @@ public class RetrofitManager {
             call.enqueue(new Callback<SimpleMessageResponse>() {
                 @Override
                 public void onResponse(Call<SimpleMessageResponse> call, Response<SimpleMessageResponse> response) {
-                  //  callbackListener.onDataReceived(response.body());
+                    //  callbackListener.onDataReceived(response.body());
                 }
 
                 @Override
                 public void onFailure(Call<SimpleMessageResponse> call, Throwable t) {
-                 //   callbackListener.onDataReceived(null);
+                    //   callbackListener.onDataReceived(null);
                 }
             });
         } catch (MalformedURLException e) {
-          //  callbackListener.onDataReceived(null);
+            //  callbackListener.onDataReceived(null);
             e.printStackTrace();
         }
     }
 
-    public void updateClient(final IDataChangeListener<IModel> callbackListener,String token,String clientId,String first_name,String last_name)
-    {
+    public void updateClient(final IDataChangeListener<IModel> callbackListener, String token, String clientId, String first_name, String last_name) {
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", "Bearer " + token);
 
         HashMap<String, String> queryMap = new HashMap<String, String>();
-        queryMap.put("first_name",first_name);
-        queryMap.put("last_name",last_name);
+        queryMap.put("first_name", first_name);
+        queryMap.put("last_name", last_name);
 
         try {
             URL url = new URL("http://singularsacademy.com/lawyer/public/api/clients/" + clientId);
@@ -486,20 +487,171 @@ public class RetrofitManager {
             String parameters = url.getQuery();
 
             API api = APIClient.getClient(baseUrl).create(API.class);
-            Call<SimpleMessageResponse> call = api.editClient(apiName, headerMap,queryMap);
+            Call<SimpleMessageResponse> call = api.editClient(apiName, headerMap, queryMap);
             call.enqueue(new Callback<SimpleMessageResponse>() {
                 @Override
                 public void onResponse(Call<SimpleMessageResponse> call, Response<SimpleMessageResponse> response) {
-                      callbackListener.onDataReceived(response.body());
+                    callbackListener.onDataReceived(response.body());
                 }
 
                 @Override
                 public void onFailure(Call<SimpleMessageResponse> call, Throwable t) {
-                       callbackListener.onDataReceived(null);
+                    callbackListener.onDataReceived(null);
                 }
             });
         } catch (MalformedURLException e) {
-              callbackListener.onDataReceived(null);
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
+    public void getState(final IDataChangeListener<IModel> callbackListener, String token) {
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Authorization", "Bearer " + token);
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/state");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<StateResponse> call = api.getStateList(apiName, headerMap);
+            call.enqueue(new Callback<StateResponse>() {
+                @Override
+                public void onResponse(Call<StateResponse> call, Response<StateResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<StateResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
+    public void getDistrictList(final IDataChangeListener<IModel> callbackListener, String token, String stateId) {
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Authorization", "Bearer " + token);
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/district");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<StateResponse> call = api.getDistrictList(apiName, headerMap, stateId);
+            call.enqueue(new Callback<StateResponse>() {
+                @Override
+                public void onResponse(Call<StateResponse> call, Response<StateResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<StateResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
+    public void getSubDistrictList(final IDataChangeListener<IModel> callbackListener, String token, String districtId) {
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Authorization", "Bearer " + token);
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/subdistrict");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<StateResponse> call = api.getSubDistrictList(apiName, headerMap, districtId);
+            call.enqueue(new Callback<StateResponse>() {
+                @Override
+                public void onResponse(Call<StateResponse> call, Response<StateResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<StateResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
+    public void addCourt(final IDataChangeListener<IModel> callbackListener, String token, String courtName,
+                         String courtNumber, String courtType, String stateName, String districtName, String subDistrictName) {
+
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Authorization", "Bearer " + token);
+
+        HashMap<String, String> queryMap = new HashMap<String, String>();
+        queryMap.put("court_name", courtName);
+        queryMap.put("state_id", stateName);
+        queryMap.put("district_id", districtName);
+        queryMap.put("sub_district_id", subDistrictName);
+        queryMap.put("court_number", courtNumber);
+        queryMap.put("court_type", courtType);
+
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/courts");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<SimpleMessageResponse> call = api.addCourt(apiName, headerMap, queryMap);
+            call.enqueue(new Callback<SimpleMessageResponse>() {
+                @Override
+                public void onResponse(Call<SimpleMessageResponse> call, Response<SimpleMessageResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<SimpleMessageResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
+    public void getCourtType(final IDataChangeListener<IModel> callbackListener, String token) {
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Authorization", "Bearer " + token);
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/casetype");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<CasesTypeResponse> call = api.getCaseType(apiName, headerMap);
+            call.enqueue(new Callback<CasesTypeResponse>() {
+                @Override
+                public void onResponse(Call<CasesTypeResponse> call, Response<CasesTypeResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<CasesTypeResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
             e.printStackTrace();
         }
     }
