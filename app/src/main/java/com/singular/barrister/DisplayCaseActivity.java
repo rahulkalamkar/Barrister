@@ -21,10 +21,15 @@ import com.singular.barrister.Activity.SubActivity.CasesNewHearingActivity;
 import com.singular.barrister.Activity.SubActivity.HearingDateActivity;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Cases.CasePersons;
+import com.singular.barrister.Preferance.UserPreferance;
+import com.singular.barrister.RetrofitManager.RetrofitManager;
+import com.singular.barrister.Util.IDataChangeListener;
+import com.singular.barrister.Util.IModel;
+import com.singular.barrister.Util.WebServiceError;
 
 import org.w3c.dom.Text;
 
-public class DisplayCaseActivity extends AppCompatActivity {
+public class DisplayCaseActivity extends AppCompatActivity implements IDataChangeListener<IModel> {
 
     TextView txtStatus, txtType, txtCourtName, txtCRNNumber, txtRegisterNumber, txtRegisterDate,
             txtHearing, txtClientName, txtClientEmailId, txtPhone, txtAddress, txtClientType, txtOppositionName,
@@ -70,7 +75,7 @@ public class DisplayCaseActivity extends AppCompatActivity {
         txtRegisterDate.setText(aCaseDetail.getCase_register_date());
 
 
-        txtHearing.setText(aCaseDetail.getHearing() !=null ? (aCaseDetail.getHearing().getCase_decision()!=null ? aCaseDetail.getHearing().getCase_decision() : "") : "");
+        txtHearing.setText(aCaseDetail.getHearing() != null ? (aCaseDetail.getHearing().getCase_decision() != null ? aCaseDetail.getHearing().getCase_decision() : "") : "");
 
         txtClientName.setText(aCaseDetail.getClient().getFirst_name() + " " + aCaseDetail.getClient().getLast_name());
         txtClientEmailId.setText(aCaseDetail.getClient().getEmail());
@@ -149,8 +154,11 @@ public class DisplayCaseActivity extends AppCompatActivity {
                 break;
 
             case R.id.menuAddNewHearingDates:
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("CaseID", aCaseDetail.getId());
                 Intent intent = new Intent(getApplicationContext(), CasesNewHearingActivity.class);
-                startActivity(intent);
+                intent.putExtras(bundle1);
+                startActivityForResult(intent, 1);
                 break;
 
             case R.id.menuViewAllPastHearingDates:
@@ -177,14 +185,14 @@ public class DisplayCaseActivity extends AppCompatActivity {
             changeStatusWindow.setElevation(5.0f);
         }
 
-        RadioButton radioButtonCompleted = (RadioButton) customView.findViewById(R.id.radioButton2);
-        RadioButton radioButtonInProgress = (RadioButton) customView.findViewById(R.id.radioButton1);
+        final RadioButton radioButtonCompleted = (RadioButton) customView.findViewById(R.id.radioButton2);
+        final RadioButton radioButtonInProgress = (RadioButton) customView.findViewById(R.id.radioButton1);
 
         if (aCaseDetail.getCase_status().equalsIgnoreCase("completed")) {
-            radioButtonInProgress.setChecked(true);
+            radioButtonCompleted.setChecked(true);
             radioButtonInProgress.setChecked(false);
         } else {
-            radioButtonInProgress.setChecked(false);
+            radioButtonCompleted.setChecked(false);
             radioButtonInProgress.setChecked(true);
         }
 
@@ -201,9 +209,49 @@ public class DisplayCaseActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                boolean isChanged = false;
+                if (radioButtonCompleted.isChecked()) {
+                    txtStatus.setText("completed");
+                    if (!aCaseDetail.getCase_status().equals("completed"))
+                        isChanged = true;
+                } else {
+                    txtStatus.setText("In-Progress");
+                    if (!aCaseDetail.getCase_status().equals("In-Progress"))
+                        isChanged = true;
+                }
+
+                if (isChanged) {
+                    RetrofitManager retrofitManager = new RetrofitManager();
+                    retrofitManager.changeCaseStatus(DisplayCaseActivity.this, new UserPreferance(getApplicationContext()).getToken(), aCaseDetail.getId(), radioButtonCompleted.isChecked() ? "completed" : "In-Progress");
+                }
+
                 changeStatusWindow.dismiss();
             }
         });
         changeStatusWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1 && data.getStringExtra("hearing") != null) {
+            txtHearing.setText(data.getStringExtra("hearing"));
+        } else if (data != null && data.getStringExtra("hearing") != null) {
+            txtHearing.setText(data.getStringExtra("hearing"));
+        }
+    }
+
+    @Override
+    public void onDataChanged() {
+
+    }
+
+    @Override
+    public void onDataReceived(IModel response) {
+    }
+
+    @Override
+    public void onDataFailed(WebServiceError error) {
+
     }
 }

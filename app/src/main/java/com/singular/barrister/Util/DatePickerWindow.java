@@ -16,7 +16,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.singular.barrister.Interface.CaseListeners;
 import com.singular.barrister.R;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by rahulbabanaraokalamkar on 11/29/17.
@@ -24,9 +30,10 @@ import com.singular.barrister.R;
 
 public class DatePickerWindow {
 
-    String selectedDate,selectedTime;
-    public DatePickerWindow(final Context context, View view)
-    {
+    String selectedDate, selectedTime;
+    boolean isDateSelected = false;
+
+    public DatePickerWindow(final Context context, View view, final CaseListeners listeners) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.date_picker_layout, null);
 
@@ -39,11 +46,11 @@ public class DatePickerWindow {
             DateWindow.setElevation(5.0f);
         }
 
-        final DatePicker datePicker=(DatePicker) customView.findViewById(R.id.datePicker);
+        final DatePicker datePicker = (DatePicker) customView.findViewById(R.id.datePicker);
 
-        final TimePicker timePicker=(TimePicker)customView.findViewById(R.id.timePicker);
-        TextView btnSave=(TextView)customView.findViewById(R.id.textViewSave);
-        TextView btnCancel=(TextView)customView.findViewById(R.id.textViewCancel);
+        final TimePicker timePicker = (TimePicker) customView.findViewById(R.id.timePicker);
+        TextView btnSave = (TextView) customView.findViewById(R.id.textViewSave);
+        TextView btnCancel = (TextView) customView.findViewById(R.id.textViewCancel);
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,30 +62,41 @@ public class DatePickerWindow {
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker timePicker, int hour, int minute) {
-                Log.e("Time",hour +" "+minute);
+                selectedTime = hour + ":" + minute + ":" + 00;
             }
         });
 
-        final boolean isDateSelected=false;
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isDateSelected)
-                {
+                if (!isDateSelected) {
+                    isDateSelected = true;
                     int day = datePicker.getDayOfMonth();
                     int month = datePicker.getMonth() + 1;
                     int year = datePicker.getYear();
 
-                    selectedDate = day+" "+month+" "+year;
+                    selectedDate = year + "-" + month + "-" + day;
 
-                    Log.e("Time",selectedDate);
+                    Log.e("Date", selectedDate);
                     datePicker.setVisibility(View.GONE);
                     timePicker.setVisibility(View.VISIBLE);
-                }else {
+                } else if (selectedTime == null) {
+                    datePicker.setVisibility(View.VISIBLE);
+                    timePicker.setVisibility(View.GONE);
+                    Date currentTime = Calendar.getInstance().getTime();
+                    DateFormat df = new SimpleDateFormat("HH:mm");
+                    String date = df.format(Calendar.getInstance().getTime());
+
+                    listeners.dateTime(selectedDate + " " + date);
+                    DateWindow.dismiss();
+                } else {
 
                     datePicker.setVisibility(View.VISIBLE);
                     timePicker.setVisibility(View.GONE);
+
+                    listeners.dateTime(selectedDate + " " + selectedTime);
+                    DateWindow.dismiss();
                 }
             }
         });

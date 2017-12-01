@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class SubDistrict implements IModel,Serializable {
+public class SubDistrict implements IModel, Serializable {
     String id;
     String parent_id;
     String external_id;
@@ -61,6 +61,15 @@ public class SubDistrict implements IModel,Serializable {
     }
 
     public void setPin(String pin) {
+        this.pin = pin;
+    }
+
+    public SubDistrict(String name, String id, String parent_id, String external_id, String location_type, String pin) {
+        this.id = id;
+        this.name = name;
+        this.parent_id = parent_id;
+        this.external_id = external_id;
+        this.location_type = location_type;
         this.pin = pin;
     }
 }

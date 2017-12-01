@@ -65,6 +65,9 @@ public interface API {
     @GET("{GET_HEARING_LIST}")
     Call<CaseHearingResponse> getHearingList(@Path(value = "GET_HEARING_LIST", encoded = true) String path, @HeaderMap Map<String, String> headers);
 
+    @POST("{ADD_HEARING_DATE}")
+    Call<SimpleMessageResponse> addHearingDate(@Path(value = "ADD_HEARING_DATE", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
+
     @POST("{ADD_CLIENT}")
     Call<SimpleMessageResponse> addClient(@Path(value = "ADD_CLIENT", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
 
@@ -87,8 +90,17 @@ public interface API {
     @POST("{ADD_COURT}")
     Call<SimpleMessageResponse> addCourt(@Path(value = "ADD_COURT", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
 
+    @PUT("{EDIT_COURT}")
+    Call<SimpleMessageResponse> editCourt(@Path(value = "EDIT_COURT", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
+
+    @PUT("{CHANGE_CASE_STATUS}")
+    Call<SimpleMessageResponse> changeCaseStatus(@Path(value = "CHANGE_CASE_STATUS", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
 
     @GET("{GET_CASES_TYPE}")
     Call<CasesTypeResponse> getCaseType(@Path(value = "GET_CASES_TYPE", encoded = true) String path, @HeaderMap Map<String, String> headers);
+
+    @POST("{ADD_CASE}")
+    Call<SimpleMessageResponse> addCase(@Path(value = "ADD_CASE", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
+
 
 }

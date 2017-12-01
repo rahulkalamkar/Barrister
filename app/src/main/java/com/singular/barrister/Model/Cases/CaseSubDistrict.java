@@ -8,13 +8,22 @@ import java.io.Serializable;
  * Created by rahul.kalamkar on 11/24/2017.
  */
 
-public class CaseSubDistrict implements IModel,Serializable{
+public class CaseSubDistrict implements IModel, Serializable {
     String id;
     String name;
     String parent_id;
     String external_id;
     String location_type;
     String pin;
+
+    public CaseSubDistrict(String name, String id, String parent_id, String external_id, String location_type, String pin) {
+        this.id = id;
+        this.name = name;
+        this.parent_id = parent_id;
+        this.external_id = external_id;
+        this.location_type = location_type;
+        this.pin = pin;
+    }
 
     public String getId() {
         return id;

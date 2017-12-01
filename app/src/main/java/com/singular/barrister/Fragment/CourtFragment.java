@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.singular.barrister.Activity.HomeScreen;
 import com.singular.barrister.Activity.LandingScreen;
 import com.singular.barrister.Adapter.CourtListAdapter;
+import com.singular.barrister.DisplayCourtActivity;
+import com.singular.barrister.Interface.RecycleItem;
 import com.singular.barrister.Model.Court.CourtData;
 import com.singular.barrister.Model.Court.CourtResponse;
 import com.singular.barrister.Preferance.UserPreferance;
@@ -28,6 +30,7 @@ import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class CourtFragment extends Fragment implements IDataChangeListener<IModel> {
@@ -107,4 +110,5 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
     public void onDataFailed(WebServiceError error) {
 
     }
+
 }

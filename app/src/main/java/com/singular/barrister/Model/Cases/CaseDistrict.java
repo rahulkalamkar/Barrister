@@ -15,7 +15,14 @@ public class CaseDistrict implements IModel,Serializable{
     String external_id;
     String location_type;
     String pin;
-
+    public CaseDistrict(String name, String id, String parent_id, String external_id, String location_type, String pin) {
+        this.id = id;
+        this.name = name;
+        this.parent_id = parent_id;
+        this.external_id = external_id;
+        this.location_type = location_type;
+        this.pin = pin;
+    }
     public String getId() {
         return id;
     }

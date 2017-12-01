@@ -1,6 +1,9 @@
 package com.singular.barrister.Activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.singular.barrister.Activity.SubActivity.AddCaseActivity;
 import com.singular.barrister.Activity.SubActivity.AddClientActivity;
@@ -213,7 +217,6 @@ public class HomeScreen extends AppCompatActivity {
                 fragmentManager = getSupportFragmentManager();
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContainer, clientFragment, "Client Fragment").commit();
-
             }
         } else {
 

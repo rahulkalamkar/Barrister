@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class District implements IModel,Serializable {
+public class District implements IModel, Serializable {
     String id;
     String parent_id;
     String external_id;
@@ -64,4 +64,13 @@ public class District implements IModel,Serializable {
 
     String location_type;
     String pin;
+
+    public District(String name, String id, String parent_id, String external_id, String location_type, String pin) {
+        this.id = id;
+        this.name = name;
+        this.parent_id = parent_id;
+        this.external_id = external_id;
+        this.location_type = location_type;
+        this.pin = pin;
+    }
 }

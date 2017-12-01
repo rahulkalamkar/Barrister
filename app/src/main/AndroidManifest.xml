@@ -72,8 +72,6 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Activity.ImportantLink" />
         <activity android:name=".Activity.ReferralActivity" />
-        <activity android:name=".ImportantLink" />
-        <activity android:name=".ReferralActivity" />
         <activity android:name=".DisplayCaseActivity" />
         <activity android:name=".DisplayCourtActivity" />
         <activity android:name=".Activity.SubActivity.CasesNewHearingActivity" />
@@ -85,7 +83,9 @@
         <activity android:name=".Adapter.SelectStateActivity" />
         <activity android:name=".Activity.SubActivity.SelectDistrictActivity" />
         <activity android:name=".Activity.SubActivity.SelectSubDistrictActivity" />
-        <activity android:name=".Activity.SubActivity.DateActivity"></activity>
+        <activity android:name=".Activity.SubActivity.DateActivity" />
+        <activity android:name=".Activity.SubActivity.EditCourtActivity"></activity>
+
     </application>
 
 </manifest>
