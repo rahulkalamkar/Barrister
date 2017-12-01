@@ -29,6 +29,9 @@ import android.widget.Toast;
 
 import com.singular.barrister.Adapter.RecycleAdapter;
 import com.singular.barrister.Adapter.SelectStateActivity;
+import com.singular.barrister.Database.Query.CourtTypeTableQuery;
+import com.singular.barrister.Database.Query.StateTableQuery;
+import com.singular.barrister.Database.Tables.StateTable;
 import com.singular.barrister.Interface.StateSelection;
 import com.singular.barrister.Model.CasesTypeResponse;
 import com.singular.barrister.Model.District;
@@ -46,6 +49,7 @@ import com.singular.barrister.Util.StatePopUpWindow;
 import com.singular.barrister.Util.WebServiceError;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AddCourtActivity extends AppCompatActivity implements IDataChangeListener<IModel> {
 
@@ -77,7 +81,17 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
         }
     }
 
+    List<StateTable> stateTableList;
+
     public void getStateList() {
+        stateTableList = new StateTableQuery().getAllState(getApplicationContext());
+        if (stateTableList != null) {
+            for (int i = 0; i < stateTableList.size(); i++) {
+                StateTable stateTable=stateTableList.get(i);
+              /*  State state=new State(stateTable.)
+                stateList.add();*/
+            }
+        }
         if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
             retrofitManager.getState(this, new UserPreferance(getApplicationContext()).getToken());
         } else {
@@ -259,6 +273,8 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
             if (stateResponse.getData().getState() != null) {
                 stateList = new ArrayList<State>();
                 stateList.addAll(stateResponse.getData().getState());
+                StateTableQuery stateTableQuery = new StateTableQuery();
+                stateTableQuery.valuesFromServer(getApplicationContext(), stateList);
             } else if (stateResponse.getData().getDistrict() != null) {
                 districtList = new ArrayList<District>();
                 districtList.addAll(stateResponse.getData().getDistrict());
@@ -278,6 +294,8 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
             courtTypeList = new ArrayList<String>();
             if (casesTypeResponse.getData().getCourttype() != null) {
                 courtTypeList.addAll(casesTypeResponse.getData().getCourttype());
+                CourtTypeTableQuery courtTypeTableQuery = new CourtTypeTableQuery();
+                courtTypeTableQuery.valuesFromServer(getApplicationContext(), courtTypeList);
             }
             getStateList();
         } else {
@@ -317,7 +335,9 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
         }
         showOtherError();
     }
+
     PopupWindow courtTypeWindow;
+
     public void selectCourtType(View layout) {
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.activity_select_state, null);
@@ -330,7 +350,7 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
         if (Build.VERSION.SDK_INT >= 21) {
             courtTypeWindow.setElevation(5.0f);
         }
-        LinearLayout linearLayout=(LinearLayout)customView.findViewById(R.id.layout);
+        LinearLayout linearLayout = (LinearLayout) customView.findViewById(R.id.layout);
         linearLayout.setBackgroundColor(Color.parseColor("#99777777"));
         RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recycleView);
         SimpleRecycleAdapter simpleRecycleAdapter = new SimpleRecycleAdapter(getApplicationContext(), courtTypeList);
@@ -387,8 +407,7 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
         }
     }
 
-    public void selectedCourtType(String name)
-    {
+    public void selectedCourtType(String name) {
         edtCourtType.setText(name);
     }
 }
