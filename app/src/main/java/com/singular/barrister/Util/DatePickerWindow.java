@@ -62,7 +62,7 @@ public class DatePickerWindow {
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker timePicker, int hour, int minute) {
-                selectedTime = hour + ":" + minute + ":" + 00;
+                selectedTime = hour + ":" + minute;
             }
         });
 

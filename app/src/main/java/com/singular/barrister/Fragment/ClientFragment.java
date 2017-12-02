@@ -23,12 +23,19 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.singular.barrister.Activity.LandingScreen;
 import com.singular.barrister.Activity.SubActivity.DisplayClientActivity;
 import com.singular.barrister.Adapter.ClientListAdapter;
 import com.singular.barrister.Adapter.CourtListAdapter;
+import com.singular.barrister.Database.DB.DatabaseHelper;
+import com.singular.barrister.Database.Tables.Client.BaseClientTable;
+import com.singular.barrister.Database.Tables.Client.ClientTable;
+import com.singular.barrister.Database.Tables.CourtTable;
 import com.singular.barrister.Interface.RecycleItem;
 import com.singular.barrister.Model.Client.Client;
+import com.singular.barrister.Model.Client.ClientDetail;
 import com.singular.barrister.Model.Client.ClientResponse;
 import com.singular.barrister.Model.Court.CourtResponse;
 import com.singular.barrister.Preferance.UserPreferance;
@@ -40,7 +47,9 @@ import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.RecyclerItemTouchHelper;
 import com.singular.barrister.Util.WebServiceError;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by rahulbabanaraokalamkar on 11/23/17.
@@ -83,7 +92,35 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             retrofitManager.getClientList(this, new UserPreferance(getActivity()).getToken());
         } else {
             Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+            List<BaseClientTable> list = getLocalData();
+            if(list!=null)
+                convertAndDisplay(list);
         }
+    }
+
+    public void convertAndDisplay(List<BaseClientTable> list) {
+        for (int i = 0; i < list.size(); i++) {
+            BaseClientTable baseClientTable=list.get(i);
+
+            ClientTable clientTable=baseClientTable.getClientTable();
+            ClientDetail clientDetail = new ClientDetail(clientTable.getClient_id(), clientTable.getFirst_name(), clientTable.getLast_name(),
+                    clientTable.getCountry_code(), clientTable.getMobile(), clientTable.getEmail(),
+                    clientTable.getAddress(), clientTable.getUser_type(), clientTable.getReferral_code(),
+                    clientTable.getParent_user_id(), clientTable.getUsed_referral_code(), clientTable.getDevice_type(),
+                    clientTable.getDevice_token(), clientTable.getSubscription(), clientTable.getCreated_at(), clientTable.getUpdated_at());
+
+            Client client=new Client(baseClientTable.getBase_id(),baseClientTable.getClient_id(),baseClientTable.getCreated_at(),clientDetail);
+            if(clientList==null)
+            clientList=new ArrayList<Client>();
+            clientList.add(client);
+        }
+
+        clientListAdapter = new ClientListAdapter(getActivity(), clientList, this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecycleView.setLayoutManager(linearLayoutManager);
+        mRecycleView.setAdapter(clientListAdapter);
+        progressBar.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -104,6 +141,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             ClientResponse clientResponse = (ClientResponse) response;
             if (clientResponse.getData().getClient() != null) {
                 clientList.addAll(clientResponse.getData().getClient());
+                saveClient();
                 clientListAdapter = new ClientListAdapter(getActivity(), clientList, this);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecycleView.setLayoutManager(linearLayoutManager);
@@ -186,6 +224,66 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         });
 
         menuWindow.showAtLocation(mRecycleView, Gravity.CENTER, 0, 0);
+    }
+
+    public List<BaseClientTable> getLocalData() {
+        Dao<BaseClientTable, Integer> baseClientTables;
+        try {
+            baseClientTables = getHelper().getBaseClientTableDao();
+            return baseClientTables.queryForAll();
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    DatabaseHelper databaseHelper = null;
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        releaseHelper();
+    }
+
+
+    public void saveClient() {
+        if (clientList == null)
+            return;
+        for (int i = 0; i < clientList.size(); i++) {
+            addDataLocally(clientList.get(i));
+        }
+    }
+
+    public void addDataLocally(Client client) {
+        ClientTable clientTable = new ClientTable(client.getClient().getId(), client.getClient().getFirst_name(), client.getClient().getLast_name(),
+                client.getClient().getCountry_code(), client.getClient().getMobile(), client.getClient().getEmail(),
+                client.getClient().getAddress(), client.getClient().getUser_type(), client.getClient().getReferral_code(),
+                client.getClient().getParent_user_id(), client.getClient().getUsed_referral_code(), client.getClient().getDevice_type(),
+                client.getClient().getDevice_token(), client.getClient().getSubscription(), client.getClient().getCreated_at(), client.getClient().getUpdated_at());
+
+        BaseClientTable baseClientTable = new BaseClientTable(client.getId(), client.getCreated_at(), client.getClient_id(), clientTable);
+
+        Dao<BaseClientTable, Integer> baseClientTablesDao;
+        try {
+            baseClientTablesDao = getHelper().getBaseClientTableDao();
+            baseClientTablesDao.create(baseClientTable);
+            Log.e("BAseClient Table", "inserted");
+        } catch (SQLException e) {
+            Log.e("BAseClient table", "" + e);
+        }
+    }
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(getActivity(), DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
+    public void releaseHelper() {
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
     }
 
 }

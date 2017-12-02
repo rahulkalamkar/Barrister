@@ -1,5 +1,6 @@
 package com.singular.barrister.Model.Client;
 
+import com.singular.barrister.Database.Tables.Client.ClientTable;
 import com.singular.barrister.Util.IModel;
 
 import java.io.Serializable;
@@ -46,4 +47,11 @@ public class Client implements IModel,Serializable {
     }
 
     ClientDetail client;
+
+    public Client(String id, String created_at, String client_id, ClientDetail clientTable) {
+        this.id = id;
+        this.created_at = created_at;
+        this.client_id = client_id;
+        this.client = clientTable;
+    }
 }

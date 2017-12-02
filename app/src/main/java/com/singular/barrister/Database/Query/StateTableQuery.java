@@ -40,7 +40,7 @@ public class StateTableQuery {
 
         final Dao<StateTable, Integer> studentDao;
         try {
-            studentDao = getHelper().getStateTableDao();
+            studentDao = getHelper(context).getStateTableDao();
             studentDao.create(stateTable);
             Log.e("StateTable", "Value added ");
         } catch (SQLException e) {
@@ -52,7 +52,7 @@ public class StateTableQuery {
     public List<StateTable> getAllState(Context context) {
         final Dao<StateTable, Integer> stateDao;
         try {
-            stateDao = getHelper().getStateTableDao();
+            stateDao = getHelper(context).getStateTableDao();
             stateList = stateDao.queryForAll();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,7 +62,7 @@ public class StateTableQuery {
     }
 
     // This is how, DatabaseHelper can be initialized for future use
-    private DatabaseHelper getHelper() {
+    private DatabaseHelper getHelper(Context context) {
         if (databaseHelper == null) {
             databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);
         }

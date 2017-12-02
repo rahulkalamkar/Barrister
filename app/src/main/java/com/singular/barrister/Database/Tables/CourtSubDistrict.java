@@ -1,22 +1,22 @@
 package com.singular.barrister.Database.Tables;
 
-import android.content.Context;
-
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.singular.barrister.Database.DB.DatabaseHelper;
-
-import java.io.Serializable;
 
 /**
- * Created by rahulbabanaraokalamkar on 11/29/17.
+ * Created by rahulbabanaraokalamkar on 12/2/17.
  */
-@DatabaseTable(tableName = "StateTable")
-public class StateTable implements Serializable {
+
+@DatabaseTable(tableName = "CourtSubDistrict")
+public class CourtSubDistrict {
     private static final long serialVersionUID = -222864131214757024L;
 
-    @DatabaseField(columnName = "id", unique = true)
-    String id;
+    @DatabaseField(columnName = "id",generatedId = true)
+    int id;
+
+
+    @DatabaseField(columnName = "subDistrictId", unique = true)
+    String subDistrictId;
 
     @DatabaseField(columnName = "parent_id", canBeNull = true)
     String parent_id;
@@ -33,28 +33,12 @@ public class StateTable implements Serializable {
     @DatabaseField(columnName = "pin", canBeNull = true)
     String pin;
 
-    public StateTable() {
-    }
-
-    public StateTable(String id, String parent_id, String external_id, String name, String location_type, String pin) {
-        this.id = id;
-        this.pin = pin;
-        this.name = name;
-        this.location_type = location_type;
-        this.parent_id = parent_id;
-        this.external_id = external_id;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
     public String getId() {
-        return id;
+        return subDistrictId;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.subDistrictId = id;
     }
 
     public String getParent_id() {
@@ -95,5 +79,21 @@ public class StateTable implements Serializable {
 
     public void setPin(String pin) {
         this.pin = pin;
+    }
+
+    public CourtSubDistrict() {
+    }
+
+    public CourtSubDistrict(String id, String parent_id, String external_id, String name, String location_type, String pin) {
+        this.subDistrictId = id;
+        this.pin = pin;
+        this.name = name;
+        this.location_type = location_type;
+        this.parent_id = parent_id;
+        this.external_id = external_id;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 }

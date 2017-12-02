@@ -16,6 +16,22 @@ public class CourtTypeTable {
     @DatabaseField(columnName = "court_type", unique = true)
     String courtType;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCourtType() {
+        return courtType;
+    }
+
+    public void setCourtType(String courtType) {
+        this.courtType = courtType;
+    }
+
     public CourtTypeTable() {
 
     }

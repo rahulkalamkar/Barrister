@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/fab_margin"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         tools:context="com.singular.barrister.Activity.CreateAccount">
 
         <LinearLayout
@@ -22,69 +24,102 @@
             android:orientation="vertical"
             android:padding="@dimen/fab_margin">
 
-
-            <EditText
-                android:id="@+id/editTextPhoneNumber"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextPhoneNumberError"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:focusable="false"
-                android:hint="@string/hint_number"
-                android:inputType="phone"
-                android:maxLines="1"
-                android:singleLine="true" />
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextPhoneNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_number"
+                    android:focusable="false"
+                    android:text="9762993179"
+                    android:inputType="phone"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
 
 
-            <EditText
-                android:id="@+id/editTextEmailId"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextEmailIdError"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/hint_email_id"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:singleLine="true" />
+                app:errorEnabled="true">
 
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextEmailId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_email_id"
+                    android:maxLines="1" />
 
-            <EditText
-                android:id="@+id/editTextPassword"
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextPasswordError"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/hint_password"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:singleLine="true" />
+                app:errorEnabled="true">
 
-            <EditText
-                android:id="@+id/editTextFirstName"
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_password"
+                    android:inputType="textPassword"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextFirstNameError"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/hint_first_name"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:singleLine="true" />
+                app:errorEnabled="true">
 
-            <EditText
-                android:id="@+id/editTextLastName"
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextFirstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_first_name"
+                    android:inputType="textPassword"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextLastNameError"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/hint_last_name"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:singleLine="true" />
+                app:errorEnabled="true">
 
-            <EditText
-                android:id="@+id/editTextReferralCode"
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_last_name"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editTextReferralCodeError"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/hint_referral_code"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:singleLine="true" />
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editTextReferralCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_referral_code"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
         </LinearLayout>
 
         <Button

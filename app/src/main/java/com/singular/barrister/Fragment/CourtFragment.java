@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +16,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.singular.barrister.Activity.HomeScreen;
 import com.singular.barrister.Activity.LandingScreen;
 import com.singular.barrister.Adapter.CourtListAdapter;
+import com.singular.barrister.Database.DB.DatabaseHelper;
+import com.singular.barrister.Database.Tables.CourtDistrict;
+import com.singular.barrister.Database.Tables.CourtState;
+import com.singular.barrister.Database.Tables.CourtSubDistrict;
+import com.singular.barrister.Database.Tables.CourtTable;
+import com.singular.barrister.Database.Tables.StateTable;
 import com.singular.barrister.DisplayCourtActivity;
 import com.singular.barrister.Interface.RecycleItem;
+import com.singular.barrister.Model.Cases.CaseDistrict;
+import com.singular.barrister.Model.Cases.CaseState;
+import com.singular.barrister.Model.Cases.CaseSubDistrict;
 import com.singular.barrister.Model.Court.CourtData;
 import com.singular.barrister.Model.Court.CourtResponse;
+import com.singular.barrister.Model.District;
+import com.singular.barrister.Model.State;
+import com.singular.barrister.Model.SubDistrict;
 import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.R;
 import com.singular.barrister.RetrofitManager.RetrofitManager;
@@ -31,7 +46,9 @@ import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CourtFragment extends Fragment implements IDataChangeListener<IModel> {
 
@@ -69,6 +86,11 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
         if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
             retrofitManager.getCourtList(this, new UserPreferance(getActivity()).getToken());
         } else {
+            List<CourtTable> list = getAllCourt(getActivity());
+            if (list != null) {
+                convertList(list);
+            }
+
             Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
     }
@@ -88,6 +110,7 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecycleView.setLayoutManager(linearLayoutManager);
                 mRecycleView.setAdapter(courtListAdapter);
+                saveLocally();
                 progressBar.setVisibility(View.GONE);
             } else if (courtResponse.getError() != null && courtResponse.getError().getStatus_code() == 401) {
                 Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
@@ -111,4 +134,109 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
 
     }
 
+    public List<CourtTable> getAllCourt(Context context) {
+        Dao<CourtTable, Integer> courtTableDao;
+        try {
+            courtTableDao = getHelper(getActivity()).getCourtTableDao();
+            return courtTableDao.queryForAll();
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public void convertList(List<CourtTable> list) {
+        for (int i = 0; i < list.size(); i++) {
+            CaseState state = null;
+            CaseDistrict district = null;
+            CaseSubDistrict subDistrict = null;
+
+            CourtTable courtTable = list.get(i);
+            if (courtTable.getCourtState() != null) {
+                state = new CaseState(courtTable.getCourtState().getName(), courtTable.getCourtState().getId(), courtTable.getCourtState().getParent_id(),
+                        courtTable.getCourtState().getExternal_id(), courtTable.getCourtState().getLocation_type(), courtTable.getCourtState().getPin());
+            }
+            if (courtTable.getCourtDistrict() != null) {
+                district = new CaseDistrict(courtTable.getCourtDistrict().getName(), courtTable.getCourtDistrict().getId(), courtTable.getCourtDistrict().getParent_id(),
+                        courtTable.getCourtDistrict().getExternal_id(), courtTable.getCourtDistrict().getLocation_type(), courtTable.getCourtDistrict().getPin());
+            }
+            if (courtTable.getCourtSubDistrict() != null) {
+                subDistrict = new CaseSubDistrict(courtTable.getCourtSubDistrict().getName(), courtTable.getCourtSubDistrict().getId(), courtTable.getCourtSubDistrict().getParent_id(),
+                        courtTable.getCourtSubDistrict().getExternal_id(), courtTable.getCourtSubDistrict().getLocation_type(), courtTable.getCourtSubDistrict().getPin());
+            }
+
+            CourtData courtData = new CourtData(courtTable.getCourt_id(), courtTable.getCourt_name(), courtTable.getCourt_type(), courtTable.getCourt_number(),
+                    courtTable.getState_id(), courtTable.getDistrict_id(), courtTable.getSub_district_id(),
+                    state, district, subDistrict);
+
+            courtList.add(courtData);
+        }
+
+        CourtListAdapter courtListAdapter = new CourtListAdapter(getActivity(), courtList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecycleView.setLayoutManager(linearLayoutManager);
+        mRecycleView.setAdapter(courtListAdapter);
+        progressBar.setVisibility(View.GONE);
+    }
+
+    public void saveLocally() {
+        if (courtList == null)
+            return;
+        for (int i = 0; i < courtList.size(); i++) {
+            addCourtToDataBase(courtList.get(i));
+        }
+    }
+
+    public void addCourtToDataBase(CourtData courtData) {
+        CourtSubDistrict courtSubDistrict = null;
+        CourtDistrict courtDistrict = null;
+        CourtState courtState = null;
+
+        if (courtData.getState() != null) {
+            courtState = new CourtState(courtData.getState().getId(), courtData.getState().getParent_id(), courtData.getState().getExternal_id(),
+                    courtData.getState().getName(), courtData.getState().getLocation_type(), courtData.getState().getPin());
+        }
+        if (courtData.getDistrict() != null) {
+            courtDistrict = new CourtDistrict(courtData.getDistrict().getId(), courtData.getDistrict().getParent_id(), courtData.getDistrict().getExternal_id(),
+                    courtData.getDistrict().getName(), courtData.getDistrict().getLocation_type(), courtData.getDistrict().getPin());
+        }
+        if (courtData.getSubdistrict() != null) {
+            courtSubDistrict = new CourtSubDistrict(courtData.getSubdistrict().getId(), courtData.getSubdistrict().getParent_id(), courtData.getSubdistrict().getExternal_id(),
+                    courtData.getSubdistrict().getName(), courtData.getSubdistrict().getLocation_type(), courtData.getSubdistrict().getPin());
+        }
+
+        CourtTable courtTable = new CourtTable(courtData.getId(), courtData.getCourt_name(), courtData.getCourt_number(), courtData.getCourt_type(), courtData.getState_id(),
+                courtData.getDistrict_id(), courtData.getSub_district_id(), courtState, courtDistrict, courtSubDistrict);
+
+        Dao<CourtTable, Integer> courtTableDao;
+        try {
+            courtTableDao = getHelper(getActivity()).getCourtTableDao();
+            courtTableDao.create(courtTable);
+            Log.e("Court Table", "inserted");
+        } catch (SQLException e) {
+            Log.e("Court table", "" + e);
+        }
+    }
+
+    DatabaseHelper databaseHelper;
+
+    // This is how, DatabaseHelper can be initialized for future use
+    private DatabaseHelper getHelper(Context context) {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
+    public void releaseHelper() {
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        releaseHelper();
+    }
 }

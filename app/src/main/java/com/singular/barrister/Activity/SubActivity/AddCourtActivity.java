@@ -85,14 +85,19 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
 
     public void getStateList() {
         stateTableList = new StateTableQuery().getAllState(getApplicationContext());
-        if (stateTableList != null) {
+        if (stateTableList != null && stateTableList.size()>0) {
+
+            if(stateList==null)
+                stateList=new ArrayList<State>();
+
             for (int i = 0; i < stateTableList.size(); i++) {
                 StateTable stateTable=stateTableList.get(i);
-              /*  State state=new State(stateTable.)
-                stateList.add();*/
+                State state=new State(stateTable.getName(),stateTable.getId(),
+                        stateTable.getParent_id(),stateTable.getExternal_id(),
+                        stateTable.getLocation_type(),stateTable.getPin());
+                stateList.add(state);
             }
-        }
-        if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+        }else if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
             retrofitManager.getState(this, new UserPreferance(getApplicationContext()).getToken());
         } else {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();

@@ -1,6 +1,8 @@
 package com.singular.barrister.Activity;
 
 import android.content.Intent;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -37,7 +39,9 @@ public class CreateAccount extends AppCompatActivity implements View.OnClickList
 
     private TextView txtPrivacyPolicy;
     private Button btnCreate;
-    private EditText edtNumber, edtEmailId, edtPassword, edtFirstName, edtLastName, edtRefferalCode, edtAddress;
+    private TextInputEditText edtNumber, edtEmailId, edtPassword, edtFirstName, edtLastName, edtRefferalCode, edtAddress;
+    private TextInputLayout txtIPNumber, txtIPEmailId, txtIPPassword, txtIPFirstName, txtIPLastName, txtIPRefferalCode, txtIPAddress;
+
     private ProgressBar progressBar;
 
     @Override
@@ -53,14 +57,21 @@ public class CreateAccount extends AppCompatActivity implements View.OnClickList
         }
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        edtNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
-        edtEmailId = (EditText) findViewById(R.id.editTextEmailId);
-        edtFirstName = (EditText) findViewById(R.id.editTextFirstName);
-        edtLastName = (EditText) findViewById(R.id.editTextLastName);
-        edtPassword = (EditText) findViewById(R.id.editTextPassword);
-        edtRefferalCode = (EditText) findViewById(R.id.editTextReferralCode);
+        edtNumber = (TextInputEditText) findViewById(R.id.editTextPhoneNumber);
+        edtEmailId = (TextInputEditText) findViewById(R.id.editTextEmailId);
+        edtFirstName = (TextInputEditText) findViewById(R.id.editTextFirstName);
+        edtLastName = (TextInputEditText) findViewById(R.id.editTextLastName);
+        edtPassword = (TextInputEditText) findViewById(R.id.editTextPassword);
+        edtRefferalCode = (TextInputEditText) findViewById(R.id.editTextReferralCode);
 
-        edtNumber.setOnClickListener(this);
+        txtIPNumber = (TextInputLayout) findViewById(R.id.editTextPhoneNumberError);
+        txtIPEmailId = (TextInputLayout) findViewById(R.id.editTextEmailIdError);
+        txtIPFirstName = (TextInputLayout) findViewById(R.id.editTextFirstNameError);
+        txtIPLastName = (TextInputLayout) findViewById(R.id.editTextLastNameError);
+        txtIPPassword = (TextInputLayout) findViewById(R.id.editTextPasswordError);
+        txtIPRefferalCode = (TextInputLayout) findViewById(R.id.editTextReferralCodeError);
+
+        txtIPNumber.setOnClickListener(this);
         btnCreate = (Button) findViewById(R.id.textViewRegister);
         btnCreate.setOnClickListener(this);
         txtPrivacyPolicy = (TextView) findViewById(R.id.textViewPrivacy);
@@ -176,26 +187,26 @@ public class CreateAccount extends AppCompatActivity implements View.OnClickList
 
     public void checkValues() {
         if (TextUtils.isEmpty(edtNumber.getText().toString())) {
-            edtNumber.setError("Enter phone number");
+            txtIPNumber.setError("Enter phone number");
             setOtherErrorNull();
         } else if (TextUtils.isEmpty(edtEmailId.getText().toString())) {
             setOtherErrorNull();
-            edtEmailId.setError("Enter email id");
+            txtIPEmailId.setError("Enter email id");
         } else if (TextUtils.isEmpty(edtPassword.getText().toString())) {
             setOtherErrorNull();
-            edtPassword.setError("Enter password");
+            txtIPPassword.setError("Enter password");
         } else if (TextUtils.isEmpty(edtFirstName.getText().toString())) {
             setOtherErrorNull();
-            edtFirstName.setError("Enter first name");
+            txtIPFirstName.setError("Enter first name");
         } else if (TextUtils.isEmpty(edtLastName.getText().toString())) {
             setOtherErrorNull();
-            edtLastName.setError("Enter last name");
+            txtIPLastName.setError("Enter last name");
         } else {
-            edtNumber.setError(null);
-            edtEmailId.setError(null);
-            edtPassword.setError(null);
-            edtFirstName.setError(null);
-            edtLastName.setError(null);
+            txtIPNumber.setError(null);
+            txtIPEmailId.setError(null);
+            txtIPPassword.setError(null);
+            txtIPFirstName.setError(null);
+            txtIPLastName.setError(null);
             RetrofitManager retrofitManager = new RetrofitManager();
             if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -208,14 +219,14 @@ public class CreateAccount extends AppCompatActivity implements View.OnClickList
     }
 
     public void setOtherErrorNull() {
-        edtNumber.setError(null);
-        edtEmailId.setError(null);
-        edtPassword.setError(null);
-        edtFirstName.setError(null);
-        edtLastName.setError(null);
+        txtIPNumber.setError(null);
+        txtIPEmailId.setError(null);
+        txtIPPassword.setError(null);
+        txtIPFirstName.setError(null);
+        txtIPLastName.setError(null);
     }
 
-    private String country_code = "";
+    private String country_code = "+91";
 
     @Override
     public void onClick(View view) {

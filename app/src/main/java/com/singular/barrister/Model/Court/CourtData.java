@@ -37,6 +37,24 @@ public class CourtData implements IModel,Serializable{
     @SerializedName("subdistrict")
     CaseSubDistrict subdistrict;
 
+    public CourtData(String id,String court_name,String court_type,String court_number,String state_id,String district_id,String sub_district_id,
+                     CaseState caseState,CaseDistrict caseDistrict,CaseSubDistrict caseSubDistrict)
+    {
+        this.id=id;
+        this.court_name=court_name;
+        this.court_number=court_number;
+        this.court_type=court_type;
+        this.state_id=state_id;
+        this.district_id=district_id;
+        this.sub_district_id=sub_district_id;
+        this.state=caseState;
+        this.district=caseDistrict;
+        this.subdistrict=caseSubDistrict;
+    }
+
+    public CourtData()
+    {}
+
     public String getId() {
         return id;
     }
