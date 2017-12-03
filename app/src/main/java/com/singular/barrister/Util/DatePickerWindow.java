@@ -32,6 +32,11 @@ public class DatePickerWindow {
 
     String selectedDate, selectedTime;
     boolean isDateSelected = false;
+    boolean showTimer=false;
+    public void showTimer(boolean showTimer)
+    {
+        this.showTimer=showTimer;
+    }
 
     public DatePickerWindow(final Context context, View view, final CaseListeners listeners) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -79,8 +84,16 @@ public class DatePickerWindow {
                     selectedDate = year + "-" + month + "-" + day;
 
                     Log.e("Date", selectedDate);
-                    datePicker.setVisibility(View.GONE);
-                    timePicker.setVisibility(View.VISIBLE);
+                    if(!showTimer)
+                    {
+                        datePicker.setVisibility(View.GONE);
+                        timePicker.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        listeners.dateTime(selectedDate);
+                        DateWindow.dismiss();
+                    }
                 } else if (selectedTime == null) {
                     datePicker.setVisibility(View.VISIBLE);
                     timePicker.setVisibility(View.GONE);
