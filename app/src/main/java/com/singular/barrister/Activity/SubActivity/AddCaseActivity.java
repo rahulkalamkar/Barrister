@@ -1,6 +1,7 @@
 package com.singular.barrister.Activity.SubActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.TextInputEditText;
@@ -24,13 +25,23 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+import com.singular.barrister.Adapter.CourtListAdapter;
+import com.singular.barrister.Database.DB.DatabaseHelper;
+import com.singular.barrister.Database.Tables.CourtTable;
 import com.singular.barrister.DisplayCaseActivity;
+import com.singular.barrister.DisplayCourtActivity;
 import com.singular.barrister.Interface.CaseListeners;
+import com.singular.barrister.Model.Cases.CaseDistrict;
+import com.singular.barrister.Model.Cases.CaseState;
+import com.singular.barrister.Model.Cases.CaseSubDistrict;
 import com.singular.barrister.Model.Cases.CaseType;
 import com.singular.barrister.Model.CasesSubType;
 import com.singular.barrister.Model.CasesTypeData;
 import com.singular.barrister.Model.CasesTypeResponse;
 import com.singular.barrister.Model.CasesTypes;
+import com.singular.barrister.Model.Court.CourtData;
 import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.R;
 import com.singular.barrister.RetrofitManager.RetrofitManager;
@@ -40,9 +51,12 @@ import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
 
+import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class AddCaseActivity extends AppCompatActivity implements CaseListeners,IDataChangeListener<IModel> {
+public class AddCaseActivity extends AppCompatActivity implements CaseListeners, IDataChangeListener<IModel> {
 
     TextInputLayout txtILCaseStatus, txtILNextHearingDate, txtILCaseType, txtILSelectCourt, txtILCaseCNRNumber, txtILCaseRegisterNumber, txtILCaseRegisterDate,
             txtILCaseNotes, txtILOpoName, txtILOpoNumber, txtILOpoLawName, txtILOpoLawNumber;
@@ -67,7 +81,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        caseTypeDataList=new ArrayList<CasesTypeData>();
+        caseTypeDataList = new ArrayList<CasesTypeData>();
         initView();
     }
 
@@ -129,23 +143,30 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
                 DatePickerWindow datePickerWindow = new DatePickerWindow(getApplicationContext(), edtNextHearingDate, AddCaseActivity.this);
             }
         });
-        retrofitManager=new RetrofitManager();
+
+        edtSelectCourt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<CourtTable> list = getAllCourt();
+                convertList(list);
+            }
+        });
+        retrofitManager = new RetrofitManager();
         edtCaseType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(new NetworkConnection(getApplicationContext()).isNetworkAvailable())
-                {
-                    retrofitManager.getCourtType(AddCaseActivity.this,new UserPreferance(getApplicationContext()).getToken());
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.network_error),Toast.LENGTH_SHORT).show();
+                if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+                    retrofitManager.getCourtType(AddCaseActivity.this, new UserPreferance(getApplicationContext()).getToken());
+                } else {
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
     }
-RetrofitManager retrofitManager;
+
+    RetrofitManager retrofitManager;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -223,8 +244,8 @@ RetrofitManager retrofitManager;
     }
 
     PopupWindow caseTypeWindow;
-    public void selectCaseType()
-    {
+
+    public void selectCaseType() {
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.activity_select_state, null);
 
@@ -268,11 +289,11 @@ RetrofitManager retrofitManager;
                 SimpleRecycleAdapter.SimpleViewHolder simpleViewHolder = (SimpleRecycleAdapter.SimpleViewHolder) holder;
                 simpleViewHolder.txtName.setText(list.get(position).getCase_type_name());
 
-                SimpleSubListAdapter simpleSubListAdapter=new SimpleSubListAdapter(context,list.get(position).getSubCaseData());
+                SimpleSubListAdapter simpleSubListAdapter = new SimpleSubListAdapter(context, list.get(position).getSubCaseData());
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
                 simpleViewHolder.recyclerView.setLayoutManager(linearLayoutManager);
                 simpleViewHolder.recyclerView.setAdapter(simpleSubListAdapter);
-               // simpleViewHolder.recyclerView.setVisibility(View.VISIBLE);
+                // simpleViewHolder.recyclerView.setVisibility(View.VISIBLE);
 
             }
         }
@@ -286,31 +307,31 @@ RetrofitManager retrofitManager;
             TextView txtName;
             View viewHorizontal;
             RecyclerView recyclerView;
+
             public SimpleViewHolder(View itemView) {
                 super(itemView);
-                viewHorizontal=(View) itemView.findViewById(R.id.horizontalView);
+                viewHorizontal = (View) itemView.findViewById(R.id.horizontalView);
                 viewHorizontal.setVisibility(View.GONE);
                 txtName = (TextView) itemView.findViewById(R.id.textViewName);
                 txtName.setBackgroundColor(Color.parseColor("#99777777"));
 
-                recyclerView=(RecyclerView)itemView.findViewById(R.id.caseSubTypeRecycleView);
+                recyclerView = (RecyclerView) itemView.findViewById(R.id.caseSubTypeRecycleView);
                 recyclerView.setVisibility(View.VISIBLE);
             }
         }
     }
 
-    public void selectedCaseType(String aCaseType)
-    {
+    public void selectedCaseType(String aCaseType) {
         edtCaseType.setText(aCaseType);
     }
 
-    public class SimpleSubListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    public class SimpleSubListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Context context;
-        ArrayList<CasesSubType> casesSubTypes ;
-        public SimpleSubListAdapter(Context context,ArrayList<CasesSubType> casesSubTypes)
-        {
-            this.context=context;
-            this.casesSubTypes=casesSubTypes;
+        ArrayList<CasesSubType> casesSubTypes;
+
+        public SimpleSubListAdapter(Context context, ArrayList<CasesSubType> casesSubTypes) {
+            this.context = context;
+            this.casesSubTypes = casesSubTypes;
         }
 
         @Override
@@ -333,12 +354,12 @@ RetrofitManager retrofitManager;
         }
 
         public class SimpleViewHolder extends RecyclerView.ViewHolder {
-            TextView txtName,txtSubTypeName;
+            TextView txtName, txtSubTypeName;
 
             public SimpleViewHolder(View itemView) {
                 super(itemView);
                 txtName = (TextView) itemView.findViewById(R.id.textViewName);
-                txtSubTypeName=(TextView)itemView.findViewById(R.id.textViewSubName);
+                txtSubTypeName = (TextView) itemView.findViewById(R.id.textViewSubName);
                 txtName.setVisibility(View.GONE);
                 txtSubTypeName.setVisibility(View.VISIBLE);
                 itemView.setOnClickListener(new View.OnClickListener() {
@@ -364,14 +385,181 @@ RetrofitManager retrofitManager;
 
     @Override
     public void onDataReceived(IModel response) {
-        if(response != null && response instanceof CasesTypeResponse)
-        {
-            CasesTypeResponse casesTypeResponse=(CasesTypeResponse) response;
-            if(casesTypeResponse.getData().getCasetype() !=null)
-            {
+        if (response != null && response instanceof CasesTypeResponse) {
+            CasesTypeResponse casesTypeResponse = (CasesTypeResponse) response;
+            if (casesTypeResponse.getData().getCasetype() != null) {
                 caseTypeDataList.addAll(casesTypeResponse.getData().getCasetype());
                 selectCaseType();
             }
         }
+    }
+
+    public List<CourtTable> getAllCourt() {
+        Dao<CourtTable, Integer> courtTableDao;
+        try {
+            courtTableDao = getHelper(getApplicationContext()).getCourtTableDao();
+            return courtTableDao.queryForAll();
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    ArrayList<CourtData> courtList;
+
+    public void convertList(List<CourtTable> list) {
+        if (list == null)
+            return;
+
+        for (int i = 0; i < list.size(); i++) {
+            CaseState state = null;
+            CaseDistrict district = null;
+            CaseSubDistrict subDistrict = null;
+
+            CourtTable courtTable = list.get(i);
+            if (courtTable.getCourtState() != null) {
+                state = new CaseState(courtTable.getCourtState().getName(), courtTable.getCourtState().getId(), courtTable.getCourtState().getParent_id(),
+                        courtTable.getCourtState().getExternal_id(), courtTable.getCourtState().getLocation_type(), courtTable.getCourtState().getPin());
+            }
+            if (courtTable.getCourtDistrict() != null) {
+                district = new CaseDistrict(courtTable.getCourtDistrict().getName(), courtTable.getCourtDistrict().getId(), courtTable.getCourtDistrict().getParent_id(),
+                        courtTable.getCourtDistrict().getExternal_id(), courtTable.getCourtDistrict().getLocation_type(), courtTable.getCourtDistrict().getPin());
+            }
+            if (courtTable.getCourtSubDistrict() != null) {
+                subDistrict = new CaseSubDistrict(courtTable.getCourtSubDistrict().getName(), courtTable.getCourtSubDistrict().getId(), courtTable.getCourtSubDistrict().getParent_id(),
+                        courtTable.getCourtSubDistrict().getExternal_id(), courtTable.getCourtSubDistrict().getLocation_type(), courtTable.getCourtSubDistrict().getPin());
+            }
+
+            CourtData courtData = new CourtData(courtTable.getCourt_id(), courtTable.getCourt_name(), courtTable.getCourt_type(), courtTable.getCourt_number(),
+                    courtTable.getState_id(), courtTable.getDistrict_id(), courtTable.getSub_district_id(),
+                    state, district, subDistrict);
+
+            if (courtList == null)
+                courtList = new ArrayList<>();
+            courtList.add(courtData);
+        }
+        selectCourt();
+    }
+
+
+    PopupWindow selectCourtWindow;
+
+    public void selectCourt() {
+
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.simple_list_item, null);
+
+        selectCourtWindow = new PopupWindow(
+                customView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        if (Build.VERSION.SDK_INT >= 21) {
+            selectCourtWindow.setElevation(5.0f);
+        }
+
+        TextView txtName = (TextView) customView.findViewById(R.id.textViewName);
+        RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.caseSubTypeRecycleView);
+        txtName.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);/*
+        recyclerView.setBackgroundColor(Color.parseColor("#ffffff"));*/
+        CourtListAdapter courtListAdapter = new CourtListAdapter(getApplicationContext(), courtList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(courtListAdapter);
+        selectCourtWindow.showAtLocation(edtSelectCourt, Gravity.CENTER, 0, 0);
+    }
+
+    DatabaseHelper databaseHelper;
+
+    // This is how, DatabaseHelper can be initialized for future use
+    private DatabaseHelper getHelper(Context context) {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
+    public void releaseHelper() {
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        releaseHelper();
+    }
+
+    public class CourtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        ArrayList<CourtData> courtList;
+        Context context;
+
+        public CourtListAdapter(Context context, ArrayList<CourtData> courtList) {
+            this.courtList = courtList;
+            this.context = context;
+        }
+
+        @Override
+        public int getItemCount() {
+            return courtList.size();
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.court_list_item, parent, false);
+            return new CourtViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof CourtViewHolder) {
+                CourtViewHolder courtViewHolder = (CourtViewHolder) holder;
+                courtViewHolder.txtCourtName.setText(courtList.get(position).getCourt_name());
+                courtViewHolder.txtStateName.setText(getAddress(courtList.get(position)));
+
+            }
+        }
+
+        public String getAddress(CourtData aCaseDetail) {
+            String address = "";
+            if (aCaseDetail.getSubdistrict() != null && aCaseDetail.getSubdistrict().getName() != null) {
+                address = aCaseDetail.getSubdistrict().getName() + ", ";
+            }
+
+
+            if (aCaseDetail.getDistrict() != null && aCaseDetail.getDistrict().getName() != null) {
+                address = address + aCaseDetail.getDistrict().getName() + ", ";
+            }
+
+
+            if (aCaseDetail.getState() != null && aCaseDetail.getState().getName() != null) {
+                address = address + aCaseDetail.getState().getName();
+            }
+            return address;
+        }
+
+        public class CourtViewHolder extends RecyclerView.ViewHolder {
+            TextView txtCourtName, txtStateName;
+
+            public CourtViewHolder(View itemView) {
+                super(itemView);
+                txtCourtName = (TextView) itemView.findViewById(R.id.textViewCourtName);
+                txtStateName = (TextView) itemView.findViewById(R.id.textViewState);
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        selectedCourt(courtList.get(getAdapterPosition()));
+                        selectCourtWindow.dismiss();
+                    }
+                });
+            }
+        }
+    }
+
+    public void selectedCourt(CourtData data) {
+        edtSelectCourt.setText(data.getCourt_name());
     }
 }
