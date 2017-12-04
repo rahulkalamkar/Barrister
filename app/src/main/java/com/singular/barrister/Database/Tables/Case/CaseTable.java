@@ -38,6 +38,10 @@ public class CaseTable {
     @DatabaseField(columnName = "case_status")
     String case_status;
 
+    public CaseClientTable getClient() {
+        return client;
+    }
+
     @DatabaseField(columnName = "client_details", canBeNull = true, foreign = true, foreignAutoRefresh = true, foreignAutoCreate = true)
     CaseClientTable client;
 

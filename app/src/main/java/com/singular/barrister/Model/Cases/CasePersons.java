@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class CasePersons implements IModel,Serializable {
+public class CasePersons implements IModel, Serializable {
     String case_id;
     String opp_name;
     String mobile;
@@ -55,4 +55,12 @@ public class CasePersons implements IModel,Serializable {
     }
 
     String type;
+
+    public CasePersons(String case_id, String opp_name, String mobile, String country_code, String type) {
+        this.case_id = case_id;
+        this.opp_name = opp_name;
+        this.mobile = mobile;
+        this.country_code = country_code;
+        this.type = type;
+    }
 }

@@ -62,4 +62,15 @@ public class CasePerson {
     String country_code;
     @DatabaseField(columnName = "type", canBeNull = true)
     String type;
+
+    public CasePerson(String case_id, String opp_name, String mobile, String country_code, String type) {
+        this.case_id = case_id;
+        this.opp_name = opp_name;
+        this.mobile = mobile;
+        this.country_code = country_code;
+        this.type = type;
+    }
+
+    public CasePerson() {
+    }
 }

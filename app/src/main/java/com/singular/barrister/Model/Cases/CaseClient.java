@@ -72,4 +72,14 @@ public class CaseClient implements IModel,Serializable{
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public CaseClient(String client_id, String first_name, String last_name, String country_code, String mobile, String email, String address) {
+        this.id = client_id;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.country_code = country_code;
+        this.mobile = mobile;
+        this.email = email;
+        this.address = address;
+    }
 }

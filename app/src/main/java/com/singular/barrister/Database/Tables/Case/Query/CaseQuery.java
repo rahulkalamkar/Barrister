@@ -11,6 +11,7 @@ import com.singular.barrister.Database.Tables.Case.CaseCourtDistrict;
 import com.singular.barrister.Database.Tables.Case.CaseCourtState;
 import com.singular.barrister.Database.Tables.Case.CaseCourtSubDistrict;
 import com.singular.barrister.Database.Tables.Case.CaseCourtTable;
+import com.singular.barrister.Database.Tables.Case.CasePerson;
 import com.singular.barrister.Database.Tables.Case.CaseTable;
 import com.singular.barrister.Database.Tables.Case.CasesCaseType;
 import com.singular.barrister.Database.Tables.Case.CasesSubCaseType;
@@ -59,6 +60,7 @@ public class CaseQuery {
     public void addList(ArrayList<Case> caseArrayList) {
         for (Case aCase : caseArrayList) {
             addCase(aCase);
+            insertPersonsForCase(aCase.getPersons());
         }
     }
 
@@ -94,6 +96,15 @@ public class CaseQuery {
             Log.e("Case table list", "" + e);
         }
         return list;
+    }
+
+    public void convertListToOnLineList(List<CaseTable> list) {
+        List<Case> onlineCaseList = new ArrayList<>();
+        onlineCaseList.clear();
+        for (CaseTable caseTable : list) {
+            CaseClient caseClient = new CaseClient(caseTable.getClient().getClient_id(), caseTable.getClient().getFirst_name(), caseTable.getClient().getLast_name(), caseTable.getClient().getCountry_code(),
+                    caseTable.getClient().getMobile(), caseTable.getClient().getEmail(), caseTable.getClient().getAddress());
+        }
     }
 
     public CaseClientTable prePareCaseClient(CaseClient Client) {
@@ -152,8 +163,31 @@ public class CaseQuery {
     // Insert persons of case
     public void insertPersonsForCase(List<CasePersons> personsList) {
         for (CasePersons casePersons : personsList) {
-
+            addPersonList(casePersons);
         }
     }
 
+    public void addPersonList(CasePersons persons) {
+        Dao<CasePerson, Integer> casePersonIntegerDao;
+        CasePerson casePerson = new CasePerson(persons.getCase_id(), persons.getOpp_name(), persons.getMobile(), persons.getCountry_code(), persons.getType());
+        try {
+            casePersonIntegerDao = getHelper(context).getACasePersonDao();
+            casePersonIntegerDao.create(casePerson);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public List<CasePerson> getPersonList(String aCaseid) {
+        List<CasePerson> casePersons = null;
+        Dao<CasePerson, Integer> casePersonIntegerDao;
+        try {
+            casePersonIntegerDao = getHelper(context).getACasePersonDao();
+            casePersons = casePersonIntegerDao.queryForEq("case_id", aCaseid);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return casePersons;
+    }
 }
