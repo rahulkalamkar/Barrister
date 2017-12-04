@@ -7,35 +7,47 @@
     android:padding="@dimen/fab_margin"
     tools:context="com.singular.barrister.Activity.SignInAccount">
 
-    <EditText
-        android:id="@+id/editTextPhoneNumber"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/editTextNumberError"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="@string/hint_number"
-        android:inputType="phone"
-        android:maxLines="1"
-        android:singleLine="true" />
+        android:layout_height="wrap_content"
+        app:errorEnabled="true">
 
-    <EditText
-        android:id="@+id/editTextPassword"
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/editTextNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_number"
+            android:inputType="phone"
+            android:maxLines="1" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/editTextPasswordError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextPhoneNumber"
+        android:layout_below="@id/editTextNumberError"
         android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="@string/hint_password"
-        android:inputType="textPassword"
-        android:maxLines="1"
-        android:singleLine="true" />
+        app:errorEnabled="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="@string/hint_password"
+            android:maxLines="1" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/textViewLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextPassword"
+        android:layout_below="@+id/editTextPasswordError"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:background="@drawable/circular_corner_button"
@@ -51,7 +63,7 @@
         android:id="@+id/textViewNoAccountCreateNew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextPassword"
+        android:layout_below="@+id/editTextPasswordError"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/fab_margin"
         android:text="@string/no_account"
@@ -63,7 +75,7 @@
         android:id="@+id/textViewForgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextPassword"
+        android:layout_below="@+id/editTextPasswordError"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/fab_margin"
         android:text="@string/forgot_password"

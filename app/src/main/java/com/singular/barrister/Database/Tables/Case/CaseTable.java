@@ -3,6 +3,7 @@ package com.singular.barrister.Database.Tables.Case;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.singular.barrister.Model.Cases.CaseClient;
+import com.singular.barrister.Model.Cases.CaseHearing;
 import com.singular.barrister.Model.Cases.CasePersons;
 import com.singular.barrister.Model.Cases.CaseType;
 import com.singular.barrister.Model.Cases.SubCaseType;
@@ -19,24 +20,35 @@ public class CaseTable {
 
     @DatabaseField(columnName = "case_id", unique = true)
     String case_id;
-    @DatabaseField(columnName = "client_id")
+    @DatabaseField(columnName = "client_id", canBeNull = true)
     String client_id;
-    @DatabaseField(columnName = "client_type")
+    @DatabaseField(columnName = "client_type", canBeNull = true)
     String client_type;
-    @DatabaseField(columnName = "court_id")
+    @DatabaseField(columnName = "court_id", canBeNull = true)
     String court_id;
-    @DatabaseField(columnName = "case_cnr_number")
+    @DatabaseField(columnName = "case_cnr_number", canBeNull = true)
     String case_cnr_number;
-    @DatabaseField(columnName = "case_register_number")
+    @DatabaseField(columnName = "case_register_number", canBeNull = true)
     String case_register_number;
-    @DatabaseField(columnName = "case_register_date")
+    @DatabaseField(columnName = "case_register_date", canBeNull = true)
     String case_register_date;
-    @DatabaseField(columnName = "case_type")
+    @DatabaseField(columnName = "case_type", canBeNull = true)
     String case_type;
-    @DatabaseField(columnName = "case_sub_type")
+    @DatabaseField(columnName = "case_sub_type", canBeNull = true)
     String case_sub_type;
-    @DatabaseField(columnName = "case_status")
+    @DatabaseField(columnName = "case_status", canBeNull = true)
     String case_status;
+
+    public CasesHearingTable getHearingTable() {
+        return hearingTable;
+    }
+
+    public void setHearingTable(CasesHearingTable hearingTable) {
+        this.hearingTable = hearingTable;
+    }
+
+    @DatabaseField(columnName = "case_hearing", canBeNull = true, foreign = true, foreignAutoRefresh = true, foreignAutoCreate = true)
+    CasesHearingTable hearingTable;
 
     public CaseClientTable getClient() {
         return client;
@@ -66,7 +78,7 @@ public class CaseTable {
     }
 
     public CaseTable(String case_id, String client_id, String case_cnr_number, String case_register_number, String case_register_date, String case_status, String case_type, String case_sub_type,
-                     String client_type, String court_id, CaseClientTable client, CasesCaseType casesCaseType, CasesSubCaseType casesSubCaseType, CaseCourtTable caseCourtTable, String diff) {
+                     String client_type, String court_id, CaseClientTable client, CasesCaseType casesCaseType, CasesSubCaseType casesSubCaseType, CaseCourtTable caseCourtTable, String diff, CasesHearingTable hearingTable) {
         this.case_id = case_id;
         this.client_id = client_id;
         this.case_cnr_number = case_cnr_number;
@@ -82,6 +94,7 @@ public class CaseTable {
         this.casesSubCaseType = casesSubCaseType;
         this.court = caseCourtTable;
         this.diff = diff;
+        this.hearingTable=hearingTable;
 
     }
 

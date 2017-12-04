@@ -36,7 +36,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_number"
                     android:focusable="false"
-                    android:text="9762993179"
                     android:inputType="phone"
                     android:maxLines="1" />
 

@@ -28,6 +28,30 @@ public class Case implements IModel, Serializable {
     CourtData court;
     String diff;
 
+    public Case(String id, String client_id, String client_type, String court_id, String case_cnr_number, String case_register_number, String case_register_date,
+                String case_type, String case_sub_type, String case_status, CaseClient client, List<CasePersons> persons, CaseType caseType, SubCaseType subCaseType,
+                CourtData court, String diff, CaseHearing hearing) {
+        this.id = id;
+        this.client_id = client_id;
+        this.client_type = client_type;
+        this.court_id = court_id;
+        this.case_cnr_number = case_cnr_number;
+        this.case_register_number = case_register_number;
+        this.case_register_date = case_register_date;
+        this.case_type = case_type;
+        this.case_sub_type = case_sub_type;
+        this.case_status = case_status;
+        this.client = client;
+        this.case_type = case_type;
+        this.case_sub_type = case_sub_type;
+        this.subCasetype = subCaseType;
+        this.casetype = caseType;
+        this.persons = persons;
+        this.court = court;
+        this.diff = diff;
+        this.hearing = hearing;
+    }
+
     public String getDiff() {
         return diff;
     }

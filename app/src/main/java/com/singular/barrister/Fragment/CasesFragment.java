@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.singular.barrister.Activity.LandingScreen;
 import com.singular.barrister.Adapter.CasesListAdapter;
 import com.singular.barrister.Adapter.CourtListAdapter;
+import com.singular.barrister.Database.Tables.Case.CaseTable;
 import com.singular.barrister.Database.Tables.Case.Query.CaseQuery;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Cases.CasesData;
@@ -31,6 +32,7 @@ import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by rahulbabanaraokalamkar on 11/23/17.
@@ -63,13 +65,18 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
     }
 
     public void getCasesList() {
-        if (new CaseQuery(getActivity()).getList() != null) {
-
-        }
-
         if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
             retrofitManager.getCasesList(this, new UserPreferance(getActivity()).getToken());
         } else {
+            List<CaseTable> list=new CaseQuery(getActivity()).getList();
+            if ( list != null) {
+                caseList=(ArrayList<Case>) new CaseQuery(getActivity()).convertListToOnLineList(list);
+                CasesListAdapter courtListAdapter = new CasesListAdapter(getActivity(), caseList);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                mRecycleView.setLayoutManager(linearLayoutManager);
+                mRecycleView.setAdapter(courtListAdapter);
+                progressBar.setVisibility(View.GONE);
+            }
             Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
     }

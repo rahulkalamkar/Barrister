@@ -14,10 +14,12 @@ import com.singular.barrister.Database.Tables.Case.CaseCourtTable;
 import com.singular.barrister.Database.Tables.Case.CasePerson;
 import com.singular.barrister.Database.Tables.Case.CaseTable;
 import com.singular.barrister.Database.Tables.Case.CasesCaseType;
+import com.singular.barrister.Database.Tables.Case.CasesHearingTable;
 import com.singular.barrister.Database.Tables.Case.CasesSubCaseType;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Cases.CaseClient;
 import com.singular.barrister.Model.Cases.CaseDistrict;
+import com.singular.barrister.Model.Cases.CaseHearing;
 import com.singular.barrister.Model.Cases.CasePersons;
 import com.singular.barrister.Model.Cases.CaseState;
 import com.singular.barrister.Model.Cases.CaseSubDistrict;
@@ -42,7 +44,6 @@ public class CaseQuery {
         this.context = context;
     }
 
-    // This is how, DatabaseHelper can be initialized for future use
     private DatabaseHelper getHelper(Context context) {
         if (databaseHelper == null) {
             databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);
@@ -69,9 +70,10 @@ public class CaseQuery {
         CasesCaseType casesCaseType = prePareCaseType(aCase.getCasetype());
         CasesSubCaseType casesSubCaseType = prePareSubCaseType(aCase.getSubCasetype());
         CaseCourtTable caseCourtTable = prePareCaseCourt(aCase.getCourt());
+        CasesHearingTable casesHearingTable = prePareCaseHearing(aCase.getHearing());
         CaseTable caseTable = new CaseTable(aCase.getId(), aCase.getClient_id(), aCase.getCase_cnr_number(), aCase.getCase_register_number(),
                 aCase.getCase_register_date(), aCase.getCase_status(), aCase.getCase_type(),
-                aCase.getCase_sub_type(), aCase.getClient_type(), aCase.getCourt_id(), caseClientTable, casesCaseType, casesSubCaseType, caseCourtTable, aCase.getDiff());
+                aCase.getCase_sub_type(), aCase.getClient_type(), aCase.getCourt_id(), caseClientTable, casesCaseType, casesSubCaseType, caseCourtTable, aCase.getDiff(), casesHearingTable);
 
         Dao<CaseTable, Integer> caseTableIntegerDao;
         try {
@@ -98,19 +100,80 @@ public class CaseQuery {
         return list;
     }
 
-    public void convertListToOnLineList(List<CaseTable> list) {
+    public List<Case> convertListToOnLineList(List<CaseTable> list) {
         List<Case> onlineCaseList = new ArrayList<>();
         onlineCaseList.clear();
         for (CaseTable caseTable : list) {
             CaseClient caseClient = new CaseClient(caseTable.getClient().getClient_id(), caseTable.getClient().getFirst_name(), caseTable.getClient().getLast_name(), caseTable.getClient().getCountry_code(),
                     caseTable.getClient().getMobile(), caseTable.getClient().getEmail(), caseTable.getClient().getAddress());
+
+            CaseState caseState = new CaseState(caseTable.getCourt().getCourtState().getName(),
+                    caseTable.getCourt().getCourtState().getId(),
+                    caseTable.getCourt().getCourtState().getParent_id(),
+                    caseTable.getCourt().getCourtState().getExternal_id(),
+                    caseTable.getCourt().getCourtState().getLocation_type(),
+                    caseTable.getCourt().getCourtState().getPin());
+
+            CaseDistrict caseDistrict = null;
+            if (caseTable.getCourt().getCourtDistrict() != null) {
+                caseDistrict = new CaseDistrict(caseTable.getCourt().getCourtDistrict().getName(),
+                        caseTable.getCourt().getCourtDistrict().getId(),
+                        caseTable.getCourt().getCourtDistrict().getParent_id(),
+                        caseTable.getCourt().getCourtDistrict().getExternal_id(),
+                        caseTable.getCourt().getCourtDistrict().getLocation_type(),
+                        caseTable.getCourt().getCourtDistrict().getPin());
+            }
+
+            CaseSubDistrict caseSubDistrict = null;
+            if (caseTable.getCourt().getCourtSubDistrict() != null) {
+                caseSubDistrict = new CaseSubDistrict(caseTable.getCourt().getCourtSubDistrict().getName(),
+                        caseTable.getCourt().getCourtSubDistrict().getId(),
+                        caseTable.getCourt().getCourtSubDistrict().getParent_id(),
+                        caseTable.getCourt().getCourtSubDistrict().getExternal_id(),
+                        caseTable.getCourt().getCourtSubDistrict().getLocation_type(),
+                        caseTable.getCourt().getCourtSubDistrict().getPin());
+            }
+
+            CourtData courtData = new CourtData(caseTable.getCourt().getCourt_id(), caseTable.getCourt().getCourt_name(), caseTable.getCourt().getCourt_type(),
+                    caseTable.getCourt().getCourt_number(), caseTable.getCourt().getState_id(), caseTable.getCourt().getDistrict_id(), caseTable.getCourt().getSub_district_id(),
+                    caseState, caseDistrict, caseSubDistrict);
+
+            CaseType caseType = null;
+            if (caseTable.getCasesCaseType() != null)
+                caseType = new CaseType(caseTable.getCasesCaseType().getCase_type_id(), caseTable.getCasesCaseType().getCase_type_name());
+
+            SubCaseType subCaseType = null;
+            if (caseTable.getCasesSubCaseType() != null)
+                subCaseType = new SubCaseType(caseTable.getCasesSubCaseType().getSub_case_type_id(), caseTable.getCasesSubCaseType().getSub_case_type_name());
+
+            List<CasePerson> personList = getPersonList(caseTable.getCase_id());
+
+            List<CasePersons> casePersonses = null;
+            if (personList != null)
+                casePersonses = getPersonsList(personList);
+
+            CaseHearing caseHearing=null;
+            if(caseTable.getHearingTable()!=null)
+            caseHearing = new CaseHearing(caseTable.getHearingTable().getHearing_id(), caseTable.getHearingTable().getCase_id(), caseTable.getHearingTable().getCase_hearing_date(),
+                    caseTable.getHearingTable().getCase_decision(), caseTable.getHearingTable().getCase_disposed());
+
+            Case aCase = new Case(caseTable.getCase_id(), caseTable.getClient_id(), caseTable.getClient_type(), caseTable.getCourt_id(), caseTable.getCase_cnr_number(),
+                    caseTable.getCase_register_number(), caseTable.getCase_register_date(), caseTable.getCase_type(), caseTable.getCase_sub_type(),
+                    caseTable.getCase_status(), caseClient, casePersonses, caseType, subCaseType, courtData, caseTable.getDiff(), caseHearing);
+            onlineCaseList.add(aCase);
         }
+        return onlineCaseList;
     }
 
     public CaseClientTable prePareCaseClient(CaseClient Client) {
         CaseClientTable caseClient = new CaseClientTable(Client.getId(), Client.getFirst_name(), Client.getLast_name(),
                 Client.getCountry_code(), Client.getMobile(), Client.getEmail(), Client.getAddress());
         return caseClient;
+    }
+
+    public CasesHearingTable prePareCaseHearing(CaseHearing caseHearing) {
+        CasesHearingTable casesHearingTable = new CasesHearingTable(caseHearing.getId(), caseHearing.getCase_id(), caseHearing.getCase_hearing_date(), caseHearing.getCase_decision(), caseHearing.getCase_disposed());
+        return casesHearingTable;
     }
 
     public CasesCaseType prePareCaseType(CaseType caseType) {
@@ -189,5 +252,15 @@ public class CaseQuery {
             e.printStackTrace();
         }
         return casePersons;
+    }
+
+    public List<CasePersons> getPersonsList(List<CasePerson> list) {
+        List<CasePersons> casePersonses = new ArrayList<CasePersons>();
+        casePersonses.clear();
+        for (CasePerson persons : list) {
+            CasePersons casePersons = new CasePersons(persons.getCase_id(), persons.getOpp_name(), persons.getMobile(), persons.getCountry_code(), persons.getType());
+            casePersonses.add(casePersons);
+        }
+        return casePersonses;
     }
 }

@@ -28,4 +28,9 @@ public class SubCaseType implements IModel,Serializable {
     }
 
     String subcase_type_name;
+
+    public SubCaseType(String subcase_type_id,String subcase_type_name){
+        this.subcase_type_id=subcase_type_id;
+        this.subcase_type_name=subcase_type_name;
+    }
 }

@@ -28,4 +28,10 @@ public class CaseType implements IModel,Serializable{
     }
 
     String case_type_name;
+
+    public CaseType(String case_type_id,String case_type_name)
+    {
+        this.case_type_id=case_type_id;
+        this.case_type_name=case_type_name;
+    }
 }

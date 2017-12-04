@@ -16,6 +16,7 @@ import com.singular.barrister.Database.Tables.Case.CaseCourtTable;
 import com.singular.barrister.Database.Tables.Case.CasePerson;
 import com.singular.barrister.Database.Tables.Case.CaseTable;
 import com.singular.barrister.Database.Tables.Case.CasesCaseType;
+import com.singular.barrister.Database.Tables.Case.CasesHearingTable;
 import com.singular.barrister.Database.Tables.Case.CasesSubCaseType;
 import com.singular.barrister.Database.Tables.CaseTypeTable;
 import com.singular.barrister.Database.Tables.Client.BaseClientTable;
@@ -62,6 +63,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<CasesCaseType, Integer> aCasesCaseTypeDao;
     private Dao<CasesSubCaseType, Integer> aCasesSubCaseTypeDao;
     private Dao<CaseTable, Integer> aCaseTableDao;
+    private Dao<CasesHearingTable, Integer> aCaseHearingTableDao;
 
     public SQLiteDatabase sqLiteDatabase;
     Context context;
@@ -102,6 +104,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, CasesCaseType.class);
             TableUtils.createTable(connectionSource, CasesSubCaseType.class);
             TableUtils.createTable(connectionSource, CaseTable.class);
+            TableUtils.createTable(connectionSource, CasesHearingTable.class);
 
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Unable to create datbases", e);
@@ -131,6 +134,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, CasesCaseType.class);
             TableUtils.createTable(connectionSource, CasesSubCaseType.class);
             TableUtils.createTable(connectionSource, CaseTable.class);
+            TableUtils.createTable(connectionSource, CasesHearingTable.class);
 
             onCreate(sqliteDatabase, connectionSource);
 
@@ -284,4 +288,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return aCaseTableDao;
     }
 
+    public Dao<CasesHearingTable, Integer> getACaseHearingTableDao() throws SQLException {
+        if (aCaseHearingTableDao == null) {
+            aCaseHearingTableDao = getDao(CasesHearingTable.class);
+        }
+        return aCaseHearingTableDao;
+    }
 }
