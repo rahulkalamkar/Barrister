@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.singular.barrister.Activity.LandingScreen;
 import com.singular.barrister.Adapter.CasesListAdapter;
 import com.singular.barrister.Adapter.CourtListAdapter;
+import com.singular.barrister.Database.Tables.Case.Query.CaseQuery;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Cases.CasesData;
 import com.singular.barrister.Model.Cases.CasesResponse;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class CasesFragment extends Fragment implements IDataChangeListener<IModel>{
+public class CasesFragment extends Fragment implements IDataChangeListener<IModel> {
 
     private RecyclerView mRecycleView;
     private ProgressBar progressBar;
@@ -52,28 +53,28 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRecycleView=(RecyclerView)getView().findViewById(R.id.courtRecycleView);
-        progressBar=(ProgressBar)getView().findViewById(R.id.progressBar);
-        errorTextView=(TextView)getView().findViewById(R.id.textViewErrorText);
-        retrofitManager=new RetrofitManager();
-        caseList=new ArrayList<Case>();
+        mRecycleView = (RecyclerView) getView().findViewById(R.id.courtRecycleView);
+        progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
+        errorTextView = (TextView) getView().findViewById(R.id.textViewErrorText);
+        retrofitManager = new RetrofitManager();
+        caseList = new ArrayList<Case>();
         getCasesList();
-        
+
     }
 
-    public void getCasesList()
-    {
-        if(new NetworkConnection(getActivity()).isNetworkAvailable())
-        {
+    public void getCasesList() {
+        if (new CaseQuery(getActivity()).getList() != null) {
+
+        }
+
+        if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
             retrofitManager.getCasesList(this, new UserPreferance(getActivity()).getToken());
-        }
-        else {
-            Toast.makeText(getActivity(),getActivity().getResources().getString(R.string.network_error),Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void showError()
-    {
+    public void showError() {
         errorTextView.setText("There is no case added yet!");
         errorTextView.setVisibility(View.VISIBLE);
         mRecycleView.setVisibility(View.GONE);
@@ -92,33 +93,33 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
 
     @Override
     public void onDataReceived(IModel response) {
-        if(response!=null && response instanceof CasesResponse)
-        {
-            CasesResponse casesResponse =(CasesResponse) response;
-            if(casesResponse.getData().getCaseList()!=null) {
+        if (response != null && response instanceof CasesResponse) {
+            CasesResponse casesResponse = (CasesResponse) response;
+            if (casesResponse.getData().getCaseList() != null) {
                 caseList.addAll(casesResponse.getData().getCaseList());
                 CasesListAdapter courtListAdapter = new CasesListAdapter(getActivity(), caseList);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecycleView.setLayoutManager(linearLayoutManager);
                 mRecycleView.setAdapter(courtListAdapter);
                 progressBar.setVisibility(View.GONE);
-            }
-            else if(casesResponse.getError()!=null && casesResponse.getError().getStatus_code() ==401)
-            {
-                Toast.makeText(getActivity(),"Your session is Expired",Toast.LENGTH_SHORT).show();
+                if (caseList != null && caseList.size() > 0) {
+                    CaseQuery caseQuery = new CaseQuery(getActivity());
+                    caseQuery.addList(caseList);
+                }
+            } else if (casesResponse.getError() != null && casesResponse.getError().getStatus_code() == 401) {
+                Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
                 new UserPreferance(getActivity()).logOut();
                 Intent intent = new Intent(getActivity(), LandingScreen.class);
                 startActivity(intent);
                 getActivity().finish();
-            }
-            else
+            } else
                 showError();
-        }
-        else
-        {Toast.makeText(getActivity(),"Your session is Expired",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
             new UserPreferance(getActivity()).logOut();
             Intent intent = new Intent(getActivity(), LandingScreen.class);
             startActivity(intent);
-            getActivity().finish();}
+            getActivity().finish();
+        }
     }
 }

@@ -37,4 +37,11 @@ public class CasesTypeData implements IModel, Serializable {
     public void setSubCaseData(ArrayList<CasesSubType> subCaseData) {
         this.subCaseData = subCaseData;
     }
+
+    public CasesTypeData(String case_type_id, String case_type_name, ArrayList<CasesSubType> subCaseData) {
+        this.case_type_id = case_type_id;
+        this.case_type_name = case_type_name;
+        this.subCaseData = subCaseData;
+
+    }
 }

@@ -93,25 +93,25 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         } else {
             Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             List<BaseClientTable> list = getLocalData();
-            if(list!=null)
+            if (list != null)
                 convertAndDisplay(list);
         }
     }
 
     public void convertAndDisplay(List<BaseClientTable> list) {
         for (int i = 0; i < list.size(); i++) {
-            BaseClientTable baseClientTable=list.get(i);
+            BaseClientTable baseClientTable = list.get(i);
 
-            ClientTable clientTable=baseClientTable.getClientTable();
+            ClientTable clientTable = baseClientTable.getClientTable();
             ClientDetail clientDetail = new ClientDetail(clientTable.getClient_id(), clientTable.getFirst_name(), clientTable.getLast_name(),
                     clientTable.getCountry_code(), clientTable.getMobile(), clientTable.getEmail(),
                     clientTable.getAddress(), clientTable.getUser_type(), clientTable.getReferral_code(),
                     clientTable.getParent_user_id(), clientTable.getUsed_referral_code(), clientTable.getDevice_type(),
                     clientTable.getDevice_token(), clientTable.getSubscription(), clientTable.getCreated_at(), clientTable.getUpdated_at());
 
-            Client client=new Client(baseClientTable.getBase_id(),baseClientTable.getClient_id(),baseClientTable.getCreated_at(),clientDetail);
-            if(clientList==null)
-            clientList=new ArrayList<Client>();
+            Client client = new Client(baseClientTable.getBase_id(), baseClientTable.getClient_id(), baseClientTable.getCreated_at(), clientDetail);
+            if (clientList == null)
+                clientList = new ArrayList<Client>();
             clientList.add(client);
         }
 
@@ -233,6 +233,8 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             return baseClientTables.queryForAll();
         } catch (SQLException e) {
             return null;
+        } catch (Exception e) {
+            return null;
         }
     }
 
@@ -269,12 +271,15 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             Log.e("BAseClient Table", "inserted");
         } catch (SQLException e) {
             Log.e("BAseClient table", "" + e);
+        } catch (Exception e) {
+            Log.e("BAseClient table", "" + e);
         }
     }
 
     private DatabaseHelper getHelper() {
         if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(getActivity(), DatabaseHelper.class);
+            if (getActivity() != null)
+                databaseHelper = OpenHelperManager.getHelper(getActivity(), DatabaseHelper.class);
         }
         return databaseHelper;
     }

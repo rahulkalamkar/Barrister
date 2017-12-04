@@ -1,28 +1,16 @@
-package com.singular.barrister.Database.Tables;
+package com.singular.barrister.Database.Tables.Case;
 
-import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.singular.barrister.Model.Cases.SubCaseType;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
 
 /**
- * Created by rahul.kalamkar on 12/1/2017.
+ * Created by rahul.kalamkar on 12/4/2017.
  */
 
-@DatabaseTable(tableName = "CaseTypeTable")
-public class CaseTypeTable implements Serializable {
+@DatabaseTable(tableName = "Cases_CaseType")
+public class CasesCaseType {
     @DatabaseField(columnName = "id", generatedId = true)
     int id;
-
-    @DatabaseField(columnName = "case_type_id", canBeNull = true, unique = true)
-    String case_type_id;
 
     public String getCase_type_id() {
         return case_type_id;
@@ -40,15 +28,28 @@ public class CaseTypeTable implements Serializable {
         this.case_type_name = case_type_name;
     }
 
+    public int getId() {
+
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @DatabaseField(columnName = "case_type_id", canBeNull = true)
+    String case_type_id;
+
     @DatabaseField(columnName = "case_type_name", canBeNull = true)
     String case_type_name;
 
-    public CaseTypeTable() {
+    public CasesCaseType() {
 
     }
 
-    public CaseTypeTable(String case_type_id, String case_type_name) {
+    public CasesCaseType(String case_type_id, String case_type_name) {
         this.case_type_id = case_type_id;
         this.case_type_name = case_type_name;
     }
+
 }

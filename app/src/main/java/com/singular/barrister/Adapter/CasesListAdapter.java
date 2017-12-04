@@ -47,41 +47,39 @@ public class CasesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof CasesViewHolder) {
             CasesViewHolder courtViewHolder = (CasesViewHolder) holder;
-            if(casesList.get(position).getPersons().get(0).getType().equalsIgnoreCase("Client")) {
-                courtViewHolder.txtCourtName.setText(casesList.get(position).getClient().getFirst_name()+ " "+ casesList.get(position).getClient()
-                        .getLast_name()+ " VS " +casesList.get(position).getPersons().get(0).getOpp_name());
+            if (casesList.get(position).getClient() != null) {
+                if (casesList.get(position).getPersons().get(0).getType().equalsIgnoreCase("Client")) {
+                    courtViewHolder.txtCourtName.setText(casesList.get(position).getClient().getFirst_name() + " " + casesList.get(position).getClient()
+                            .getLast_name() + " VS " + casesList.get(position).getPersons().get(0).getOpp_name());
 
+                } else {
+                    courtViewHolder.txtCourtName.setText(casesList.get(position).getClient().getFirst_name() + " " + casesList.get(position).getClient()
+                            .getLast_name() + " VS " + casesList.get(position).getPersons().get(1).getOpp_name());
+                }
             }
-            else {
-                courtViewHolder.txtCourtName.setText(casesList.get(position).getClient().getFirst_name()+ " "+ casesList.get(position).getClient()
-                        .getLast_name()+ " VS " +casesList.get(position).getPersons().get(1).getOpp_name());
-            }
-
             courtViewHolder.txtStateName.setText(getAddress(casesList.get(position)));
 
         }
     }
-    public String getAddress(Case aCaseDetail)
-    {
-        String address ="";
-        if(aCaseDetail.getCourt().getSubdistrict() !=null && aCaseDetail.getCourt().getSubdistrict().getName()!=null)
-        {
-            address=aCaseDetail.getCourt().getSubdistrict().getName()+", ";
+
+    public String getAddress(Case aCaseDetail) {
+        String address = "";
+        if (aCaseDetail.getCourt().getSubdistrict() != null && aCaseDetail.getCourt().getSubdistrict().getName() != null) {
+            address = aCaseDetail.getCourt().getSubdistrict().getName() + ", ";
         }
 
 
-        if(aCaseDetail.getCourt().getDistrict() !=null && aCaseDetail.getCourt().getDistrict().getName()!=null)
-        {
-            address=address+aCaseDetail.getCourt().getDistrict().getName()+", ";
+        if (aCaseDetail.getCourt().getDistrict() != null && aCaseDetail.getCourt().getDistrict().getName() != null) {
+            address = address + aCaseDetail.getCourt().getDistrict().getName() + ", ";
         }
 
 
-        if(aCaseDetail.getCourt().getState() !=null && aCaseDetail.getCourt().getState().getName()!=null)
-        {
-            address=address+aCaseDetail.getCourt().getState().getName();
+        if (aCaseDetail.getCourt().getState() != null && aCaseDetail.getCourt().getState().getName() != null) {
+            address = address + aCaseDetail.getCourt().getState().getName();
         }
         return address;
     }
+
     public class CasesViewHolder extends RecyclerView.ViewHolder {
         TextView txtCourtName, txtStateName;
 
@@ -93,9 +91,9 @@ public class CasesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle=new Bundle();
-                    bundle.putSerializable("Case",(Serializable)casesList.get(getAdapterPosition()));
-                    Intent intent =new Intent(context, DisplayCaseActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Case", (Serializable) casesList.get(getAdapterPosition()));
+                    Intent intent = new Intent(context, DisplayCaseActivity.class);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }

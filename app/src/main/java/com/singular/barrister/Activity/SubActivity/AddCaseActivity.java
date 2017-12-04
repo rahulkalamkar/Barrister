@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,27 +25,34 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.singular.barrister.Database.DB.DatabaseHelper;
+import com.singular.barrister.Database.Tables.CaseTypeTable;
 import com.singular.barrister.Database.Tables.Client.BaseClientTable;
 import com.singular.barrister.Database.Tables.Client.ClientTable;
 import com.singular.barrister.Database.Tables.CourtTable;
+import com.singular.barrister.Database.Tables.SubCaseTypeTable;
 import com.singular.barrister.Interface.CaseListeners;
 import com.singular.barrister.Interface.RecycleItem;
+import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Cases.CaseDistrict;
 import com.singular.barrister.Model.Cases.CaseState;
 import com.singular.barrister.Model.Cases.CaseSubDistrict;
+import com.singular.barrister.Model.Cases.SubCaseType;
 import com.singular.barrister.Model.CasesSubType;
 import com.singular.barrister.Model.CasesTypeData;
 import com.singular.barrister.Model.CasesTypeResponse;
 import com.singular.barrister.Model.Client.Client;
 import com.singular.barrister.Model.Client.ClientDetail;
 import com.singular.barrister.Model.Court.CourtData;
+import com.singular.barrister.Model.SimpleMessageResponse;
 import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.R;
 import com.singular.barrister.RetrofitManager.RetrofitManager;
@@ -53,9 +62,13 @@ import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AddCaseActivity extends AppCompatActivity implements CaseListeners, IDataChangeListener<IModel> {
@@ -92,8 +105,8 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         rdtPetitioner = (RadioButton) findViewById(R.id.radioButtonPetitioner);
-        rdtPetitioner = (RadioButton) findViewById(R.id.radioButtonDefender);
-        rdtPetitioner = (RadioButton) findViewById(R.id.radioButtonThirdParty);
+        rdtDefender = (RadioButton) findViewById(R.id.radioButtonDefender);
+        rdtThirdParty = (RadioButton) findViewById(R.id.radioButtonThirdParty);
 
         txtILCaseStatus = (TextInputLayout) findViewById(R.id.EditTextCaseStatusError);
         edtCaseStatus = (TextInputEditText) findViewById(R.id.EditTextCaseStatus);
@@ -143,7 +156,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             @Override
             public void onClick(View view) {
                 DatePickerWindow datePickerWindow = new DatePickerWindow(getApplicationContext(), edtNextHearingDate, AddCaseActivity.this);
-            datePickerWindow.showTimer(true);
+                datePickerWindow.showTimer(true);
             }
         });
 
@@ -154,11 +167,26 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
                 convertList(list);
             }
         });
+
+        edtCaseRegisterDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isForRegisterDate = true;
+                DatePickerWindow datePickerWindow = new DatePickerWindow(getApplicationContext(), edtCaseRegisterDate, AddCaseActivity.this);
+                datePickerWindow.showTimer(true);
+            }
+        });
+
         retrofitManager = new RetrofitManager();
         edtCaseType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+                if (caseTypeDataList == null)
+                    caseTypeDataList = new ArrayList<CasesTypeData>();
+                caseTypeDataList.addAll(convertListToCaseType());
+                if (caseTypeDataList != null && caseTypeDataList.size() > 0) {
+                    selectCaseType();
+                } else if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
                     retrofitManager.getCourtType(AddCaseActivity.this, new UserPreferance(getApplicationContext()).getToken());
                 } else {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
@@ -173,6 +201,64 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             }
         });
 
+    }
+
+    boolean isForRegisterDate = false;
+
+    public List<CaseTypeTable> checkValuesForCaseTypeLocally() {
+        Dao<CaseTypeTable, Integer> caseTypeTablesDao;
+        try {
+            caseTypeTablesDao = getHelper(getApplicationContext()).getCaseTypeTableDao();
+            return caseTypeTablesDao.queryForAll();
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public List<CasesTypeData> convertListToCaseType() {
+        List<CasesTypeData> casesTypeDatas = null;
+        if (casesTypeDatas == null)
+            casesTypeDatas = new ArrayList<CasesTypeData>();
+        casesTypeDatas.clear();
+
+        List<CaseTypeTable> caseTypeTablesList = checkValuesForCaseTypeLocally();
+        if (caseTypeTablesList != null) {
+            for (int i = 0; i < caseTypeTablesList.size(); i++) {
+                CaseTypeTable caseTypeTable = caseTypeTablesList.get(i);
+                List<SubCaseTypeTable> subCaseList = getSubCaseTypeTableValue(caseTypeTable.getCase_type_id());
+                CasesTypeData casesTypeData = getCasesTypeData(caseTypeTable, subCaseList);
+                casesTypeDatas.add(casesTypeData);
+            }
+        }
+        return casesTypeDatas;
+    }
+
+    public CasesTypeData getCasesTypeData(CaseTypeTable caseTypeTable, List<SubCaseTypeTable> subCaseList) {
+        CasesTypeData casesTypeData1 = new CasesTypeData(caseTypeTable.getCase_type_id(), caseTypeTable.getCase_type_name(), convertListToCasesSubType(subCaseList));
+        return casesTypeData1;
+    }
+
+    public ArrayList<CasesSubType> convertListToCasesSubType(List<SubCaseTypeTable> subCaseList) {
+        ArrayList<CasesSubType> casesSubTypes = null;
+        if (casesSubTypes == null)
+            casesSubTypes = new ArrayList<CasesSubType>();
+        casesSubTypes.clear();
+        for (int i = 0; i < subCaseList.size(); i++) {
+            SubCaseTypeTable subCaseTypeTable = subCaseList.get(i);
+            CasesSubType casesSubType = new CasesSubType(subCaseTypeTable.getSub_case_type_id(), subCaseTypeTable.getSub_case_type_name());
+            casesSubTypes.add(casesSubType);
+        }
+        return casesSubTypes;
+    }
+
+    public List<SubCaseTypeTable> getSubCaseTypeTableValue(String caseTypeId) {
+        Dao<SubCaseTypeTable, Integer> subCaseTypeTables;
+        try {
+            subCaseTypeTables = getHelper(getApplicationContext()).getSubCaseTypeTableDao();
+            return subCaseTypeTables.queryForEq("case_type_id", caseTypeId);
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     RetrofitManager retrofitManager;
@@ -240,7 +326,12 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
 
     @Override
     public void dateTime(String date) {
-        edtNextHearingDate.setText(date);
+        if (isForRegisterDate) {
+            edtCaseRegisterDate.setText(date);
+        } else {
+            edtNextHearingDate.setText(date);
+        }
+        isForRegisterDate = false;
     }
 
     @Override
@@ -250,11 +341,92 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
                 finish();
                 break;
             case R.id.menuSubmit:
+                checkValues();
                 break;
         }
         return true;
     }
 
+    public void checkValues() {
+        if (rdtDefender.isChecked()) {
+            selectedClientType = rdtDefender.getText().toString();
+        } else if (rdtPetitioner.isChecked()) {
+            selectedClientType = rdtPetitioner.getText().toString();
+        } else if (rdtThirdParty.isChecked()) {
+            selectedClientType = rdtThirdParty.getText().toString();
+        }
+
+        if (TextUtils.isEmpty(edtCaseStatus.getText().toString())) {
+            txtILCaseStatus.setError("enter case status");
+        } else if (TextUtils.isEmpty(edtNextHearingDate.getText().toString())) {
+            txtILNextHearingDate.setError("enter next hearing date");
+        } else if (TextUtils.isEmpty(edtCaseType.getText().toString())) {
+            txtILCaseType.setError("enter case type");
+        } else if (TextUtils.isEmpty(edtSelectCourt.getText().toString())) {
+            txtILSelectCourt.setError("select court");
+        } else if (TextUtils.isEmpty(edtCaseCNRNumber.getText().toString())) {
+            txtILCaseCNRNumber.setError("enter case cnr number");
+        } else if (TextUtils.isEmpty(edtCaseRegisterNumber.getText().toString())) {
+            txtILCaseRegisterNumber.setError("enter case register number");
+        } else if (TextUtils.isEmpty(edtCaseRegisterDate.getText().toString())) {
+            txtILCaseRegisterDate.setError("enter case register date");
+        } else if (TextUtils.isEmpty(edtCaseNotes.getText().toString())) {
+            txtILCaseNotes.setError("enter case notes");
+        } else if (TextUtils.isEmpty(edtOpoName.getText().toString())) {
+            txtILOpoName.setError("enter opposition name");
+        } else if (TextUtils.isEmpty(edtOpoNumber.getText().toString())) {
+            txtILOpoNumber.setError("enter  opposition number");
+        } else if (TextUtils.isEmpty(edtOpoLawyerName.getText().toString())) {
+            txtILOpoLawName.setError("enter opposition lawyer name");
+        } else if (TextUtils.isEmpty(edtOpoLawyerNumber.getText().toString())) {
+            txtILOpoLawNumber.setError("enter opposition lawyer number");
+        } else if (txtSelectClient.getText().toString().equalsIgnoreCase("")) {
+            Toast.makeText(getApplicationContext(), "Select client name", Toast.LENGTH_SHORT).show();
+        } else if (TextUtils.isEmpty(selectedClientType)) {
+            Toast.makeText(getApplicationContext(), "select client type", Toast.LENGTH_SHORT).show();
+        } else {
+            if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                retrofitManager.addCase(this, new UserPreferance(getApplicationContext()).getToken(), selectedClient.getClient_id(), selectedClientType, selectedCourt.getId(), edtCaseCNRNumber.getText().toString(),
+                        edtCaseRegisterNumber.getText().toString(),
+                        edtCaseRegisterDate.getText().toString(),
+                        selectedCaseType.getCase_type_id(), selectedCaseSubType.getSubcase_type_id(),
+                        edtCaseStatus.getText().toString(),
+                        getJSONFORMAT(edtOpoLawyerName.getText().toString(), "91", edtOpoLawyerNumber.getText().toString()),
+                        getJSONFORMAT(edtOpoName.getText().toString(), "91", edtOpoNumber.getText().toString()),
+                        getJSONFORMAT(edtOpoName.getText().toString(), "91", edtOpoNumber.getText().toString()),
+                        getJSON());
+            } else {
+                Toast.makeText(getApplicationContext(), "Check internet connection", Toast.LENGTH_SHORT).show();
+            }
+            selectedClientType = null;
+        }
+    }
+
+    public String getJSON() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("case_hearing_date", edtNextHearingDate.getText().toString());
+            jsonObject.put("case_decision", edtCaseNotes.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
+    public String getJSONFORMAT(String name, String country_code, String mobile) {
+        JSONObject map = new JSONObject();
+        try {
+            map.put("opp_name", name);
+            map.put("country_code", country_code);
+            map.put("mobile", mobile);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return map.toString();
+    }
+
+    String selectedClientType = "";
     PopupWindow caseTypeWindow;
 
     public void selectCaseType() {
@@ -336,8 +508,24 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         }
     }
 
-    public void selectedCaseType(String aCaseType) {
-        edtCaseType.setText(aCaseType);
+    CasesSubType selectedCaseSubType;
+    CasesTypeData selectedCaseType;
+
+    public void selectedCaseType(CasesSubType casesSubType) {
+        selectedCaseSubType = casesSubType;
+        getSelectedCaseType(casesSubType);
+        edtCaseType.setText(casesSubType.getSubcase_type_name());
+    }
+
+    public void getSelectedCaseType(CasesSubType casesSubType) {
+        for (CasesTypeData casesTypeData : caseTypeDataList) {
+            for (CasesSubType subType : casesTypeData.getSubCaseData()) {
+                if (subType.getSubcase_type_id().equalsIgnoreCase(casesSubType.getSubcase_type_id())) {
+                    selectedCaseType = casesTypeData;
+                    return;
+                }
+            }
+        }
     }
 
     public class SimpleSubListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -380,7 +568,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        selectedCaseType(casesSubTypes.get(getAdapterPosition()).getSubcase_type_name());
+                        selectedCaseType(casesSubTypes.get(getAdapterPosition()));
                         caseTypeWindow.dismiss();
                     }
                 });
@@ -404,8 +592,50 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             CasesTypeResponse casesTypeResponse = (CasesTypeResponse) response;
             if (casesTypeResponse.getData().getCasetype() != null) {
                 caseTypeDataList.addAll(casesTypeResponse.getData().getCasetype());
+                saveCaseType(caseTypeDataList);
                 selectCaseType();
             }
+        } else if (response != null && response instanceof SimpleMessageResponse) {
+            mProgressBar.setVisibility(View.GONE);
+            Toast.makeText(getApplicationContext(), "Case added successFully", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void saveCaseType(ArrayList<CasesTypeData> caseTypeDataList) {
+        if (caseTypeDataList == null)
+            return;
+
+        for (int i = 0; i < caseTypeDataList.size(); i++) {
+            CasesTypeData casesTypeData = caseTypeDataList.get(i);
+            CaseTypeTable caseTypeTable = new CaseTypeTable(casesTypeData.getCase_type_id(), casesTypeData.getCase_type_name());
+            insertDataCaseType(caseTypeTable);
+            for (int j = 0; j < caseTypeDataList.get(i).getSubCaseData().size(); j++) {
+                CasesSubType casesSubType = caseTypeDataList.get(i).getSubCaseData().get(j);
+                SubCaseTypeTable subCaseTypeTable = new SubCaseTypeTable(casesTypeData.getCase_type_id(), casesSubType.getSubcase_type_id(), casesSubType.getSubcase_type_name());
+                insertDataSubCaseType(subCaseTypeTable);
+            }
+        }
+    }
+
+    public void insertDataCaseType(CaseTypeTable casesTypeData) {
+        Dao<CaseTypeTable, Integer> caseTypeTablesDao;
+        try {
+            caseTypeTablesDao = getHelper(getApplicationContext()).getCaseTypeTableDao();
+            caseTypeTablesDao.create(casesTypeData);
+            Log.e("case type Table", "inserted");
+        } catch (SQLException e) {
+            Log.e("case type table", "" + e);
+        }
+    }
+
+    public void insertDataSubCaseType(SubCaseTypeTable subCaseTypeTable) {
+        Dao<SubCaseTypeTable, Integer> subCaseTypeTables;
+        try {
+            subCaseTypeTables = getHelper(getApplicationContext()).getSubCaseTypeTableDao();
+            subCaseTypeTables.create(subCaseTypeTable);
+            Log.e("sub case type Table", "inserted");
+        } catch (SQLException e) {
+            Log.e("sub case type table", "" + e);
         }
     }
 
@@ -578,34 +808,37 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         }
     }
 
+    CourtData selectedCourt;
+
     public void selectedCourt(CourtData data) {
+        selectedCourt = data;
         edtSelectCourt.setText(data.getCourt_name());
     }
 
-    public void fetchAndDisplayClient()
-    {
+    public void fetchAndDisplayClient() {
         List<BaseClientTable> list = getLocalData();
-        if(list!=null)
+        if (list != null)
             convertAndDisplay(list);
     }
 
     ArrayList<Client> clientList;
+
     public void convertAndDisplay(List<BaseClientTable> list) {
-        if(clientList==null)
-            clientList=new ArrayList<Client>();
+        if (clientList == null)
+            clientList = new ArrayList<Client>();
         clientList.clear();
 
         for (int i = 0; i < list.size(); i++) {
-            BaseClientTable baseClientTable=list.get(i);
+            BaseClientTable baseClientTable = list.get(i);
 
-            ClientTable clientTable=baseClientTable.getClientTable();
+            ClientTable clientTable = baseClientTable.getClientTable();
             ClientDetail clientDetail = new ClientDetail(clientTable.getClient_id(), clientTable.getFirst_name(), clientTable.getLast_name(),
                     clientTable.getCountry_code(), clientTable.getMobile(), clientTable.getEmail(),
                     clientTable.getAddress(), clientTable.getUser_type(), clientTable.getReferral_code(),
                     clientTable.getParent_user_id(), clientTable.getUsed_referral_code(), clientTable.getDevice_type(),
                     clientTable.getDevice_token(), clientTable.getSubscription(), clientTable.getCreated_at(), clientTable.getUpdated_at());
 
-            Client client=new Client(baseClientTable.getBase_id(),baseClientTable.getClient_id(),baseClientTable.getCreated_at(),clientDetail);
+            Client client = new Client(baseClientTable.getBase_id(), baseClientTable.getCreated_at(), baseClientTable.getClient_id(), clientDetail);
             clientList.add(client);
         }
         selectClient();
@@ -709,9 +942,11 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         }
     }
 
-    public void selectedClient(Client client)
-    {
-        txtSelectClient.setText(client.getClient().getFirst_name() +" "+client.getClient().getLast_name() +"\n"+client.getClient().getMobile());
+    Client selectedClient;
+
+    public void selectedClient(Client client) {
+        selectedClient = client;
+        txtSelectClient.setText(client.getClient().getFirst_name() + " " + client.getClient().getLast_name() + "\n" + client.getClient().getMobile());
         selectClientWindow.dismiss();
     }
 

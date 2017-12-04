@@ -54,8 +54,9 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
 
         aCaseDetail = (Case) getIntent().getExtras().getSerializable("Case");
 
-        setTitle(aCaseDetail.getClient().getFirst_name() + " " + aCaseDetail.getClient().getLast_name() + " Vs " +
-                getPerson("Client").getOpp_name());
+        if (aCaseDetail.getClient() != null)
+            setTitle(aCaseDetail.getClient().getFirst_name() + " " + aCaseDetail.getClient().getLast_name() + " Vs " +
+                    getPerson("Client").getOpp_name());
         setData();
     }
 
@@ -68,7 +69,8 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
 
     public void setData() {
         txtStatus.setText(aCaseDetail.getCase_status());
-        txtType.setText(aCaseDetail.getCasetype().getCase_type_name());
+        if (aCaseDetail.getCasetype() != null)
+            txtType.setText(aCaseDetail.getCasetype().getCase_type_name());
         txtCourtName.setText(aCaseDetail.getCourt().getCourt_name());
         txtCRNNumber.setText(aCaseDetail.getCase_cnr_number());
         txtRegisterNumber.setText(aCaseDetail.getCase_register_number());
@@ -77,12 +79,13 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
 
         txtHearing.setText(aCaseDetail.getHearing() != null ? (aCaseDetail.getHearing().getCase_decision() != null ? aCaseDetail.getHearing().getCase_decision() : "") : "");
 
-        txtClientName.setText(aCaseDetail.getClient().getFirst_name() + " " + aCaseDetail.getClient().getLast_name());
-        txtClientEmailId.setText(aCaseDetail.getClient().getEmail());
-        txtPhone.setText(aCaseDetail.getClient().getMobile());
-        txtAddress.setText(getAddress());
-        txtClientType.setText(aCaseDetail.getClient_type());
-
+        if (aCaseDetail.getClient() != null) {
+            txtClientName.setText(aCaseDetail.getClient().getFirst_name() + " " + aCaseDetail.getClient().getLast_name());
+            txtClientEmailId.setText(aCaseDetail.getClient().getEmail());
+            txtPhone.setText(aCaseDetail.getClient().getMobile());
+            txtAddress.setText(getAddress());
+            txtClientType.setText(aCaseDetail.getClient_type());
+        }
         txtOppositionName.setText(getPerson("Client").getOpp_name());
         txtOppositionNumber.setText(getPerson("Client").getMobile());
         txtOppositionLawyerName.setText(getPerson("Lawyer").getOpp_name());

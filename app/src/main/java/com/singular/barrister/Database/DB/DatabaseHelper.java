@@ -8,6 +8,16 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.table.TableUtils;
+import com.singular.barrister.Database.Tables.Case.CaseClientTable;
+import com.singular.barrister.Database.Tables.Case.CaseCourtDistrict;
+import com.singular.barrister.Database.Tables.Case.CaseCourtState;
+import com.singular.barrister.Database.Tables.Case.CaseCourtSubDistrict;
+import com.singular.barrister.Database.Tables.Case.CaseCourtTable;
+import com.singular.barrister.Database.Tables.Case.CasePerson;
+import com.singular.barrister.Database.Tables.Case.CaseTable;
+import com.singular.barrister.Database.Tables.Case.CasesCaseType;
+import com.singular.barrister.Database.Tables.Case.CasesSubCaseType;
+import com.singular.barrister.Database.Tables.CaseTypeTable;
 import com.singular.barrister.Database.Tables.Client.BaseClientTable;
 import com.singular.barrister.Database.Tables.Client.ClientTable;
 import com.singular.barrister.Database.Tables.CourtDistrict;
@@ -16,6 +26,8 @@ import com.singular.barrister.Database.Tables.CourtSubDistrict;
 import com.singular.barrister.Database.Tables.CourtTable;
 import com.singular.barrister.Database.Tables.CourtTypeTable;
 import com.singular.barrister.Database.Tables.StateTable;
+import com.singular.barrister.Database.Tables.SubCaseTypeTable;
+import com.singular.barrister.Model.Cases.SubCaseType;
 
 import android.util.Log;
 
@@ -38,6 +50,18 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<CourtSubDistrict, Integer> courtSubDistrictDao;
     private Dao<ClientTable, Integer> clientTableDao;
     private Dao<BaseClientTable, Integer> baseClientTableDao;
+    private Dao<CaseTypeTable, Integer> caseTypeTableDao;
+    private Dao<SubCaseTypeTable, Integer> subCaseTypeTableDao;
+
+    private Dao<CaseClientTable, Integer> aCaseClientTableDao;
+    private Dao<CaseCourtDistrict, Integer> aCaseCourtDistrictDao;
+    private Dao<CaseCourtState, Integer> aCaseCourtStateDao;
+    private Dao<CaseCourtSubDistrict, Integer> aCaseCourtSubDistrictDao;
+    private Dao<CaseCourtTable, Integer> aCaseCourtTableDao;
+    private Dao<CasePerson, Integer> aCasePersonDao;
+    private Dao<CasesCaseType, Integer> aCasesCaseTypeDao;
+    private Dao<CasesSubCaseType, Integer> aCasesSubCaseTypeDao;
+    private Dao<CaseTable, Integer> aCaseTableDao;
 
     public SQLiteDatabase sqLiteDatabase;
     Context context;
@@ -65,6 +89,19 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, CourtSubDistrict.class);
             TableUtils.createTable(connectionSource, BaseClientTable.class);
             TableUtils.createTable(connectionSource, ClientTable.class);
+            TableUtils.createTable(connectionSource, CaseTypeTable.class);
+            TableUtils.createTable(connectionSource, SubCaseTypeTable.class);
+
+            // Cases related table
+            TableUtils.createTable(connectionSource, CaseClientTable.class);
+            TableUtils.createTable(connectionSource, CaseCourtDistrict.class);
+            TableUtils.createTable(connectionSource, CaseCourtSubDistrict.class);
+            TableUtils.createTable(connectionSource, CaseCourtState.class);
+            TableUtils.createTable(connectionSource, CaseCourtTable.class);
+            TableUtils.createTable(connectionSource, CasePerson.class);
+            TableUtils.createTable(connectionSource, CasesCaseType.class);
+            TableUtils.createTable(connectionSource, CasesSubCaseType.class);
+            TableUtils.createTable(connectionSource, CaseTable.class);
 
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Unable to create datbases", e);
@@ -82,6 +119,19 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, CourtSubDistrict.class);
             TableUtils.createTable(connectionSource, BaseClientTable.class);
             TableUtils.createTable(connectionSource, ClientTable.class);
+            TableUtils.createTable(connectionSource, CaseTypeTable.class);
+            TableUtils.createTable(connectionSource, SubCaseTypeTable.class);
+
+            TableUtils.createTable(connectionSource, CaseClientTable.class);
+            TableUtils.createTable(connectionSource, CaseCourtDistrict.class);
+            TableUtils.createTable(connectionSource, CaseCourtSubDistrict.class);
+            TableUtils.createTable(connectionSource, CaseCourtState.class);
+            TableUtils.createTable(connectionSource, CaseCourtTable.class);
+            TableUtils.createTable(connectionSource, CasePerson.class);
+            TableUtils.createTable(connectionSource, CasesCaseType.class);
+            TableUtils.createTable(connectionSource, CasesSubCaseType.class);
+            TableUtils.createTable(connectionSource, CaseTable.class);
+
             onCreate(sqliteDatabase, connectionSource);
 
         } catch (SQLException e) {
@@ -148,4 +198,90 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         return clientTableDao;
     }
+
+    public Dao<CaseTypeTable, Integer> getCaseTypeTableDao() throws SQLException {
+        if (caseTypeTableDao == null) {
+            caseTypeTableDao = getDao(CaseTypeTable.class);
+        }
+        return caseTypeTableDao;
+    }
+
+    public Dao<SubCaseTypeTable, Integer> getSubCaseTypeTableDao() throws SQLException {
+        if (subCaseTypeTableDao == null) {
+            subCaseTypeTableDao = getDao(SubCaseTypeTable.class);
+        }
+        return subCaseTypeTableDao;
+    }
+
+    public Dao<CaseClientTable, Integer> getACaseClientTableDao() throws SQLException {
+        if (aCaseClientTableDao == null) {
+            aCaseClientTableDao = getDao(CaseClientTable.class);
+        }
+        return aCaseClientTableDao;
+    }
+
+
+    public Dao<CaseCourtDistrict, Integer> getACaseCourtDistrictDao() throws SQLException {
+        if (aCaseCourtDistrictDao == null) {
+            aCaseCourtDistrictDao = getDao(CaseCourtDistrict.class);
+        }
+        return aCaseCourtDistrictDao;
+    }
+
+
+    public Dao<CaseCourtState, Integer> getACaseCourtStateDao() throws SQLException {
+        if (aCaseCourtStateDao == null) {
+            aCaseCourtStateDao = getDao(CaseCourtState.class);
+        }
+        return aCaseCourtStateDao;
+    }
+
+
+    public Dao<CaseCourtSubDistrict, Integer> getACaseCourtSubDistrictDao() throws SQLException {
+        if (aCaseCourtSubDistrictDao == null) {
+            aCaseCourtSubDistrictDao = getDao(CaseCourtSubDistrict.class);
+        }
+        return aCaseCourtSubDistrictDao;
+    }
+
+
+    public Dao<CaseCourtTable, Integer> getACaseCourtTableDao() throws SQLException {
+        if (aCaseCourtTableDao == null) {
+            aCaseCourtTableDao = getDao(CaseCourtTable.class);
+        }
+        return aCaseCourtTableDao;
+    }
+
+
+    public Dao<CasePerson, Integer> getACasePersonDao() throws SQLException {
+        if (aCasePersonDao == null) {
+            aCasePersonDao = getDao(CasePerson.class);
+        }
+        return aCasePersonDao;
+    }
+
+
+    public Dao<CasesCaseType, Integer> getACasesCaseTypeDao() throws SQLException {
+        if (aCasesCaseTypeDao == null) {
+            aCasesCaseTypeDao = getDao(CasesCaseType.class);
+        }
+        return aCasesCaseTypeDao;
+    }
+
+
+    public Dao<CasesSubCaseType, Integer> getACasesSubCaseTypeDao() throws SQLException {
+        if (aCasesSubCaseTypeDao == null) {
+            aCasesSubCaseTypeDao = getDao(CasesSubCaseType.class);
+        }
+        return aCasesSubCaseTypeDao;
+    }
+
+
+    public Dao<CaseTable, Integer> getACaseTableDao() throws SQLException {
+        if (aCaseTableDao == null) {
+            aCaseTableDao = getDao(CaseTable.class);
+        }
+        return aCaseTableDao;
+    }
+
 }
