@@ -274,7 +274,6 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
 
     DatabaseHelper databaseHelper;
 
-    // This is how, DatabaseHelper can be initialized for future use
     private DatabaseHelper getHelper(Context context) {
         if (databaseHelper == null) {
             databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);

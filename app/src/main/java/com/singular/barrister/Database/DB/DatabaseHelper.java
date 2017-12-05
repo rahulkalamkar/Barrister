@@ -28,6 +28,7 @@ import com.singular.barrister.Database.Tables.CourtTable;
 import com.singular.barrister.Database.Tables.CourtTypeTable;
 import com.singular.barrister.Database.Tables.StateTable;
 import com.singular.barrister.Database.Tables.SubCaseTypeTable;
+import com.singular.barrister.Database.Tables.WebSite.ImportantLink;
 import com.singular.barrister.Model.Cases.SubCaseType;
 
 import android.util.Log;
@@ -64,6 +65,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<CasesSubCaseType, Integer> aCasesSubCaseTypeDao;
     private Dao<CaseTable, Integer> aCaseTableDao;
     private Dao<CasesHearingTable, Integer> aCaseHearingTableDao;
+
+    private Dao<ImportantLink, Integer> ImportantWebDao;
 
     public SQLiteDatabase sqLiteDatabase;
     Context context;
@@ -106,6 +109,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, CaseTable.class);
             TableUtils.createTable(connectionSource, CasesHearingTable.class);
 
+            TableUtils.createTable(connectionSource, ImportantLink.class);
+
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Unable to create datbases", e);
         }
@@ -135,6 +140,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, CasesSubCaseType.class);
             TableUtils.createTable(connectionSource, CaseTable.class);
             TableUtils.createTable(connectionSource, CasesHearingTable.class);
+
+            TableUtils.createTable(connectionSource, ImportantLink.class);
 
             onCreate(sqliteDatabase, connectionSource);
 
@@ -293,5 +300,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             aCaseHearingTableDao = getDao(CasesHearingTable.class);
         }
         return aCaseHearingTableDao;
+    }
+
+    public Dao<ImportantLink, Integer> getImportantWebDao() throws SQLException {
+        if (ImportantWebDao == null) {
+            ImportantWebDao = getDao(ImportantLink.class);
+        }
+        return ImportantWebDao;
     }
 }

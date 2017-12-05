@@ -1,11 +1,13 @@
 package com.singular.barrister.Activity;
 
+import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,8 +16,14 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+import com.singular.barrister.Database.DB.DatabaseHelper;
+import com.singular.barrister.Database.Tables.CourtTable;
 import com.singular.barrister.Fragment.ImportantLinkFragment;
 import com.singular.barrister.R;
+
+import java.sql.SQLException;
 
 public class ImportantLink extends AppCompatActivity {
 
@@ -63,6 +71,25 @@ public class ImportantLink extends AppCompatActivity {
             transaction.replace(R.id.fragmentContainer, importantLinkFragment, "Add link").commit();
             frameLayout.setVisibility(View.VISIBLE);
         } else {
+            saveData();
+        }
+    }
+
+    public void saveData() {
+        if (importantLinkFragment.checkValues()) {
+            String webName = importantLinkFragment.edtWebName.getText().toString();
+            String webUrl = importantLinkFragment.edtWebSite.getText().toString();
+
+            com.singular.barrister.Database.Tables.WebSite.ImportantLink importantLink = new com.singular.barrister.Database.Tables.WebSite.ImportantLink(webName, webUrl);
+
+            Dao<com.singular.barrister.Database.Tables.WebSite.ImportantLink, Integer> importantLinkIntegerDao;
+            try {
+                importantLinkIntegerDao = getHelper(getApplicationContext()).getImportantWebDao();
+                importantLinkIntegerDao.create(importantLink);
+            } catch (SQLException e) {
+                Log.e("Court table", "" + e);
+            }
+
             mRecycleView.setVisibility(View.VISIBLE);
             fragmentManager = getSupportFragmentManager();
             fragmentManager.popBackStack();
@@ -70,6 +97,23 @@ public class ImportantLink extends AppCompatActivity {
         }
     }
 
+
+
+    DatabaseHelper databaseHelper;
+
+    private DatabaseHelper getHelper(Context context) {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
+    public void releaseHelper() {
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -103,4 +147,6 @@ public class ImportantLink extends AppCompatActivity {
         }
         return true;
     }
+
+
 }
