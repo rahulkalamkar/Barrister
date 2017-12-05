@@ -296,11 +296,7 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
     }
 
     public void onSearch(String text) {
-        try {
-            if (courtListAdapter != null)
-                courtListAdapter.getFilter().filter(text);
-        } catch (Exception e) {
-
-        }
+        if (courtListAdapter != null)
+            courtListAdapter.getFilter().filter(text);
     }
 }

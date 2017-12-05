@@ -83,6 +83,7 @@ public class CourtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     ValueFilter valueFilter;
+    int count = 0;
 
     private class ValueFilter extends Filter {
         @Override
@@ -94,16 +95,18 @@ public class CourtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 return null;
 
             if (charString.isEmpty()) {
-
                 courtList = arrayList;
             } else {
-
+                if (count > charString.length() && courtList.size() == 0) {
+                    courtList = arrayList;
+                }
+                count++;
                 ArrayList<CourtData> filteredList = new ArrayList<>();
 
                 for (CourtData courtData : courtList) {
 
-                    if (courtData.getCourt_name().toLowerCase().contains(charString.toLowerCase())) {
-
+                    if (courtData.getCourt_name().toLowerCase().contains(charString.toLowerCase()) ||
+                            getAddress(courtData).toLowerCase().contains(charString.toLowerCase())) {
                         filteredList.add(courtData);
                     }
                 }

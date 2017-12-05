@@ -76,6 +76,8 @@ public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return valueFilter;
     }
 
+    int count = 0;
+
     private class ValueFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
@@ -86,16 +88,19 @@ public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 return null;
 
             if (charString.isEmpty()) {
-
                 clientArrayList = arrayList;
             } else {
-
+                if (count > charString.length() && clientArrayList.size() == 0) {
+                    clientArrayList = arrayList;
+                }
+                count++;
                 ArrayList<Client> filteredList = new ArrayList<>();
 
                 for (Client client : clientArrayList) {
 
                     if (client.getClient().getFirst_name().toLowerCase().contains(charString.toLowerCase()) ||
-                            client.getClient().getLast_name().toLowerCase().contains(charString.toLowerCase())) {
+                            client.getClient().getLast_name().toLowerCase().contains(charString.toLowerCase()) ||
+                            client.getClient().getMobile().toLowerCase().contains(charString.toLowerCase())) {
 
                         filteredList.add(client);
                     }

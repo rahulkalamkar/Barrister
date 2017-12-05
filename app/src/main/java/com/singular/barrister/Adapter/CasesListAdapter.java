@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.singular.barrister.DisplayCaseActivity;
 import com.singular.barrister.Model.Cases.Case;
+import com.singular.barrister.Model.Cases.CasePersons;
 import com.singular.barrister.Model.Client.Client;
 import com.singular.barrister.Model.Court.CourtData;
 import com.singular.barrister.R;
@@ -104,6 +105,15 @@ public class CasesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     ValueFilter valueFilter;
 
+    public CasePersons getPerson(String type, Case cases) {
+        if (cases.getPersons().get(0).getType().equalsIgnoreCase(type))
+            return cases.getPersons().get(0);
+        else
+            return cases.getPersons().get(1);
+    }
+
+    int count = 0;
+
     private class ValueFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
@@ -117,14 +127,21 @@ public class CasesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 casesList = arrayList;
             } else {
-
+                if (count > charString.length() && casesList.size() == 0) {
+                    casesList = arrayList;
+                }
+                count++;
                 ArrayList<Case> filteredList = new ArrayList<>();
 
                 for (Case cases : casesList) {
                     String secondWord = getOppositionName(cases);
                     if (cases.getClient().getFirst_name().toLowerCase().contains(charString.toLowerCase()) ||
                             cases.getClient().getLast_name().toLowerCase().contains(charString.toLowerCase()) ||
-                            secondWord.toLowerCase().contains(charString.toLowerCase())) {
+                            secondWord.toLowerCase().contains(charString.toLowerCase()) ||
+                            cases.getCourt().getCourt_name().toLowerCase().contains(charString.toLowerCase()) ||
+                            getPerson("Client", cases).getOpp_name().toLowerCase().contains(charString.toLowerCase()) ||
+                            getPerson("Lawyer", cases).getOpp_name().toLowerCase().contains(charString.toLowerCase()) ||
+                            cases.getCourt().getCourt_number().toLowerCase().contains(charString.toLowerCase())) {
                         filteredList.add(cases);
                     }
                 }
