@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.singular.barrister.DisplayCaseActivity;
@@ -22,12 +24,14 @@ import java.util.ArrayList;
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class CasesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CasesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     ArrayList<Case> casesList;
+    ArrayList<Case> arrayList;
     Context context;
 
     public CasesListAdapter(Context context, ArrayList<Case> casesList) {
         this.casesList = casesList;
+        this.arrayList = casesList;
         this.context = context;
     }
 
@@ -80,6 +84,71 @@ public class CasesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return address;
     }
 
+    @Override
+    public Filter getFilter() {
+        if (valueFilter == null) {
+            valueFilter = new ValueFilter();
+        }
+        return valueFilter;
+    }
+
+    public String getOppositionName(Case cases) {
+        String str = "";
+        if (cases.getPersons().get(0).getType().equalsIgnoreCase("Client")) {
+            str = cases.getPersons().get(0).getOpp_name();
+        } else {
+            str = cases.getPersons().get(1).getOpp_name();
+        }
+        return str;
+    }
+
+    ValueFilter valueFilter;
+
+    private class ValueFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+
+            String charString = charSequence.toString();
+
+            if (casesList == null)
+                return null;
+
+            if (charString.isEmpty()) {
+
+                casesList = arrayList;
+            } else {
+
+                ArrayList<Case> filteredList = new ArrayList<>();
+
+                for (Case cases : casesList) {
+                    String secondWord = getOppositionName(cases);
+                    if (cases.getClient().getFirst_name().toLowerCase().contains(charString.toLowerCase()) ||
+                            cases.getClient().getLast_name().toLowerCase().contains(charString.toLowerCase()) ||
+                            secondWord.toLowerCase().contains(charString.toLowerCase())) {
+                        filteredList.add(cases);
+                    }
+                }
+
+                casesList = filteredList;
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = casesList;
+            return filterResults;
+
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint,
+                                      FilterResults results) {
+            if (results != null) {
+                casesList = (ArrayList<Case>) results.values;
+                notifyDataSetChanged();
+            }
+        }
+
+    }
+
     public class CasesViewHolder extends RecyclerView.ViewHolder {
         TextView txtCourtName, txtStateName;
 
@@ -100,4 +169,6 @@ public class CasesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             });
         }
     }
+
+
 }

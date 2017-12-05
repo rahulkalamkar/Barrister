@@ -10,146 +10,156 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1">
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" android:padding="@dimen/fab_margin">
+            android:orientation="vertical"
+            android:padding="@dimen/fab_margin">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CASE DETAIL"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CASE DETAIL"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Status"
-            android:textSize="16sp"
-            android:textColor="#000000"
-            android:layout_marginTop="@dimen/fab_margin"/>
-        <TextView
-            android:id="@+id/textViewCaseStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:text="In-Progress"
-            android:textColor="#777777"
-            android:textSize="16sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:text="Status"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewCaseStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textColor="#777777"
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.2dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#777777"
-                android:layout_marginBottom="10dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Type"
-            android:textSize="16sp"
-            android:textColor="#000000"/>
-        <TextView
-            android:id="@+id/textViewCaseType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Criminal"
-            android:layout_marginTop="3dp"
-            android:textColor="#777777"
-            android:textSize="16sp"/>
+                android:background="#777777" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewCaseType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textColor="#777777"
+                android:textSize="16sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.2dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#777777"
-                android:layout_marginBottom="10dp"/>
+                android:background="#777777" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Court name"
-                android:textSize="16sp"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/textViewCourtName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Madras high court"
                 android:layout_marginTop="3dp"
                 android:textColor="#777777"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.2dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#777777"
-                android:layout_marginBottom="10dp"/>
+                android:background="#777777" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="CNR number"
-                android:textSize="16sp"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/textViewCNRNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12e34"
                 android:layout_marginTop="3dp"
                 android:textColor="#777777"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.2dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#777777"
-                android:layout_marginBottom="10dp"/>
+                android:background="#777777" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Registrater number"
-                android:textSize="16sp"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/textViewCaseRegistrationNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="13254"
                 android:layout_marginTop="3dp"
                 android:textColor="#777777"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.2dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#777777"
-                android:layout_marginBottom="10dp"/>
+                android:background="#777777" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Register date"
-                android:textSize="16sp"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/textViewCaseRegisterDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="18 Jan 2017"
                 android:layout_marginTop="3dp"
                 android:textColor="#777777"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -160,207 +170,220 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fab_margin"
                 android:text="NEXT HEARING"
                 android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                android:layout_marginTop="@dimen/fab_margin"/>
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/textViewCaseNextHearing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="jafjaladnoagaan"
+                android:layout_marginTop="8dp"
                 android:textColor="#000000"
-                android:textSize="16sp"
-                android:layout_marginTop="8dp"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fab_margin"
                 android:text="CLIENT DETAIL"
                 android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                android:layout_marginTop="@dimen/fab_margin"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fab_margin"
                 android:text="Name"
-                android:textSize="16sp"
                 android:textColor="#000000"
-                android:layout_marginTop="@dimen/fab_margin"/>
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/textViewClientName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rahul K"
                 android:layout_marginTop="3dp"
                 android:textColor="#777777"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.2dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#777777"
-                android:layout_marginBottom="10dp"/>
+                android:background="#777777" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Email Id"
-                android:textSize="16sp"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/textViewClientEmailId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="9762993179"
                 android:layout_marginTop="3dp"
                 android:textColor="#777777"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.2dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#777777"
-                android:layout_marginBottom="10dp"/>
+                android:background="#777777" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Phone"
-                android:textSize="16sp"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/textViewClientPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="9762993179"
                 android:layout_marginTop="3dp"
                 android:textColor="#777777"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.2dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#777777"
-                android:layout_marginBottom="10dp"/>
+                android:background="#777777" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Address"
-                android:textSize="16sp"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/textViewClientAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="njnkj"
                 android:layout_marginTop="3dp"
                 android:textColor="#777777"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.2dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#777777"
-                android:layout_marginBottom="10dp"/>
+                android:background="#777777" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Client type"
-                android:textSize="16sp"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/textViewClientType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="hkjk"
                 android:layout_marginTop="3dp"
                 android:textColor="#777777"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fab_margin"
                 android:text="OPPOSITION DETAIL"
                 android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                android:layout_marginTop="@dimen/fab_margin"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fab_margin"
                 android:text="Name"
-                android:textSize="16sp"
                 android:textColor="#000000"
-                android:layout_marginTop="@dimen/fab_margin"/>
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/textViewOPOName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rahul K"
                 android:layout_marginTop="3dp"
                 android:textColor="#777777"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.2dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#777777"
-                android:layout_marginBottom="10dp"/>
+                android:background="#777777" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Phone"
-                android:textSize="16sp"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/textViewOPOPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="9762993179"
                 android:layout_marginTop="3dp"
                 android:textColor="#777777"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.2dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#777777"
-                android:layout_marginBottom="10dp"/>
+                android:background="#777777" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Lawyer Name"
-                android:textSize="16sp"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/textViewOPOLawyerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reshma"
                 android:layout_marginTop="3dp"
                 android:textColor="#777777"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.2dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#777777"
-                android:layout_marginBottom="10dp"/>
+                android:background="#777777" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Lawyer Phone"
-                android:textSize="16sp"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/textViewOPOLawyerPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="786756786"
                 android:layout_marginTop="3dp"
                 android:textColor="#777777"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
         </LinearLayout>
 

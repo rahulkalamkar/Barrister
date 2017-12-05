@@ -34,6 +34,7 @@ import com.singular.barrister.Database.Tables.Client.BaseClientTable;
 import com.singular.barrister.Database.Tables.Client.ClientTable;
 import com.singular.barrister.Database.Tables.CourtTable;
 import com.singular.barrister.Interface.RecycleItem;
+import com.singular.barrister.Interface.RecycleItemClient;
 import com.singular.barrister.Model.Client.Client;
 import com.singular.barrister.Model.Client.ClientDetail;
 import com.singular.barrister.Model.Client.ClientResponse;
@@ -55,7 +56,7 @@ import java.util.List;
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class ClientFragment extends Fragment implements IDataChangeListener<IModel>, RecycleItem {
+public class ClientFragment extends Fragment implements IDataChangeListener<IModel>, RecycleItemClient {
 
     private RecyclerView mRecycleView;
     private ProgressBar progressBar;
@@ -89,6 +90,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
 
     public void getClientList() {
         if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
+            progressBar.setVisibility(View.VISIBLE);
             retrofitManager.getClientList(this, new UserPreferance(getActivity()).getToken());
         } else {
             Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
@@ -165,9 +167,9 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(Client client) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable("Client", clientList.get(position));
+        bundle.putSerializable("Client", client);
         Intent intent = new Intent(getActivity(), DisplayClientActivity.class);
         intent.putExtras(bundle);
         getActivity().startActivity(intent);
@@ -176,11 +178,11 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
     private int newPosition;
 
     @Override
-    public void onItemLongClick(int position) {
-        showMenu(position);
+    public void onItemLongClick(Client client) {
+        showMenu(client);
     }
 
-    public void showMenu(final int position) {
+    public void showMenu(final Client client) {
         LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.simple_list, null);
 
@@ -202,8 +204,8 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         textViewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                retrofitManager.deleteClient(new UserPreferance(getActivity()).getToken(), clientList.get(position).getClient_id());
-                clientList.remove(position);
+                retrofitManager.deleteClient(new UserPreferance(getActivity()).getToken(), client.getClient_id());
+                clientList.remove(client);
                 clientListAdapter.notifyDataSetChanged();
                 menuWindow.dismiss();
             }
@@ -224,6 +226,10 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         });
 
         menuWindow.showAtLocation(mRecycleView, Gravity.CENTER, 0, 0);
+    }
+
+    public void removeClient(Client client) {
+        clientList.remove(client);
     }
 
     public List<BaseClientTable> getLocalData() {
@@ -251,11 +257,16 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         if (clientList == null)
             return;
         for (int i = 0; i < clientList.size(); i++) {
-            addDataLocally(clientList.get(i));
+            if (checkClient(clientList.get(i))) {
+                addDataLocally(clientList.get(i), true);
+            } else {
+                addDataLocally(clientList.get(i), false);
+            }
         }
+        checkAndSyncDB(clientList);
     }
 
-    public void addDataLocally(Client client) {
+    public void addDataLocally(Client client, boolean update) {
         ClientTable clientTable = new ClientTable(client.getClient().getId(), client.getClient().getFirst_name(), client.getClient().getLast_name(),
                 client.getClient().getCountry_code(), client.getClient().getMobile(), client.getClient().getEmail(),
                 client.getClient().getAddress(), client.getClient().getUser_type(), client.getClient().getReferral_code(),
@@ -267,10 +278,59 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         Dao<BaseClientTable, Integer> baseClientTablesDao;
         try {
             baseClientTablesDao = getHelper().getBaseClientTableDao();
-            baseClientTablesDao.create(baseClientTable);
-            Log.e("BAseClient Table", "inserted");
+            if (update) {
+                baseClientTablesDao.update(baseClientTable);
+                Log.e("BAseClient Table", "updated");
+            } else {
+                baseClientTablesDao.create(baseClientTable);
+                Log.e("BAseClient Table", "inserted");
+            }
         } catch (SQLException e) {
             Log.e("BAseClient table", "" + e);
+        } catch (Exception e) {
+            Log.e("BAseClient table", "" + e);
+        }
+    }
+
+    public boolean checkClient(Client client) {
+        List<BaseClientTable> list = null;
+        Dao<BaseClientTable, Integer> baseClientTablesDao;
+        try {
+            baseClientTablesDao = getHelper().getBaseClientTableDao();
+            list = baseClientTablesDao.queryForEq("client_id", client.getClient_id());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return (list != null && list.size() > 0);
+    }
+
+    public void checkAndSyncDB(ArrayList<Client> clients) {
+        if (clients == null)
+            return;
+        List<BaseClientTable> list = getLocalData();
+        if (list == null)
+            return;
+        for (BaseClientTable baseClientTable : list) {
+            boolean delete = true;
+            for (Client client : clients) {
+                if (client.getClient_id().equalsIgnoreCase(baseClientTable.getClient_id())) {
+                    delete = false;
+                    break;
+                }
+            }
+            if (delete) {
+                deleteClient(baseClientTable);
+            }
+        }
+
+    }
+
+    public void deleteClient(BaseClientTable baseClientTable) {
+        Dao<BaseClientTable, Integer> baseClientTables;
+        try {
+            baseClientTables = getHelper().getBaseClientTableDao();
+            baseClientTables.delete(baseClientTable);
+            Log.e("BAseClient table", "deleted");
         } catch (Exception e) {
             Log.e("BAseClient table", "" + e);
         }
@@ -288,6 +348,13 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         if (databaseHelper != null) {
             OpenHelperManager.releaseHelper();
             databaseHelper = null;
+        }
+    }
+
+    public void onSearch(String text) {
+        Log.e("ClientFragment", text);
+        if (clientListAdapter != null) {
+            clientListAdapter.getFilter().filter(text);
         }
     }
 

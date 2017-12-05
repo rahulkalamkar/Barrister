@@ -24,16 +24,17 @@ import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
 
-public class DisplayClientActivity extends AppCompatActivity implements IDataChangeListener<IModel>{
+public class DisplayClientActivity extends AppCompatActivity implements IDataChangeListener<IModel> {
 
     private MenuItem btnEdit, btnSubmit;
     TextView txtName, txtNumber, txtEmailId;
-    EditText edtFirstName,edtLAstName;
+    EditText edtFirstName, edtLAstName;
     Client client;
-    LinearLayout linearLayout,layoutNameContainer,layoutEditContainer;
+    LinearLayout linearLayout, layoutNameContainer, layoutEditContainer;
     ProgressBar mProgressBar;
     FrameLayout mFragmentContainer;
     RetrofitManager retrofitManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,11 +57,11 @@ public class DisplayClientActivity extends AppCompatActivity implements IDataCha
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         linearLayout = (LinearLayout) findViewById(R.id.profileContainer);
 
-        edtFirstName=(EditText)findViewById(R.id.EditTextFirstName);
-        edtLAstName =(EditText)findViewById(R.id.EditTextLastName);
+        edtFirstName = (EditText) findViewById(R.id.EditTextFirstName);
+        edtLAstName = (EditText) findViewById(R.id.EditTextLastName);
 
-        layoutEditContainer=(LinearLayout)findViewById(R.id.EditContainer);
-        layoutNameContainer=(LinearLayout)findViewById(R.id.NameContainer);
+        layoutEditContainer = (LinearLayout) findViewById(R.id.EditContainer);
+        layoutNameContainer = (LinearLayout) findViewById(R.id.NameContainer);
         setData();
     }
 
@@ -70,36 +71,33 @@ public class DisplayClientActivity extends AppCompatActivity implements IDataCha
         txtEmailId.setText(client.getClient().getEmail());
     }
 
-    String newFirstName,newLastName;
-    public void displayName(boolean isToShow)
-    {
-        if(isToShow)
-        {
+    String newFirstName, newLastName;
+
+    public void displayName(boolean isToShow) {
+        if (isToShow) {
             layoutNameContainer.setVisibility(View.VISIBLE);
             layoutEditContainer.setVisibility(View.GONE);
-            if(newFirstName !=null )
-                setName(newFirstName,newLastName);
+            if (newFirstName != null)
+                setName(newFirstName, newLastName);
             else
-                setName(client.getClient().getFirst_name(),client.getClient().getLast_name());
-        }else{
+                setName(client.getClient().getFirst_name(), client.getClient().getLast_name());
+        } else {
             layoutNameContainer.setVisibility(View.GONE);
             layoutEditContainer.setVisibility(View.VISIBLE);
-            if(newFirstName !=null )
-                setTextToEditSection(newFirstName,newLastName);
+            if (newFirstName != null)
+                setTextToEditSection(newFirstName, newLastName);
             else
-            setTextToEditSection(client.getClient().getFirst_name(),client.getClient().getLast_name());
+                setTextToEditSection(client.getClient().getFirst_name(), client.getClient().getLast_name());
         }
     }
 
-    public void setTextToEditSection(String first_name,String last_name)
-    {
-edtFirstName.setText(first_name);
+    public void setTextToEditSection(String first_name, String last_name) {
+        edtFirstName.setText(first_name);
         edtLAstName.setText(last_name);
     }
 
-    public void setName(String first_name,String last_name)
-    {
-        txtName.setText(first_name +" "+last_name);
+    public void setName(String first_name, String last_name) {
+        txtName.setText(first_name + " " + last_name);
     }
 
     @Override
@@ -137,28 +135,23 @@ edtFirstName.setText(first_name);
         return true;
     }
 
-    public void checkData()
-    {
-        if(TextUtils.isEmpty(edtFirstName.getText().toString()))
-        {
+    public void checkData() {
+        if (TextUtils.isEmpty(edtFirstName.getText().toString())) {
             edtFirstName.setError("Enter first name");
             edtLAstName.setError(null);
-        }else if(TextUtils.isEmpty(edtLAstName.getText().toString()))
-        {
+        } else if (TextUtils.isEmpty(edtLAstName.getText().toString())) {
             edtFirstName.setError(null);
             edtLAstName.setError("Enter last name");
-        }
-        else if(client.getClient().getFirst_name().equalsIgnoreCase(edtFirstName.getText().toString()) &&
-                client.getClient().getLast_name().equalsIgnoreCase(edtLAstName.getText().toString())){
+        } else if (client.getClient().getFirst_name().equalsIgnoreCase(edtFirstName.getText().toString()) &&
+                client.getClient().getLast_name().equalsIgnoreCase(edtLAstName.getText().toString())) {
             btnSubmit.setVisible(false);
             btnEdit.setVisible(true);
             displayName(true);
-        }
-        else{
+        } else {
             edtFirstName.setError(null);
             edtLAstName.setError(null);
-            newFirstName=edtFirstName.getText().toString();
-            newLastName=edtLAstName.getText().toString();
+            newFirstName = edtFirstName.getText().toString();
+            newLastName = edtLAstName.getText().toString();
             updateData();
         }
     }
@@ -168,23 +161,16 @@ edtFirstName.setText(first_name);
             retrofitManager = new RetrofitManager();
             mProgressBar.setVisibility(View.VISIBLE);
             retrofitManager.updateClient(this, new UserPreferance(getApplicationContext()).getToken(), client.getClient_id(), newFirstName, newLastName);
-        }
-        else{
-            Toast.makeText(getApplicationContext(),getResources().getString(R.string.network_error),Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onDataReceived(IModel response) {
-        /*if(response !=null && response instanceof SimpleMessageResponse)
-        {*/
-            btnSubmit.setVisible(false);
-            btnEdit.setVisible(true);
-            displayName(true);
-       /* }
-        else {
-            Toast.makeText(getApplicationContext(),"OOPS! something went wrong",Toast.LENGTH_SHORT).show();
-        }*/
+        btnSubmit.setVisible(false);
+        btnEdit.setVisible(true);
+        displayName(true);
         mProgressBar.setVisibility(View.GONE);
     }
 

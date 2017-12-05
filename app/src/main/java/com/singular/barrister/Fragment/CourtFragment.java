@@ -84,9 +84,10 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
 
     public void getCourtList() {
         if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
+            progressBar.setVisibility(View.VISIBLE);
             retrofitManager.getCourtList(this, new UserPreferance(getActivity()).getToken());
         } else {
-            List<CourtTable> list = getAllCourt(getActivity());
+            List<CourtTable> list = getAllCourt();
             if (list != null) {
                 convertList(list);
             }
@@ -100,13 +101,15 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
 
     }
 
+    CourtListAdapter courtListAdapter;
+
     @Override
     public void onDataReceived(IModel response) {
         if (response != null && response instanceof CourtResponse) {
             CourtResponse courtResponse = (CourtResponse) response;
             if (courtResponse.getData().getCourt() != null) {
                 courtList.addAll(courtResponse.getData().getCourt());
-                CourtListAdapter courtListAdapter = new CourtListAdapter(getActivity(), courtList);
+                courtListAdapter = new CourtListAdapter(getActivity(), courtList);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecycleView.setLayoutManager(linearLayoutManager);
                 mRecycleView.setAdapter(courtListAdapter);
@@ -134,7 +137,7 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
 
     }
 
-    public List<CourtTable> getAllCourt(Context context) {
+    public List<CourtTable> getAllCourt() {
         Dao<CourtTable, Integer> courtTableDao;
         try {
             courtTableDao = getHelper(getActivity()).getCourtTableDao();
@@ -182,11 +185,58 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
         if (courtList == null)
             return;
         for (int i = 0; i < courtList.size(); i++) {
-            addCourtToDataBase(courtList.get(i));
+            if (checkCourt(courtList.get(i))) {
+                addCourtToDataBase(courtList.get(i), true);
+            } else {
+                addCourtToDataBase(courtList.get(i), false);
+            }
+        }
+        checkAndSyncDB(courtList);
+    }
+
+    public void checkAndSyncDB(ArrayList<CourtData> courtDataArrayList) {
+        if (courtDataArrayList == null)
+            return;
+        List<CourtTable> list = getAllCourt();
+        if (list == null)
+            return;
+        for (CourtTable courtTable : list) {
+            boolean delete = true;
+            for (CourtData data : courtDataArrayList) {
+                if (data.getId().equalsIgnoreCase(courtTable.getCourt_id())) {
+                    delete = false;
+                    break;
+                }
+            }
+            if (delete)
+                deleteCourt(courtTable);
         }
     }
 
-    public void addCourtToDataBase(CourtData courtData) {
+    public void deleteCourt(CourtTable courtTable) {
+        Dao<CourtTable, Integer> courtTableDao;
+        try {
+            courtTableDao = getHelper(getActivity()).getCourtTableDao();
+            courtTableDao.delete(courtTable);
+            Log.e("Court Table", "delete");
+        } catch (SQLException e) {
+            Log.e("Court table", "" + e);
+        }
+    }
+
+    public boolean checkCourt(CourtData courtData) {
+        List<CourtTable> list = null;
+        Dao<CourtTable, Integer> courtTableIntegerDao;
+        try {
+            courtTableIntegerDao = getHelper(getActivity()).getCourtTableDao();
+            list = courtTableIntegerDao.queryForEq("court_id", courtData.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return (list != null && list.size() > 0);
+    }
+
+    public void addCourtToDataBase(CourtData courtData, boolean update) {
         CourtSubDistrict courtSubDistrict = null;
         CourtDistrict courtDistrict = null;
         CourtState courtState = null;
@@ -210,8 +260,13 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
         Dao<CourtTable, Integer> courtTableDao;
         try {
             courtTableDao = getHelper(getActivity()).getCourtTableDao();
-            courtTableDao.create(courtTable);
-            Log.e("Court Table", "inserted");
+            if (update) {
+                courtTableDao.update(courtTable);
+                Log.e("Court Table", "update");
+            } else {
+                courtTableDao.create(courtTable);
+                Log.e("Court Table", "inserted");
+            }
         } catch (SQLException e) {
             Log.e("Court table", "" + e);
         }
@@ -238,5 +293,14 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
     public void onDestroy() {
         super.onDestroy();
         releaseHelper();
+    }
+
+    public void onSearch(String text) {
+        try {
+            if (courtListAdapter != null)
+                courtListAdapter.getFilter().filter(text);
+        } catch (Exception e) {
+
+        }
     }
 }

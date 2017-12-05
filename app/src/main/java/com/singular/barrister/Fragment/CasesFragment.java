@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,11 +67,12 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
 
     public void getCasesList() {
         if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
+            progressBar.setVisibility(View.VISIBLE);
             retrofitManager.getCasesList(this, new UserPreferance(getActivity()).getToken());
         } else {
-            List<CaseTable> list=new CaseQuery(getActivity()).getList();
-            if ( list != null) {
-                caseList=(ArrayList<Case>) new CaseQuery(getActivity()).convertListToOnLineList(list);
+            List<CaseTable> list = new CaseQuery(getActivity()).getList();
+            if (list != null) {
+                caseList = (ArrayList<Case>) new CaseQuery(getActivity()).convertListToOnLineList(list);
                 CasesListAdapter courtListAdapter = new CasesListAdapter(getActivity(), caseList);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecycleView.setLayoutManager(linearLayoutManager);
@@ -98,13 +100,15 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
 
     }
 
+    CasesListAdapter courtListAdapter;
+
     @Override
     public void onDataReceived(IModel response) {
         if (response != null && response instanceof CasesResponse) {
             CasesResponse casesResponse = (CasesResponse) response;
             if (casesResponse.getData().getCaseList() != null) {
                 caseList.addAll(casesResponse.getData().getCaseList());
-                CasesListAdapter courtListAdapter = new CasesListAdapter(getActivity(), caseList);
+                courtListAdapter = new CasesListAdapter(getActivity(), caseList);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecycleView.setLayoutManager(linearLayoutManager);
                 mRecycleView.setAdapter(courtListAdapter);
@@ -112,6 +116,8 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
                 if (caseList != null && caseList.size() > 0) {
                     CaseQuery caseQuery = new CaseQuery(getActivity());
                     caseQuery.addList(caseList);
+                } else {
+                    showError();
                 }
             } else if (casesResponse.getError() != null && casesResponse.getError().getStatus_code() == 401) {
                 Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
@@ -127,6 +133,12 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
             Intent intent = new Intent(getActivity(), LandingScreen.class);
             startActivity(intent);
             getActivity().finish();
+        }
+    }
+
+    public void onSearch(String text) {
+        if (courtListAdapter != null) {
+            courtListAdapter.getFilter().filter(text);
         }
     }
 }

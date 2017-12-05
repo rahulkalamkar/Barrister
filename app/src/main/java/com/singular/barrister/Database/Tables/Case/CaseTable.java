@@ -17,6 +17,8 @@ import java.util.List;
 
 @DatabaseTable(tableName = "CaseTable")
 public class CaseTable {
+    @DatabaseField(columnName = "id", generatedId = true)
+    int id;
 
     @DatabaseField(columnName = "case_id", unique = true)
     String case_id;
@@ -94,7 +96,7 @@ public class CaseTable {
         this.casesSubCaseType = casesSubCaseType;
         this.court = caseCourtTable;
         this.diff = diff;
-        this.hearingTable=hearingTable;
+        this.hearingTable = hearingTable;
 
     }
 

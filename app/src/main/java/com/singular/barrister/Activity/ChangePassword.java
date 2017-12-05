@@ -1,6 +1,8 @@
 package com.singular.barrister.Activity;
 
 import android.content.Intent;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,7 +23,8 @@ import com.singular.barrister.Util.WebServiceError;
 
 public class ChangePassword extends AppCompatActivity implements IDataChangeListener<IModel> {
 
-    EditText edtOldPassword, edtNewPassword, edtNewPasswordConfirm;
+    TextInputEditText edtOldPassword, edtNewPassword, edtNewPasswordConfirm;
+    TextInputLayout txtILedtOldPassword, txtILedtNewPassword, txtILedtNewPasswordConfirm;
     RetrofitManager retrofitManager;
 
     @Override
@@ -38,25 +41,29 @@ public class ChangePassword extends AppCompatActivity implements IDataChangeList
         }
         retrofitManager = new RetrofitManager();
 
-        edtOldPassword = (EditText) findViewById(R.id.edtTextOldPassword);
-        edtNewPassword = (EditText) findViewById(R.id.edtTextNewPassword);
-        edtNewPasswordConfirm = (EditText) findViewById(R.id.edtTextNewPasswordConfirm);
+        edtOldPassword = (TextInputEditText) findViewById(R.id.edtTextOldPassword);
+        edtNewPassword = (TextInputEditText) findViewById(R.id.edtTextNewPassword);
+        edtNewPasswordConfirm = (TextInputEditText) findViewById(R.id.edtTextNewPasswordConfirm);
+
+        txtILedtOldPassword = (TextInputLayout) findViewById(R.id.edtTextOldPasswordError);
+        txtILedtNewPassword = (TextInputLayout) findViewById(R.id.edtTextNewPasswordError);
+        txtILedtNewPasswordConfirm = (TextInputLayout) findViewById(R.id.edtTextNewPasswordConfirmError);
     }
 
     public void checkValue() {
         if (TextUtils.isEmpty(edtOldPassword.getText().toString())) {
-            edtOldPassword.setError("Enter current password");
+            txtILedtOldPassword.setError("Enter current password");
         } else if (TextUtils.isEmpty(edtNewPassword.getText().toString())) {
-            edtOldPassword.setError(null);
-            edtNewPassword.setError("Enter new password");
+            txtILedtOldPassword.setError(null);
+            txtILedtNewPassword.setError("Enter new password");
         } else if (TextUtils.isEmpty(edtNewPasswordConfirm.getText().toString())) {
-            edtOldPassword.setError(null);
-            edtNewPassword.setError(null);
-            edtNewPasswordConfirm.setError("Enter new password");
+            txtILedtOldPassword.setError(null);
+            txtILedtNewPassword.setError(null);
+            txtILedtNewPasswordConfirm.setError("Enter new password");
         } else if (!edtNewPassword.getText().toString().equalsIgnoreCase(edtNewPasswordConfirm.getText().toString())) {
-            edtOldPassword.setError(null);
-            edtNewPassword.setError(null);
-            edtNewPasswordConfirm.setError("Password doesn't match");
+            txtILedtOldPassword.setError(null);
+            txtILedtNewPassword.setError(null);
+            txtILedtNewPasswordConfirm.setError("Password doesn't match");
         } else {
             if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
                 retrofitManager.changePassword(this, new UserPreferance(getApplicationContext()).getToken(), edtOldPassword.getText().toString(),

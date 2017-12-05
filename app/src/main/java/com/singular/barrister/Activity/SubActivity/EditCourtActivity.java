@@ -176,15 +176,19 @@ public class EditCourtActivity extends AppCompatActivity implements IDataChangeL
             @Override
             public void onClick(View view) {
                 if (stateList != null) {
-                    selectedDistrict = null;
-                    selectedSubDistrict = null;
-                    edtDistrict.setText("");
-                    edtSubDistrict.setText("");
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("State", stateList);
-                    Intent intent = new Intent(getApplicationContext(), SelectStateActivity.class);
-                    intent.putExtras(bundle);
-                    startActivityForResult(intent, 1);
+                    if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+                        selectedDistrict = null;
+                        selectedSubDistrict = null;
+                        edtDistrict.setText("");
+                        edtSubDistrict.setText("");
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("State", stateList);
+                        Intent intent = new Intent(getApplicationContext(), SelectStateActivity.class);
+                        intent.putExtras(bundle);
+                        startActivityForResult(intent, 1);
+                    } else {
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     getStateList();
                 }
@@ -195,13 +199,17 @@ public class EditCourtActivity extends AppCompatActivity implements IDataChangeL
             @Override
             public void onClick(View view) {
                 if (selectedState != null) {
-                    selectedSubDistrict = null;
-                    edtSubDistrict.setText("");
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("StateId", selectedState.getId());
-                    Intent intent = new Intent(getApplicationContext(), SelectDistrictActivity.class);
-                    intent.putExtras(bundle);
-                    startActivityForResult(intent, 2);
+                    if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+                        selectedSubDistrict = null;
+                        edtSubDistrict.setText("");
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("StateId", selectedState.getId());
+                        Intent intent = new Intent(getApplicationContext(), SelectDistrictActivity.class);
+                        intent.putExtras(bundle);
+                        startActivityForResult(intent, 2);
+                    } else {
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     showOtherError();
                     txtIPState.setError("Enter State");
@@ -213,11 +221,15 @@ public class EditCourtActivity extends AppCompatActivity implements IDataChangeL
             @Override
             public void onClick(View view) {
                 if (selectedDistrict != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("DistrictId", selectedDistrict.getId());
-                    Intent intent = new Intent(getApplicationContext(), SelectSubDistrictActivity.class);
-                    intent.putExtras(bundle);
-                    startActivityForResult(intent, 3);
+                    if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("DistrictId", selectedDistrict.getId());
+                        Intent intent = new Intent(getApplicationContext(), SelectSubDistrictActivity.class);
+                        intent.putExtras(bundle);
+                        startActivityForResult(intent, 3);
+                    } else {
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     showOtherError();
                     txtIPDistrict.setError("Enter District");

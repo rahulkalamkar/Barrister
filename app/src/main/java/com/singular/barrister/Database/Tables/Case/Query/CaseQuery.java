@@ -60,8 +60,81 @@ public class CaseQuery {
 
     public void addList(ArrayList<Case> caseArrayList) {
         for (Case aCase : caseArrayList) {
-            addCase(aCase);
-            insertPersonsForCase(aCase.getPersons());
+            if (checkCase(aCase)) {
+                updateCase(aCase);
+            } else {
+                addCase(aCase);
+                insertPersonsForCase(aCase.getPersons());
+            }
+        }
+        compareAndSyncDB(caseArrayList);
+    }
+
+    public boolean checkCase(Case aCase) {
+        List<CaseTable> list = null;
+        Dao<CaseTable, Integer> caseTableIntegerDao;
+        try {
+            caseTableIntegerDao = getHelper(context).getACaseTableDao();
+            list = caseTableIntegerDao.queryForEq("case_id", aCase.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Log.e("Case table list", "" + e);
+        }
+        return (list != null && list.size() > 0);
+    }
+
+    public void updateCase(Case aCase) {
+        CaseClientTable caseClientTable = prePareCaseClient(aCase.getClient());
+        CasesCaseType casesCaseType = prePareCaseType(aCase.getCasetype());
+        CasesSubCaseType casesSubCaseType = prePareSubCaseType(aCase.getSubCasetype());
+        CaseCourtTable caseCourtTable = prePareCaseCourt(aCase.getCourt());
+        CasesHearingTable casesHearingTable = prePareCaseHearing(aCase.getHearing());
+        CaseTable caseTable = new CaseTable(aCase.getId(), aCase.getClient_id(), aCase.getCase_cnr_number(), aCase.getCase_register_number(),
+                aCase.getCase_register_date(), aCase.getCase_status(), aCase.getCase_type(),
+                aCase.getCase_sub_type(), aCase.getClient_type(), aCase.getCourt_id(), caseClientTable, casesCaseType, casesSubCaseType, caseCourtTable, aCase.getDiff(), casesHearingTable);
+
+        Dao<CaseTable, Integer> caseTableIntegerDao;
+        try {
+            caseTableIntegerDao = getHelper(context).getACaseTableDao();
+            caseTableIntegerDao.update(caseTable);
+            Log.e("Case table", "updated");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Log.e("Case table", "" + e.getMessage());
+        }
+    }
+
+    public void compareAndSyncDB(ArrayList<Case> caseArrayList) {
+        if (caseArrayList == null)
+            return;
+        List<CaseTable> list = getList();
+        if (list == null)
+            return;
+        if (list != null && list.size() != caseArrayList.size()) {
+            for (CaseTable caseTable : list) {
+                boolean delete = true;
+                for (Case aCase : caseArrayList) {
+                    if (aCase.getId().equalsIgnoreCase(caseTable.getCase_id())) {
+                        delete = false;
+                        break;
+                    }
+                }
+                if (delete) {
+                    deleteCase(caseTable);
+                }
+            }
+        }
+    }
+
+    public void deleteCase(CaseTable caseTable) {
+        Dao<CaseTable, Integer> caseTableIntegerDao;
+        try {
+            caseTableIntegerDao = getHelper(context).getACaseTableDao();
+            caseTableIntegerDao.delete(caseTable);
+            Log.e("Case table", "deleted");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Log.e("Case table", "" + e.getMessage());
         }
     }
 
@@ -152,10 +225,10 @@ public class CaseQuery {
             if (personList != null)
                 casePersonses = getPersonsList(personList);
 
-            CaseHearing caseHearing=null;
-            if(caseTable.getHearingTable()!=null)
-            caseHearing = new CaseHearing(caseTable.getHearingTable().getHearing_id(), caseTable.getHearingTable().getCase_id(), caseTable.getHearingTable().getCase_hearing_date(),
-                    caseTable.getHearingTable().getCase_decision(), caseTable.getHearingTable().getCase_disposed());
+            CaseHearing caseHearing = null;
+            if (caseTable.getHearingTable() != null)
+                caseHearing = new CaseHearing(caseTable.getHearingTable().getHearing_id(), caseTable.getHearingTable().getCase_id(), caseTable.getHearingTable().getCase_hearing_date(),
+                        caseTable.getHearingTable().getCase_decision(), caseTable.getHearingTable().getCase_disposed());
 
             Case aCase = new Case(caseTable.getCase_id(), caseTable.getClient_id(), caseTable.getClient_type(), caseTable.getCourt_id(), caseTable.getCase_cnr_number(),
                     caseTable.getCase_register_number(), caseTable.getCase_register_date(), caseTable.getCase_type(), caseTable.getCase_sub_type(),
@@ -172,7 +245,9 @@ public class CaseQuery {
     }
 
     public CasesHearingTable prePareCaseHearing(CaseHearing caseHearing) {
-        CasesHearingTable casesHearingTable = new CasesHearingTable(caseHearing.getId(), caseHearing.getCase_id(), caseHearing.getCase_hearing_date(), caseHearing.getCase_decision(), caseHearing.getCase_disposed());
+        CasesHearingTable casesHearingTable = null;
+        if (caseHearing != null)
+            casesHearingTable = new CasesHearingTable(caseHearing.getId(), caseHearing.getCase_id(), caseHearing.getCase_hearing_date(), caseHearing.getCase_decision(), caseHearing.getCase_disposed());
         return casesHearingTable;
     }
 

@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.singular.barrister.DisplayCourtActivity;
@@ -21,12 +23,15 @@ import java.util.ArrayList;
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class CourtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CourtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
     ArrayList<CourtData> courtList;
+    ArrayList<CourtData> arrayList;
     Context context;
 
     public CourtListAdapter(Context context, ArrayList<CourtData> courtList) {
         this.courtList = courtList;
+        this.arrayList = courtList;
+
         this.context = context;
     }
 
@@ -67,6 +72,60 @@ public class CourtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             address = address + aCaseDetail.getState().getName();
         }
         return address;
+    }
+
+    @Override
+    public Filter getFilter() {
+        if (valueFilter == null) {
+            valueFilter = new ValueFilter();
+        }
+        return valueFilter;
+    }
+
+    ValueFilter valueFilter;
+
+    private class ValueFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+
+            String charString = charSequence.toString();
+
+            if (courtList == null)
+                return null;
+
+            if (charString.isEmpty()) {
+
+                courtList = arrayList;
+            } else {
+
+                ArrayList<CourtData> filteredList = new ArrayList<>();
+
+                for (CourtData courtData : courtList) {
+
+                    if (courtData.getCourt_name().toLowerCase().contains(charString.toLowerCase())) {
+
+                        filteredList.add(courtData);
+                    }
+                }
+
+                courtList = filteredList;
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = courtList;
+            return filterResults;
+
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint,
+                                      FilterResults results) {
+            if (results != null) {
+                courtList = (ArrayList<CourtData>) results.values;
+                notifyDataSetChanged();
+            }
+        }
+
     }
 
     public class CourtViewHolder extends RecyclerView.ViewHolder {
