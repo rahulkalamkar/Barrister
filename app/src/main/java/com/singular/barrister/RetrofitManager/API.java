@@ -34,7 +34,7 @@ public interface API {
     @POST("{LOGIN}")
     Call<RegisterResponse> loginUser(@Path(value = "LOGIN", encoded = true) String path, @QueryMap Map<String, String> headers);
 
-    @POST("{LOGOUT}")
+    @GET("{LOGOUT}")
     Call<RegisterResponse> logoutUser(@Path(value = "LOGOUT", encoded = true) String path, @HeaderMap Map<String, String> headers);
 
     @GET("{GET_COURT_LIST}")
