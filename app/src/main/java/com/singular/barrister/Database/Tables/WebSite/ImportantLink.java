@@ -17,6 +17,22 @@ public class ImportantLink {
     @DatabaseField(columnName = "web_site")
     String web_site;
 
+    public String getWeb_name() {
+        return web_name;
+    }
+
+    public void setWeb_name(String web_name) {
+        this.web_name = web_name;
+    }
+
+    public String getWeb_site() {
+        return web_site;
+    }
+
+    public void setWeb_site(String web_site) {
+        this.web_site = web_site;
+    }
+
     public ImportantLink() {
     }
 
