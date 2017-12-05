@@ -108,7 +108,7 @@ public class RetrofitManager {
             String parameters = url.getQuery();
 
             API api = APIClient.getClient(baseUrl).create(API.class);
-            Call<RegisterResponse> call = api.loginUser(apiName, hashMap);
+            Call<RegisterResponse> call = api.logoutUser(apiName, hashMap);
             call.enqueue(new Callback<RegisterResponse>() {
                 @Override
                 public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
