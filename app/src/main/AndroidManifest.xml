@@ -84,8 +84,8 @@
         <activity android:name=".Activity.SubActivity.SelectDistrictActivity" />
         <activity android:name=".Activity.SubActivity.SelectSubDistrictActivity" />
         <activity android:name=".Activity.SubActivity.DateActivity" />
-        <activity android:name=".Activity.SubActivity.EditCourtActivity"></activity>
-
+        <activity android:name=".Activity.SubActivity.EditCourtActivity" />
+        <activity android:name=".WebActivity"></activity>
     </application>
 
 </manifest>

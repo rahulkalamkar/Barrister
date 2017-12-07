@@ -1,6 +1,8 @@
 package com.singular.barrister.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 
 import com.singular.barrister.Database.Tables.WebSite.ImportantLink;
 import com.singular.barrister.R;
+import com.singular.barrister.WebActivity;
 
 import java.util.List;
 
@@ -53,6 +56,18 @@ public class ImportantListAdapter extends RecyclerView.Adapter<RecyclerView.View
             super(itemView);
             linkName = (TextView) itemView.findViewById(R.id.textViewCourtName);
             linkUrl = (TextView) itemView.findViewById(R.id.textViewState);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Name", list.get(getAdapterPosition()).getWeb_name());
+                    bundle.putString("Url", list.get(getAdapterPosition()).getWeb_site());
+                    Intent i = new Intent(context, WebActivity.class);
+                    i.putExtras(bundle);
+                    context.startActivity(i);
+                }
+            });
         }
     }
 }
