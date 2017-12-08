@@ -1,7 +1,9 @@
 package com.singular.barrister.Activity;
 
+import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -10,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -17,8 +20,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.singular.barrister.Activity.SubActivity.AddCaseActivity;
@@ -32,6 +37,8 @@ import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.R;
 import com.singular.barrister.RetrofitManager.RetrofitManager;
 import com.singular.barrister.Util.NetworkConnection;
+
+import java.lang.reflect.Field;
 
 public class HomeScreen extends AppCompatActivity {
 
@@ -146,6 +153,18 @@ public class HomeScreen extends AppCompatActivity {
         inflater.inflate(R.menu.option, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.menuSearch).getActionView();
 
+        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+        searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+
+        AutoCompleteTextView searchTextView = (AutoCompleteTextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        try {
+            Field mCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
+            mCursorDrawableRes.setAccessible(true);
+            mCursorDrawableRes.set(searchTextView, R.drawable.cursor); //This sets the cursor resource ID to 0 or @null which will make it visible on white background
+        } catch (Exception e) {
+        }
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -206,7 +225,7 @@ public class HomeScreen extends AppCompatActivity {
 
             case R.id.menuLogout:/*
                 progressBar.setVisibility(View.VISIBLE);*/
-                logOut();
+                showConfirmationDialog();
                 break;
 
             case R.id.menuLoveApp:
@@ -229,6 +248,35 @@ public class HomeScreen extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(HomeScreen.this);
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure you want to logout?");
+
+        String positiveText = getString(android.R.string.ok);
+        builder.setPositiveButton(positiveText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        logOut();
+                        dialog.dismiss();
+                    }
+                });
+
+        String negativeText = getString(android.R.string.cancel);
+        builder.setNegativeButton(negativeText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        // display dialog
+        dialog.show();
     }
 
     @Override

@@ -174,7 +174,7 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
             courtList.add(courtData);
         }
 
-        CourtListAdapter courtListAdapter = new CourtListAdapter(getActivity(), courtList);
+        courtListAdapter = new CourtListAdapter(getActivity(), courtList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecycleView.setLayoutManager(linearLayoutManager);
         mRecycleView.setAdapter(courtListAdapter);

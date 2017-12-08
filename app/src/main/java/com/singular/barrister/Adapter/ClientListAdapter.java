@@ -53,7 +53,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.court_list_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.client_list_adapter, parent, false);
         return new ClientViewHolder(v);
     }
 
@@ -63,6 +63,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             ClientViewHolder clientViewHolder = (ClientViewHolder) holder;
             clientViewHolder.txtCourtName.setText(clientArrayList.get(position).getClient().getFirst_name() + " " +
                     clientArrayList.get(position).getClient().getLast_name());
+            clientViewHolder.txtInitial.setText(clientArrayList.get(position).getClient().getFirst_name().substring(0, 1).toUpperCase() + clientArrayList.get(position).getClient().getLast_name().substring(0, 1).toUpperCase());
             clientViewHolder.txtStateName.setText("+" + clientArrayList.get(position).getClient().getCountry_code() + " " +
                     clientArrayList.get(position).getClient().getMobile());
         }
@@ -126,19 +127,17 @@ public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     }
 
-    public class ClientViewHolder extends RecyclerView.ViewHolder {
-        public TextView txtCourtName, txtStateName, txtDelete;
-        public RelativeLayout bgLayout;
-        public LinearLayout fgLayout;
 
+
+    public class ClientViewHolder extends RecyclerView.ViewHolder {
+        public TextView txtCourtName, txtStateName, txtInitial;
+        public LinearLayout fgLayout;
         public ClientViewHolder(View itemView) {
             super(itemView);
             txtCourtName = (TextView) itemView.findViewById(R.id.textViewCourtName);
             txtStateName = (TextView) itemView.findViewById(R.id.textViewState);
-            bgLayout = (RelativeLayout) itemView.findViewById(R.id.view_background);
             fgLayout = (LinearLayout) itemView.findViewById(R.id.view_foreground);
-            txtDelete = (TextView) itemView.findViewById(R.id.textViewDelete);
-
+            txtInitial = (TextView) itemView.findViewById(R.id.textViewInitial);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

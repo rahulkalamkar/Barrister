@@ -102,5 +102,7 @@ public interface API {
     @POST("{ADD_CASE}")
     Call<SimpleMessageResponse> addCase(@Path(value = "ADD_CASE", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
 
+    @DELETE("{DELETE_CASE}")
+    Call<SimpleMessageResponse> deleteCase(@Path(value = "DELETE_CASE", encoded = true) String path, @HeaderMap Map<String, String> headers);
 
 }

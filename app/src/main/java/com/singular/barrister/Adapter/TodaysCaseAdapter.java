@@ -47,17 +47,6 @@ public class TodaysCaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                             .getLast_name() + " VS " + caseList.get(position).getPersons().get(1).getOpp_name());
                 }
             }
-            
-           /* todayViewHolder.txtClientOne.setText(caseList.get(position).getClient().getFirst_name() + " " + caseList.get(position).getClient()
-                    .getLast_name());
-
-           *//* if (caseList.get(position).getClient() != null) {
-                if (caseList.get(position).getPersons().get(0).getType().equalsIgnoreCase("Client")) {
-                    todayViewHolder.txtClientTwo.setText(caseList.get(position).getPersons().get(0).getOpp_name());
-                } else {
-                    todayViewHolder.txtClientTwo.setText(caseList.get(position).getPersons().get(1).getOpp_name());
-                }
-            }*/
 
             todayViewHolder.txtCourtName.setText(caseList.get(position).getCourt().getCourt_name());
             todayViewHolder.txtAddress.setText(getAddress(caseList.get(position).getCourt()));

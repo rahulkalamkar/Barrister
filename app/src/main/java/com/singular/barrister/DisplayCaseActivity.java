@@ -1,9 +1,13 @@
 package com.singular.barrister;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -21,6 +26,7 @@ import com.singular.barrister.Activity.SubActivity.CasesNewHearingActivity;
 import com.singular.barrister.Activity.SubActivity.HearingDateActivity;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Cases.CasePersons;
+import com.singular.barrister.Model.SimpleMessageResponse;
 import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.RetrofitManager.RetrofitManager;
 import com.singular.barrister.Util.IDataChangeListener;
@@ -38,6 +44,7 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
     LinearLayout layout;
     Case aCaseDetail;
     PopupWindow changeStatusWindow;
+    ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,7 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         layout = (LinearLayout) findViewById(R.id.linearLayout);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         initialization();
 
         aCaseDetail = (Case) getIntent().getExtras().getSerializable("Case");
@@ -153,7 +161,8 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
                 break;
 
             case R.id.menuChangeCaseStatus:
-                showChangeStatusWindow();
+                changeStatusAlert();
+                //showChangeStatusWindow();
                 break;
 
             case R.id.menuAddNewHearingDates:
@@ -175,63 +184,56 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
         return true;
     }
 
-    public void showChangeStatusWindow() {
-        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.change_case_status_window, null);
+    String selectedItem;
 
-        changeStatusWindow = new PopupWindow(
-                customView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        );
-        if (Build.VERSION.SDK_INT >= 21) {
-            changeStatusWindow.setElevation(5.0f);
-        }
+    public void changeStatusAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(DisplayCaseActivity.this);
+        builder.setTitle("Change status");
 
-        final RadioButton radioButtonCompleted = (RadioButton) customView.findViewById(R.id.radioButton2);
-        final RadioButton radioButtonInProgress = (RadioButton) customView.findViewById(R.id.radioButton1);
+        int i = 0;
 
         if (aCaseDetail.getCase_status().equalsIgnoreCase("completed")) {
-            radioButtonCompleted.setChecked(true);
-            radioButtonInProgress.setChecked(false);
+            i = 1;
         } else {
-            radioButtonCompleted.setChecked(false);
-            radioButtonInProgress.setChecked(true);
+            i = 0;
         }
 
-        Button cancelButton = (Button) customView.findViewById(R.id.buttonCancel);
-        Button submitButton = (Button) customView.findViewById(R.id.buttonSave);
+        //list of items
+        final String[] items = {"In-Progress", "completed"};
+        builder.setSingleChoiceItems(items, i,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        selectedItem = items[which];
+                    }
+                });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeStatusWindow.dismiss();
-            }
-        });
+        String positiveText = getString(android.R.string.ok);
+        builder.setPositiveButton(positiveText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (selectedItem != null && !TextUtils.isEmpty(selectedItem)) {
+                            txtStatus.setText(selectedItem);
+                            mProgressBar.setVisibility(View.VISIBLE);
+                            RetrofitManager retrofitManager = new RetrofitManager();
+                            retrofitManager.changeCaseStatus(DisplayCaseActivity.this, new UserPreferance(getApplicationContext()).getToken(), aCaseDetail.getId(), selectedItem);
+                        }
+                    }
+                });
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean isChanged = false;
-                if (radioButtonCompleted.isChecked()) {
-                    txtStatus.setText("completed");
-                    if (!aCaseDetail.getCase_status().equals("completed"))
-                        isChanged = true;
-                } else {
-                    txtStatus.setText("In-Progress");
-                    if (!aCaseDetail.getCase_status().equals("In-Progress"))
-                        isChanged = true;
-                }
+        String negativeText = getString(android.R.string.cancel);
+        builder.setNegativeButton(negativeText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // negative button logic
+                    }
+                });
 
-                if (isChanged) {
-                    RetrofitManager retrofitManager = new RetrofitManager();
-                    retrofitManager.changeCaseStatus(DisplayCaseActivity.this, new UserPreferance(getApplicationContext()).getToken(), aCaseDetail.getId(), radioButtonCompleted.isChecked() ? "completed" : "In-Progress");
-                }
-
-                changeStatusWindow.dismiss();
-            }
-        });
-        changeStatusWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
+        AlertDialog dialog = builder.create();
+        // display dialog
+        dialog.show();
     }
 
     @Override
@@ -251,6 +253,7 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
 
     @Override
     public void onDataReceived(IModel response) {
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override

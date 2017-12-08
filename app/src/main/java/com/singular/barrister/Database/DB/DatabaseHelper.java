@@ -28,6 +28,16 @@ import com.singular.barrister.Database.Tables.CourtTable;
 import com.singular.barrister.Database.Tables.CourtTypeTable;
 import com.singular.barrister.Database.Tables.StateTable;
 import com.singular.barrister.Database.Tables.SubCaseTypeTable;
+import com.singular.barrister.Database.Tables.Today.TodayCaseClientTable;
+import com.singular.barrister.Database.Tables.Today.TodayCaseCourtDistrict;
+import com.singular.barrister.Database.Tables.Today.TodayCaseCourtState;
+import com.singular.barrister.Database.Tables.Today.TodayCaseCourtSubDistrict;
+import com.singular.barrister.Database.Tables.Today.TodayCaseCourtTable;
+import com.singular.barrister.Database.Tables.Today.TodayCasePerson;
+import com.singular.barrister.Database.Tables.Today.TodayCaseTable;
+import com.singular.barrister.Database.Tables.Today.TodayCasesCaseType;
+import com.singular.barrister.Database.Tables.Today.TodayCasesHearingTable;
+import com.singular.barrister.Database.Tables.Today.TodayCasesSubCaseType;
 import com.singular.barrister.Database.Tables.WebSite.ImportantLink;
 import com.singular.barrister.Model.Cases.SubCaseType;
 
@@ -65,6 +75,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<CasesSubCaseType, Integer> aCasesSubCaseTypeDao;
     private Dao<CaseTable, Integer> aCaseTableDao;
     private Dao<CasesHearingTable, Integer> aCaseHearingTableDao;
+
+    private Dao<TodayCaseClientTable, Integer> aTodayCaseClientTableDao;
+    private Dao<TodayCaseCourtDistrict, Integer> aTodayCaseCourtDistrictDao;
+    private Dao<TodayCaseCourtState, Integer> aTodayCaseCourtStateDao;
+    private Dao<TodayCaseCourtSubDistrict, Integer> aTodayCaseCourtSubDistrictDao;
+    private Dao<TodayCaseCourtTable, Integer> aTodayCaseCourtTableDao;
+    private Dao<TodayCasePerson, Integer> aTodayCasePersonDao;
+    private Dao<TodayCasesCaseType, Integer> aTodayCasesCaseTypeDao;
+    private Dao<TodayCasesSubCaseType, Integer> aTodayCasesSubCaseTypeDao;
+    private Dao<TodayCaseTable, Integer> aTodayCaseTableDao;
+    private Dao<TodayCasesHearingTable, Integer> aTodayCaseHearingTableDao;
 
     private Dao<ImportantLink, Integer> ImportantWebDao;
 
@@ -109,6 +130,18 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, CaseTable.class);
             TableUtils.createTable(connectionSource, CasesHearingTable.class);
 
+            // Today Cases related table
+            TableUtils.createTable(connectionSource, TodayCaseClientTable.class);
+            TableUtils.createTable(connectionSource, TodayCaseCourtDistrict.class);
+            TableUtils.createTable(connectionSource, TodayCaseCourtSubDistrict.class);
+            TableUtils.createTable(connectionSource, TodayCaseCourtState.class);
+            TableUtils.createTable(connectionSource, TodayCaseCourtTable.class);
+            TableUtils.createTable(connectionSource, TodayCasePerson.class);
+            TableUtils.createTable(connectionSource, TodayCasesCaseType.class);
+            TableUtils.createTable(connectionSource, TodayCasesSubCaseType.class);
+            TableUtils.createTable(connectionSource, TodayCaseTable.class);
+            TableUtils.createTable(connectionSource, TodayCasesHearingTable.class);
+
             TableUtils.createTable(connectionSource, ImportantLink.class);
 
         } catch (SQLException e) {
@@ -141,6 +174,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, CaseTable.class);
             TableUtils.createTable(connectionSource, CasesHearingTable.class);
 
+            // Today Cases related table
+            TableUtils.createTable(connectionSource, TodayCaseClientTable.class);
+            TableUtils.createTable(connectionSource, TodayCaseCourtDistrict.class);
+            TableUtils.createTable(connectionSource, TodayCaseCourtSubDistrict.class);
+            TableUtils.createTable(connectionSource, TodayCaseCourtState.class);
+            TableUtils.createTable(connectionSource, TodayCaseCourtTable.class);
+            TableUtils.createTable(connectionSource, TodayCasePerson.class);
+            TableUtils.createTable(connectionSource, TodayCasesCaseType.class);
+            TableUtils.createTable(connectionSource, TodayCasesSubCaseType.class);
+            TableUtils.createTable(connectionSource, TodayCaseTable.class);
+            TableUtils.createTable(connectionSource, TodayCasesHearingTable.class);
             TableUtils.createTable(connectionSource, ImportantLink.class);
 
             onCreate(sqliteDatabase, connectionSource);
@@ -307,5 +351,19 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             ImportantWebDao = getDao(ImportantLink.class);
         }
         return ImportantWebDao;
+    }
+
+    public Dao<TodayCaseTable, Integer> getATodayCaseTableDao() throws SQLException {
+        if (aTodayCaseTableDao == null) {
+            aTodayCaseTableDao = getDao(TodayCaseTable.class);
+        }
+        return aTodayCaseTableDao;
+    }
+
+    public Dao<TodayCasePerson, Integer> getATodayCasePersonDao() throws SQLException {
+        if (aTodayCasePersonDao == null) {
+            aTodayCasePersonDao = getDao(TodayCasePerson.class);
+        }
+        return aTodayCasePersonDao;
     }
 }

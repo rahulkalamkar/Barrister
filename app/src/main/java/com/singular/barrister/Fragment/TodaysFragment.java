@@ -19,7 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.singular.barrister.Activity.LandingScreen;
+import com.singular.barrister.Adapter.CasesListAdapter;
 import com.singular.barrister.Adapter.TodaysCaseAdapter;
+import com.singular.barrister.Database.Tables.Case.CaseTable;
+import com.singular.barrister.Database.Tables.Case.Query.CaseQuery;
+import com.singular.barrister.Database.Tables.Today.Query.TodayCaseQuery;
+import com.singular.barrister.Database.Tables.Today.TodayCaseTable;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Today.TodayResponse;
 import com.singular.barrister.Preferance.UserPreferance;
@@ -31,6 +36,7 @@ import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -68,6 +74,15 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
             progressBar.setVisibility(View.VISIBLE);
             retrofitManager.getTodayCases(this, new UserPreferance(getActivity()).getToken());
         } else {
+            List<TodayCaseTable> list = new TodayCaseQuery(getActivity()).getList();
+            if (list != null) {
+                caseList = (ArrayList<Case>) new TodayCaseQuery(getActivity()).convertListToOnLineList(list);
+                TodaysCaseAdapter todaysCaseAdapter = new TodaysCaseAdapter(getActivity(), caseList);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(linearLayoutManager);
+                mRecyclerView.setAdapter(todaysCaseAdapter);
+                progressBar.setVisibility(View.GONE);
+            }
             Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
     }
@@ -93,8 +108,13 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(linearLayoutManager);
                 mRecyclerView.setAdapter(todaysCaseAdapter);
-
                 progressBar.setVisibility(View.GONE);
+                if (caseList != null && caseList.size() > 0) {
+                    TodayCaseQuery caseQuery = new TodayCaseQuery(getActivity());
+                    caseQuery.addList(caseList);
+                } else {
+                    showError();
+                }
             } else if (todayResponse.getError() != null && todayResponse.getError().getStatus_code() == 401) {
                 Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
                 new UserPreferance(getActivity()).logOut();
@@ -118,6 +138,6 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
     }
 
     public void onSearch(String text) {
-        Log.e("TodaysFragment",text);
+        Log.e("TodaysFragment", text);
     }
 }

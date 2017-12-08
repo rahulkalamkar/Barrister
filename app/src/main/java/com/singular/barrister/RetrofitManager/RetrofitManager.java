@@ -99,7 +99,7 @@ public class RetrofitManager {
     public void setLogOut(/*final IDataChangeListener<IModel> callbackListener, */String token) {
         HashMap<String, String> hashMap = new HashMap<String, String>();
         hashMap.put("Authorization", "Bearer " + token);
-      //  hashMap.put("deviceType", "android");
+        //  hashMap.put("deviceType", "android");
 
         try {
             URL url = new URL("http://singularsacademy.com/lawyer/public/api/logout");
@@ -112,16 +112,16 @@ public class RetrofitManager {
             call.enqueue(new Callback<RegisterResponse>() {
                 @Override
                 public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-               //     callbackListener.onDataReceived(response.body());
+                    //     callbackListener.onDataReceived(response.body());
                 }
 
                 @Override
                 public void onFailure(Call<RegisterResponse> call, Throwable t) {
-               //     callbackListener.onDataReceived(null);
+                    //     callbackListener.onDataReceived(null);
                 }
             });
         } catch (MalformedURLException e) {
-         //   callbackListener.onDataReceived(null);
+            //   callbackListener.onDataReceived(null);
             e.printStackTrace();
         }
     }
@@ -220,7 +220,7 @@ public class RetrofitManager {
         hashMap.put("Authorization", "Bearer " + token);
 
         try {
-            URL url = new URL("http://www.singularsacademy.com/lawyer/public/api/case/today");
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/case/today");
             String baseUrl = url.getProtocol() + "://" + url.getHost();
             String apiName = url.getPath();
             String parameters = url.getQuery();
@@ -249,7 +249,7 @@ public class RetrofitManager {
         hashMap.put("Authorization", "Bearer " + token);
 
         try {
-            URL url = new URL("http://www.singularsacademy.com/lawyer/public/api/profile");
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/profile");
             String baseUrl = url.getProtocol() + "://" + url.getHost();
             String apiName = url.getPath();
             String parameters = url.getQuery();
@@ -283,7 +283,7 @@ public class RetrofitManager {
         queryMap.put("address", address);
 
         try {
-            URL url = new URL("http://www.singularsacademy.com/lawyer/public/api/profile");
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/profile");
             String baseUrl = url.getProtocol() + "://" + url.getHost();
             String apiName = url.getPath();
             String parameters = url.getQuery();
@@ -489,6 +489,35 @@ public class RetrofitManager {
 
             API api = APIClient.getClient(baseUrl).create(API.class);
             Call<SimpleMessageResponse> call = api.deleteClient(apiName, headerMap);
+            call.enqueue(new Callback<SimpleMessageResponse>() {
+                @Override
+                public void onResponse(Call<SimpleMessageResponse> call, Response<SimpleMessageResponse> response) {
+                    //  callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<SimpleMessageResponse> call, Throwable t) {
+                    //   callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            //  callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteCase(/*final IDataChangeListener<IModel> callbackListener,*/ String token, String caseId) {
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Authorization", "Bearer " + token);
+
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/case/" + caseId);
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<SimpleMessageResponse> call = api.deleteCase(apiName, headerMap);
             call.enqueue(new Callback<SimpleMessageResponse>() {
                 @Override
                 public void onResponse(Call<SimpleMessageResponse> call, Response<SimpleMessageResponse> response) {

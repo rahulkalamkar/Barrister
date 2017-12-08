@@ -1,15 +1,19 @@
 package com.singular.barrister.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,9 +23,12 @@ import com.singular.barrister.Adapter.CasesListAdapter;
 import com.singular.barrister.Adapter.CourtListAdapter;
 import com.singular.barrister.Database.Tables.Case.CaseTable;
 import com.singular.barrister.Database.Tables.Case.Query.CaseQuery;
+import com.singular.barrister.DisplayCaseActivity;
+import com.singular.barrister.Interface.RecycleItemCase;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Cases.CasesData;
 import com.singular.barrister.Model.Cases.CasesResponse;
+import com.singular.barrister.Model.Client.Client;
 import com.singular.barrister.Model.Court.CourtData;
 import com.singular.barrister.Model.Court.CourtResponse;
 import com.singular.barrister.Preferance.UserPreferance;
@@ -32,6 +39,7 @@ import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +47,7 @@ import java.util.List;
  * Created by rahulbabanaraokalamkar on 11/23/17.
  */
 
-public class CasesFragment extends Fragment implements IDataChangeListener<IModel> {
+public class CasesFragment extends Fragment implements IDataChangeListener<IModel>, RecycleItemCase {
 
     private RecyclerView mRecycleView;
     private ProgressBar progressBar;
@@ -73,7 +81,7 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
             List<CaseTable> list = new CaseQuery(getActivity()).getList();
             if (list != null) {
                 caseList = (ArrayList<Case>) new CaseQuery(getActivity()).convertListToOnLineList(list);
-                CasesListAdapter courtListAdapter = new CasesListAdapter(getActivity(), caseList);
+                courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecycleView.setLayoutManager(linearLayoutManager);
                 mRecycleView.setAdapter(courtListAdapter);
@@ -108,7 +116,7 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
             CasesResponse casesResponse = (CasesResponse) response;
             if (casesResponse.getData().getCaseList() != null) {
                 caseList.addAll(casesResponse.getData().getCaseList());
-                courtListAdapter = new CasesListAdapter(getActivity(), caseList);
+                courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecycleView.setLayoutManager(linearLayoutManager);
                 mRecycleView.setAdapter(courtListAdapter);
@@ -140,5 +148,65 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
         if (courtListAdapter != null) {
             courtListAdapter.getFilter().filter(text);
         }
+    }
+
+    @Override
+    public void onItemClick(Case aCase) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Case", aCase);
+        Intent intent = new Intent(getActivity(), DisplayCaseActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemLongClick(Case aCase) {
+        showMenu(aCase);
+    }
+
+    public void showMenu(final Case aCase) {
+        LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.simple_list, null);
+
+        final PopupWindow menuWindow = new PopupWindow(
+                customView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        );
+        menuWindow.setOutsideTouchable(false);
+        menuWindow.setFocusable(true);
+        if (Build.VERSION.SDK_INT >= 21) {
+            menuWindow.setElevation(5.0f);
+        }
+
+        TextView textViewDelete = (TextView) customView.findViewById(R.id.menuDeleteButton);
+        TextView textViewCall = (TextView) customView.findViewById(R.id.menuCallButton);
+        TextView textViewMessage = (TextView) customView.findViewById(R.id.menuMessageButton);
+
+        textViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                retrofitManager.deleteCase(new UserPreferance(getActivity()).getToken(), aCase.getId());
+                caseList.remove(aCase);
+                courtListAdapter.notifyDataSetChanged();
+                menuWindow.dismiss();
+            }
+        });
+
+        textViewCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuWindow.dismiss();
+            }
+        });
+
+        textViewMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuWindow.dismiss();
+            }
+        });
+
+        menuWindow.showAtLocation(mRecycleView, Gravity.CENTER, 0, 0);
     }
 }

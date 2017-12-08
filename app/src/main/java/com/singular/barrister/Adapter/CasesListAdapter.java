@@ -12,6 +12,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.singular.barrister.DisplayCaseActivity;
+import com.singular.barrister.Interface.RecycleItemCase;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Cases.CasePersons;
 import com.singular.barrister.Model.Client.Client;
@@ -29,11 +30,13 @@ public class CasesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     ArrayList<Case> casesList;
     ArrayList<Case> arrayList;
     Context context;
+    RecycleItemCase recycleItemCase;
 
-    public CasesListAdapter(Context context, ArrayList<Case> casesList) {
+    public CasesListAdapter(Context context, ArrayList<Case> casesList, RecycleItemCase recycleItemCase) {
         this.casesList = casesList;
         this.arrayList = casesList;
         this.context = context;
+        this.recycleItemCase = recycleItemCase;
     }
 
 
@@ -177,11 +180,15 @@ public class CasesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Case", (Serializable) casesList.get(getAdapterPosition()));
-                    Intent intent = new Intent(context, DisplayCaseActivity.class);
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
+                    recycleItemCase.onItemClick(casesList.get(getAdapterPosition()));
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    recycleItemCase.onItemLongClick(casesList.get(getAdapterPosition()));
+                    return false;
                 }
             });
         }
