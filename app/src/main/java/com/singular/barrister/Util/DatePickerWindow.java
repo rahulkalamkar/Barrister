@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.PopupWindow;
@@ -54,8 +55,8 @@ public class DatePickerWindow {
         final DatePicker datePicker = (DatePicker) customView.findViewById(R.id.datePicker);
 
         final TimePicker timePicker = (TimePicker) customView.findViewById(R.id.timePicker);
-        TextView btnSave = (TextView) customView.findViewById(R.id.textViewSave);
-        TextView btnCancel = (TextView) customView.findViewById(R.id.textViewCancel);
+        Button btnSave = (Button) customView.findViewById(R.id.textViewSave);
+        Button btnCancel = (Button) customView.findViewById(R.id.textViewCancel);
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

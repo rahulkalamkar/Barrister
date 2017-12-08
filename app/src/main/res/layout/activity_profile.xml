@@ -109,7 +109,8 @@
                     android:layout_marginTop="@dimen/fab_margin"
                     android:text="Address"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/textViewAddress"
@@ -117,13 +118,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:textColor="#777777"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.2dp"
                     android:layout_marginTop="10dp"
-                    android:background="#777777" />
+                    android:background="#777777"
+                    android:visibility="gone"/>
             </LinearLayout>
 
             <FrameLayout

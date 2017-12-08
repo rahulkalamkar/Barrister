@@ -40,10 +40,10 @@ public class DisplayClientActivity extends AppCompatActivity implements IDataCha
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_client);
         if (getActionBar() != null) {
-            getActionBar().setTitle("Client details");
+            getActionBar().setTitle("Client Details");
             getActionBar().setDisplayHomeAsUpEnabled(true);
         } else if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Client details");
+            getSupportActionBar().setTitle("Client Details");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 

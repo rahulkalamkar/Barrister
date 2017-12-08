@@ -68,7 +68,7 @@ public class EditCourtActivity extends AppCompatActivity implements IDataChangeL
         setContentView(R.layout.activity_edit_court);
 
         if (getActionBar() != null) {
-            getActionBar().setTitle("Edit court");
+            getActionBar().setTitle("Edit Court");
             getActionBar().setDisplayHomeAsUpEnabled(true);
         } else if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Edit court");
@@ -288,12 +288,16 @@ public class EditCourtActivity extends AppCompatActivity implements IDataChangeL
                 selectedDistrict.getExternal_id(),
                 selectedDistrict.getLocation_type(),
                 selectedDistrict.getPin()));
-        courtData.setSubdistrict(new CaseSubDistrict(selectedSubDistrict.getName(),
-                selectedSubDistrict.getId(),
-                selectedSubDistrict.getParent_id(),
-                selectedSubDistrict.getExternal_id(),
-                selectedSubDistrict.getLocation_type(),
-                selectedSubDistrict.getPin()));
+        if (selectedSubDistrict != null) {
+            courtData.setSubdistrict(new CaseSubDistrict(selectedSubDistrict.getName(),
+                    selectedSubDistrict.getId(),
+                    selectedSubDistrict.getParent_id(),
+                    selectedSubDistrict.getExternal_id(),
+                    selectedSubDistrict.getLocation_type(),
+                    selectedSubDistrict.getPin()));
+        } else {
+            courtData.setSubdistrict(null);
+        }
         return courtData;
     }
 

@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:maxLines="1"
+            android:paddingLeft="0dp"
             android:text="Rahul"
             android:textColor="#777777"
             android:textSize="16sp" />
@@ -49,6 +50,7 @@
             android:maxLines="1"
             android:text="Kalamkar"
             android:textColor="#777777"
+            android:paddingLeft="0dp"
             android:textSize="16sp" />
 
         <View
@@ -109,12 +111,14 @@
             android:layout_marginTop="@dimen/fab_margin"
             android:text="Address"
             android:textColor="#000000"
+            android:visibility="gone"
             android:textSize="16sp" />
 
         <EditText
             android:id="@+id/EditTextAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:text="101, Guru krupa building, Navghar Lane-1 Mulund East"
             android:textColor="#777777"
             android:textSize="16sp" />
@@ -122,7 +126,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <ProgressBar

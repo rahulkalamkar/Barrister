@@ -101,6 +101,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                     if (client.getClient().getFirst_name().toLowerCase().contains(charString.toLowerCase()) ||
                             client.getClient().getLast_name().toLowerCase().contains(charString.toLowerCase()) ||
+                            client.getClient().getEmail().toLowerCase().contains(charString.toLowerCase()) ||
                             client.getClient().getMobile().toLowerCase().contains(charString.toLowerCase())) {
 
                         filteredList.add(client);

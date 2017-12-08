@@ -55,21 +55,21 @@ public class AddClientActivity extends AppCompatActivity implements IDataChangeL
     }
 
     public void checkValues() {
-        if (TextUtils.isEmpty(edtPhone.getText().toString())) {
-            setOtherErrorNull();
-            edtPhone.setError("Enter phone number");
-        } else if (TextUtils.isEmpty(edtEmailId.getText().toString())) {
-            setOtherErrorNull();
-            edtEmailId.setError("Enter email id");
-        } else if (TextUtils.isEmpty(edtPassword.getText().toString())) {
-            setOtherErrorNull();
-            edtPassword.setError("Enter password");
-        } else if (TextUtils.isEmpty(edtFirstName.getText().toString())) {
+        if (TextUtils.isEmpty(edtFirstName.getText().toString())) {
             setOtherErrorNull();
             edtFirstName.setError("Enter first name");
         } else if (TextUtils.isEmpty(edtLastName.getText().toString())) {
             setOtherErrorNull();
             edtLastName.setError("Enter last name");
+        } else if (TextUtils.isEmpty(edtPhone.getText().toString())) {
+            setOtherErrorNull();
+            edtPhone.setError("Enter phone number");
+        }if (TextUtils.isEmpty(edtEmailId.getText().toString())) {
+            setOtherErrorNull();
+            edtEmailId.setError("Enter email id");
+        } else if (TextUtils.isEmpty(edtPassword.getText().toString())) {
+            setOtherErrorNull();
+            edtPassword.setError("Enter password");
         } else {
             edtPhone.setError(null);
             edtEmailId.setError(null);

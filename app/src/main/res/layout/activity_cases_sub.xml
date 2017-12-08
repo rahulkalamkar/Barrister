@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:hint="Select date"
+                    android:hint="Next Hearing Date"
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
@@ -59,7 +59,7 @@
                     android:id="@+id/editTextCaseNotes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Decision"/>
+                    android:hint="Case Notes"/>
 
             </android.support.design.widget.TextInputLayout>
 

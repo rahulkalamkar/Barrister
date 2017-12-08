@@ -62,6 +62,7 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:hint="First name"
+                        android:paddingLeft="0dp"
                         android:textColor="#777777"
                         android:textSize="16sp" />
 
@@ -81,6 +82,7 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:hint="Last name"
+                        android:paddingLeft="0dp"
                         android:textColor="#777777"
                         android:textSize="16sp" />
 

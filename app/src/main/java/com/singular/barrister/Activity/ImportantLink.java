@@ -45,10 +45,10 @@ public class ImportantLink extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_important_link);
         if (getActionBar() != null) {
-            getActionBar().setTitle(getResources().getString(R.string.menu_important_link));
+            getActionBar().setTitle("Important Websites");
             getActionBar().setDisplayHomeAsUpEnabled(true);
         } else if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(getResources().getString(R.string.menu_important_link));
+            getSupportActionBar().setTitle("Important Websites");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar3);

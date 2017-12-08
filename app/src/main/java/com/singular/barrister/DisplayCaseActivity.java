@@ -38,7 +38,7 @@ import org.w3c.dom.Text;
 public class DisplayCaseActivity extends AppCompatActivity implements IDataChangeListener<IModel> {
 
     TextView txtStatus, txtType, txtCourtName, txtCRNNumber, txtRegisterNumber, txtRegisterDate,
-            txtHearing, txtClientName, txtClientEmailId, txtPhone, txtAddress, txtClientType, txtOppositionName,
+            txtHearing, txtHearingDate, txtClientName, txtClientEmailId, txtPhone, txtAddress, txtClientType, txtOppositionName,
             txtOppositionNumber, txtOppositionLawyerName, txtOppositionLawyerNumber;
 
     LinearLayout layout;
@@ -86,7 +86,7 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
 
 
         txtHearing.setText(aCaseDetail.getHearing() != null ? (aCaseDetail.getHearing().getCase_decision() != null ? aCaseDetail.getHearing().getCase_decision() : "") : "");
-
+        txtHearingDate.setText(aCaseDetail.getHearing() != null ? (aCaseDetail.getHearing().getCase_hearing_date() != null ? aCaseDetail.getHearing().getCase_hearing_date() : "") : "");
         if (aCaseDetail.getClient() != null) {
             txtClientName.setText(aCaseDetail.getClient().getFirst_name() + " " + aCaseDetail.getClient().getLast_name());
             txtClientEmailId.setText(aCaseDetail.getClient().getEmail());
@@ -97,7 +97,7 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
         txtOppositionName.setText(getPerson("Client").getOpp_name());
         txtOppositionNumber.setText(getPerson("Client").getMobile());
         txtOppositionLawyerName.setText(getPerson("Lawyer").getOpp_name());
-        txtOppositionNumber.setText(getPerson("Lawyer").getMobile());
+        txtOppositionLawyerNumber.setText(getPerson("Lawyer").getMobile());
 
     }
 
@@ -109,6 +109,7 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
         txtRegisterNumber = (TextView) findViewById(R.id.textViewCaseRegistrationNumber);
         txtRegisterDate = (TextView) findViewById(R.id.textViewCaseRegisterDate);
         txtHearing = (TextView) findViewById(R.id.textViewCaseNextHearing);
+        txtHearingDate = (TextView) findViewById(R.id.textViewCaseNextDate);
         txtClientName = (TextView) findViewById(R.id.textViewClientName);
         txtClientEmailId = (TextView) findViewById(R.id.textViewClientEmailId);
         txtPhone = (TextView) findViewById(R.id.textViewClientPhone);
@@ -241,8 +242,10 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 1 && data.getStringExtra("hearing") != null) {
             txtHearing.setText(data.getStringExtra("hearing"));
+            txtHearingDate.setText(data.getStringExtra("date"));
         } else if (data != null && data.getStringExtra("hearing") != null) {
             txtHearing.setText(data.getStringExtra("hearing"));
+            txtHearingDate.setText(data.getStringExtra("date"));
         }
     }
 

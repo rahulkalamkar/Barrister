@@ -37,7 +37,7 @@
 
         </RelativeLayout>
 
-        <TextView
+        <Button
             android:id="@+id/textViewSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,11 +45,12 @@
             android:layout_alignRight="@+id/pickerLayout"
             android:layout_below="@+id/pickerLayout"
             android:padding="@dimen/fab_margin"
-            android:text="Ok"
+            android:text="OK"
+            android:background="@android:color/transparent"
             android:textColor="#000000"
             android:textSize="16sp" />
 
-        <TextView
+        <Button
             android:id="@+id/textViewCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,8 +58,9 @@
             android:layout_toLeftOf="@+id/textViewSave"
             android:layout_toStartOf="@+id/textViewSave"
             android:padding="@dimen/fab_margin"
-            android:text="Canecl"
+            android:text="CANCEL"
             android:textColor="#000000"
+            android:background="@android:color/transparent"
             android:textSize="16sp" />
     </RelativeLayout>
 </RelativeLayout>

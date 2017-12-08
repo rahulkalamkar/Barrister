@@ -40,10 +40,10 @@ public class ProfileActivity extends AppCompatActivity implements IDataChangeLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         if (getActionBar() != null) {
-            getActionBar().setTitle(getResources().getString(R.string.menu_profile));
+            getActionBar().setTitle("My Profile");
             getActionBar().setDisplayHomeAsUpEnabled(true);
         } else if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(getResources().getString(R.string.menu_profile));
+            getSupportActionBar().setTitle("My Profile");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 

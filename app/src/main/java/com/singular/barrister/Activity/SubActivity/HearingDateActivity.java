@@ -33,10 +33,10 @@ public class HearingDateActivity extends AppCompatActivity implements IDataChang
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hearing_date);
         if (getActionBar() != null) {
-            getActionBar().setTitle("Last hearing dates");
+            getActionBar().setTitle("Last Hearing Dates");
             getActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
-            getSupportActionBar().setTitle("Last hearing dates");
+            getSupportActionBar().setTitle("Last Hearing Dates");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         mRecycleView = (RecyclerView) findViewById(R.id.recycleView);

@@ -40,10 +40,10 @@ public class CasesNewHearingActivity extends AppCompatActivity implements CaseLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cases_sub);
         if (getActionBar() != null) {
-            getActionBar().setTitle("New hearing date");
+            getActionBar().setTitle("New Hearing Date");
             getActionBar().setDisplayHomeAsUpEnabled(true);
         } else if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("New hearing date");
+            getSupportActionBar().setTitle("New Hearing Date");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -95,6 +95,7 @@ public class CasesNewHearingActivity extends AppCompatActivity implements CaseLi
     public void returnDataToHome(int resultCode) {
         Intent returnIntent = getIntent();
         returnIntent.putExtra("hearing", edtCaseNotes.getText().toString());
+        returnIntent.putExtra("date", edtDate.getText().toString());
         returnIntent.putExtra("result", resultCode);
         setResult(RESULT_OK, returnIntent);
         finish();
