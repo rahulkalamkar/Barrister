@@ -85,19 +85,19 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
 
     public void getStateList() {
         stateTableList = new StateTableQuery().getAllState(getApplicationContext());
-        if (stateTableList != null && stateTableList.size()>0) {
+        if (stateTableList != null && stateTableList.size() > 0) {
 
-            if(stateList==null)
-                stateList=new ArrayList<State>();
+            if (stateList == null)
+                stateList = new ArrayList<State>();
 
             for (int i = 0; i < stateTableList.size(); i++) {
-                StateTable stateTable=stateTableList.get(i);
-                State state=new State(stateTable.getName(),stateTable.getId(),
-                        stateTable.getParent_id(),stateTable.getExternal_id(),
-                        stateTable.getLocation_type(),stateTable.getPin());
+                StateTable stateTable = stateTableList.get(i);
+                State state = new State(stateTable.getName(), stateTable.getId(),
+                        stateTable.getParent_id(), stateTable.getExternal_id(),
+                        stateTable.getLocation_type(), stateTable.getPin());
                 stateList.add(state);
             }
-        }else if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+        } else if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
             retrofitManager.getState(this, new UserPreferance(getApplicationContext()).getToken());
         } else {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
@@ -134,10 +134,6 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
             @Override
             public void onClick(View view) {
                 if (stateList != null) {
-                    selectedDistrict = null;
-                    selectedSubDistrict = null;
-                    edtDistrict.setText("");
-                    edtSubDistrict.setText("");
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("State", stateList);
                     Intent intent = new Intent(getApplicationContext(), SelectStateActivity.class);
@@ -320,6 +316,10 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
         if (resultCode == 1) {
             selectedState = (State) data.getExtras().getSerializable("State");
             edtState.setText(selectedState.getName());
+            selectedDistrict = null;
+            selectedSubDistrict = null;
+            edtDistrict.setText("");
+            edtSubDistrict.setText("");
         } else if (resultCode == 2) {
             selectedDistrict = (District) data.getExtras().getSerializable("District");
             edtDistrict.setText(selectedDistrict.getName());
@@ -391,7 +391,10 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
 
         @Override
         public int getItemCount() {
-            return list.size();
+            if (list != null)
+                return list.size();
+            else
+                return 0;
         }
 
         public class SimpleViewHolder extends RecyclerView.ViewHolder {

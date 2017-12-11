@@ -177,10 +177,6 @@ public class EditCourtActivity extends AppCompatActivity implements IDataChangeL
             public void onClick(View view) {
                 if (stateList != null) {
                     if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
-                        selectedDistrict = null;
-                        selectedSubDistrict = null;
-                        edtDistrict.setText("");
-                        edtSubDistrict.setText("");
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("State", stateList);
                         Intent intent = new Intent(getApplicationContext(), SelectStateActivity.class);
@@ -425,6 +421,10 @@ public class EditCourtActivity extends AppCompatActivity implements IDataChangeL
         if (resultCode == 1) {
             selectedState = (State) data.getExtras().getSerializable("State");
             edtState.setText(selectedState.getName());
+            selectedDistrict = null;
+            selectedSubDistrict = null;
+            edtDistrict.setText("");
+            edtSubDistrict.setText("");
         } else if (resultCode == 2) {
             selectedDistrict = (District) data.getExtras().getSerializable("District");
             edtDistrict.setText(selectedDistrict.getName());

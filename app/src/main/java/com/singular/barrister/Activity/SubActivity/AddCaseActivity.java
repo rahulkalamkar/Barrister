@@ -33,6 +33,9 @@ import android.widget.Toast;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.ForeignCollection;
+import com.singular.barrister.Activity.InenerActivity.SelectCaseType;
+import com.singular.barrister.Activity.InenerActivity.SelectClient;
+import com.singular.barrister.Activity.InenerActivity.SelectCourt;
 import com.singular.barrister.Database.DB.DatabaseHelper;
 import com.singular.barrister.Database.Tables.CaseTypeTable;
 import com.singular.barrister.Database.Tables.Client.BaseClientTable;
@@ -163,8 +166,10 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         edtSelectCourt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<CourtTable> list = getAllCourt();
-                convertList(list);
+              /*  List<CourtTable> list = getAllCourt();
+                convertList(list);*/
+                Intent i = new Intent(getApplicationContext(), SelectCourt.class);
+                startActivityForResult(i, 11);
             }
         });
 
@@ -181,6 +186,9 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         edtCaseType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), SelectCaseType.class);
+                startActivityForResult(i, 11);
+                /*
                 if (caseTypeDataList == null)
                     caseTypeDataList = new ArrayList<CasesTypeData>();
                 caseTypeDataList.addAll(convertListToCaseType());
@@ -190,14 +198,17 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
                     retrofitManager.getCourtType(AddCaseActivity.this, new UserPreferance(getApplicationContext()).getToken());
                 } else {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-                }
+                }*/
             }
         });
 
         txtSelectClient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fetchAndDisplayClient();
+                Intent i = new Intent(getApplicationContext(), SelectClient.class);
+                startActivityForResult(i, 22);
+
+                //  fetchAndDisplayClient();
             }
         });
 
@@ -215,51 +226,6 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         }
     }
 
-    public List<CasesTypeData> convertListToCaseType() {
-        List<CasesTypeData> casesTypeDatas = null;
-        if (casesTypeDatas == null)
-            casesTypeDatas = new ArrayList<CasesTypeData>();
-        casesTypeDatas.clear();
-
-        List<CaseTypeTable> caseTypeTablesList = checkValuesForCaseTypeLocally();
-        if (caseTypeTablesList != null) {
-            for (int i = 0; i < caseTypeTablesList.size(); i++) {
-                CaseTypeTable caseTypeTable = caseTypeTablesList.get(i);
-                List<SubCaseTypeTable> subCaseList = getSubCaseTypeTableValue(caseTypeTable.getCase_type_id());
-                CasesTypeData casesTypeData = getCasesTypeData(caseTypeTable, subCaseList);
-                casesTypeDatas.add(casesTypeData);
-            }
-        }
-        return casesTypeDatas;
-    }
-
-    public CasesTypeData getCasesTypeData(CaseTypeTable caseTypeTable, List<SubCaseTypeTable> subCaseList) {
-        CasesTypeData casesTypeData1 = new CasesTypeData(caseTypeTable.getCase_type_id(), caseTypeTable.getCase_type_name(), convertListToCasesSubType(subCaseList));
-        return casesTypeData1;
-    }
-
-    public ArrayList<CasesSubType> convertListToCasesSubType(List<SubCaseTypeTable> subCaseList) {
-        ArrayList<CasesSubType> casesSubTypes = null;
-        if (casesSubTypes == null)
-            casesSubTypes = new ArrayList<CasesSubType>();
-        casesSubTypes.clear();
-        for (int i = 0; i < subCaseList.size(); i++) {
-            SubCaseTypeTable subCaseTypeTable = subCaseList.get(i);
-            CasesSubType casesSubType = new CasesSubType(subCaseTypeTable.getSub_case_type_id(), subCaseTypeTable.getSub_case_type_name());
-            casesSubTypes.add(casesSubType);
-        }
-        return casesSubTypes;
-    }
-
-    public List<SubCaseTypeTable> getSubCaseTypeTableValue(String caseTypeId) {
-        Dao<SubCaseTypeTable, Integer> subCaseTypeTables;
-        try {
-            subCaseTypeTables = getHelper(getApplicationContext()).getSubCaseTypeTableDao();
-            return subCaseTypeTables.queryForEq("case_type_id", caseTypeId);
-        } catch (SQLException e) {
-            return null;
-        }
-    }
 
     RetrofitManager retrofitManager;
 
@@ -427,86 +393,6 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
     }
 
     String selectedClientType = "";
-    PopupWindow caseTypeWindow;
-
-    public void selectCaseType() {
-        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.activity_select_state, null);
-
-        caseTypeWindow = new PopupWindow(
-                customView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        );
-        if (Build.VERSION.SDK_INT >= 21) {
-            caseTypeWindow.setElevation(5.0f);
-        }
-        LinearLayout linearLayout = (LinearLayout) customView.findViewById(R.id.layout);
-        linearLayout.setBackgroundColor(Color.parseColor("#99777777"));
-        caseTypeWindow.setOutsideTouchable(true);
-        caseTypeWindow.setFocusable(true);
-
-        RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recycleView);
-        SimpleRecycleAdapter simpleRecycleAdapter = new SimpleRecycleAdapter(getApplicationContext(), caseTypeDataList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(simpleRecycleAdapter);
-
-        caseTypeWindow.showAtLocation(edtCaseType, Gravity.CENTER, 0, 0);
-    }
-
-    public class SimpleRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        Context context;
-        ArrayList<CasesTypeData> list;
-
-        public SimpleRecycleAdapter(Context context, ArrayList<CasesTypeData> list) {
-            this.context = context;
-            this.list = list;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.simple_list_item, parent, false);
-            return new SimpleRecycleAdapter.SimpleViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof SimpleRecycleAdapter.SimpleViewHolder) {
-                SimpleRecycleAdapter.SimpleViewHolder simpleViewHolder = (SimpleRecycleAdapter.SimpleViewHolder) holder;
-                simpleViewHolder.txtName.setText(list.get(position).getCase_type_name());
-
-                SimpleSubListAdapter simpleSubListAdapter = new SimpleSubListAdapter(context, list.get(position).getSubCaseData());
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-                simpleViewHolder.recyclerView.setLayoutManager(linearLayoutManager);
-                simpleViewHolder.recyclerView.setAdapter(simpleSubListAdapter);
-                // simpleViewHolder.recyclerView.setVisibility(View.VISIBLE);
-
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
-
-        public class SimpleViewHolder extends RecyclerView.ViewHolder {
-            TextView txtName;
-            View viewHorizontal;
-            RecyclerView recyclerView;
-
-            public SimpleViewHolder(View itemView) {
-                super(itemView);
-                viewHorizontal = (View) itemView.findViewById(R.id.horizontalView);
-                viewHorizontal.setVisibility(View.GONE);
-                txtName = (TextView) itemView.findViewById(R.id.textViewName);
-                txtName.setBackgroundColor(Color.parseColor("#99777777"));
-
-                recyclerView = (RecyclerView) itemView.findViewById(R.id.caseSubTypeRecycleView);
-                recyclerView.setVisibility(View.VISIBLE);
-            }
-        }
-    }
 
     CasesSubType selectedCaseSubType;
     CasesTypeData selectedCaseType;
@@ -528,54 +414,6 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         }
     }
 
-    public class SimpleSubListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        Context context;
-        ArrayList<CasesSubType> casesSubTypes;
-
-        public SimpleSubListAdapter(Context context, ArrayList<CasesSubType> casesSubTypes) {
-            this.context = context;
-            this.casesSubTypes = casesSubTypes;
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof SimpleViewHolder) {
-                SimpleViewHolder simpleViewHolder = (SimpleViewHolder) holder;
-                simpleViewHolder.txtSubTypeName.setText(casesSubTypes.get(position).getSubcase_type_name());
-            }
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.simple_list_item, parent, false);
-            return new SimpleViewHolder(v);
-        }
-
-        @Override
-        public int getItemCount() {
-            return casesSubTypes.size();
-        }
-
-        public class SimpleViewHolder extends RecyclerView.ViewHolder {
-            TextView txtName, txtSubTypeName;
-
-            public SimpleViewHolder(View itemView) {
-                super(itemView);
-                txtName = (TextView) itemView.findViewById(R.id.textViewName);
-                txtSubTypeName = (TextView) itemView.findViewById(R.id.textViewSubName);
-                txtName.setVisibility(View.GONE);
-                txtSubTypeName.setVisibility(View.VISIBLE);
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        selectedCaseType(casesSubTypes.get(getAdapterPosition()));
-                        caseTypeWindow.dismiss();
-                    }
-                });
-            }
-        }
-    }
-
     @Override
     public void onDataChanged() {
 
@@ -593,7 +431,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             if (casesTypeResponse.getData().getCasetype() != null) {
                 caseTypeDataList.addAll(casesTypeResponse.getData().getCasetype());
                 saveCaseType(caseTypeDataList);
-                selectCaseType();
+
             }
         } else if (response != null && response instanceof SimpleMessageResponse) {
             mProgressBar.setVisibility(View.GONE);
@@ -815,67 +653,6 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         edtSelectCourt.setText(data.getCourt_name());
     }
 
-    public void fetchAndDisplayClient() {
-        List<BaseClientTable> list = getLocalData();
-        if (list != null)
-            convertAndDisplay(list);
-    }
-
-    ArrayList<Client> clientList;
-
-    public void convertAndDisplay(List<BaseClientTable> list) {
-        if (clientList == null)
-            clientList = new ArrayList<Client>();
-        clientList.clear();
-
-        for (int i = 0; i < list.size(); i++) {
-            BaseClientTable baseClientTable = list.get(i);
-
-            ClientTable clientTable = baseClientTable.getClientTable();
-            ClientDetail clientDetail = new ClientDetail(clientTable.getClient_id(), clientTable.getFirst_name(), clientTable.getLast_name(),
-                    clientTable.getCountry_code(), clientTable.getMobile(), clientTable.getEmail(),
-                    clientTable.getAddress(), clientTable.getUser_type(), clientTable.getReferral_code(),
-                    clientTable.getParent_user_id(), clientTable.getUsed_referral_code(), clientTable.getDevice_type(),
-                    clientTable.getDevice_token(), clientTable.getSubscription(), clientTable.getCreated_at(), clientTable.getUpdated_at());
-
-            Client client = new Client(baseClientTable.getBase_id(), baseClientTable.getCreated_at(), baseClientTable.getClient_id(), clientDetail);
-            clientList.add(client);
-        }
-        selectClient();
-
-    }
-
-    PopupWindow selectClientWindow;
-
-    public void selectClient() {
-
-        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.simple_list_item, null);
-
-        selectClientWindow = new PopupWindow(
-                customView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        if (Build.VERSION.SDK_INT >= 21) {
-            selectClientWindow.setElevation(5.0f);
-        }
-        selectClientWindow.setOutsideTouchable(true);
-        selectClientWindow.setFocusable(true);
-        selectClientWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#99777777")));
-        TextView txtName = (TextView) customView.findViewById(R.id.textViewName);
-        RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.caseSubTypeRecycleView);
-        txtName.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
-
-        ClientListAdapter clientListAdapter = new ClientListAdapter(getApplicationContext(), clientList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(clientListAdapter);
-
-        selectClientWindow.showAtLocation(edtSelectCourt, Gravity.CENTER, 0, 0);
-    }
-
     public List<BaseClientTable> getLocalData() {
         Dao<BaseClientTable, Integer> baseClientTables;
         try {
@@ -887,67 +664,28 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
     }
 
 
-    public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        ArrayList<Client> clientList;
-        Context context;
-
-        public ClientListAdapter(Context context, ArrayList<Client> clientList) {
-            this.clientList = clientList;
-            this.context = context;
-        }
-
-
-        @Override
-        public int getItemCount() {
-            return clientList.size();
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.court_list_item, parent, false);
-            return new ClientListAdapter.ClientViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            if (holder instanceof ClientListAdapter.ClientViewHolder) {
-                ClientListAdapter.ClientViewHolder clientViewHolder = (ClientListAdapter.ClientViewHolder) holder;
-                clientViewHolder.txtCourtName.setText(clientList.get(position).getClient().getFirst_name() + " " +
-                        clientList.get(position).getClient().getLast_name());
-                clientViewHolder.txtStateName.setText("+" + clientList.get(position).getClient().getCountry_code() + " " +
-                        clientList.get(position).getClient().getMobile());
-            }
-        }
-
-        public class ClientViewHolder extends RecyclerView.ViewHolder {
-            public TextView txtCourtName, txtStateName, txtDelete;
-            public RelativeLayout bgLayout;
-            public LinearLayout fgLayout;
-
-            public ClientViewHolder(View itemView) {
-                super(itemView);
-                txtCourtName = (TextView) itemView.findViewById(R.id.textViewCourtName);
-                txtStateName = (TextView) itemView.findViewById(R.id.textViewState);
-                bgLayout = (RelativeLayout) itemView.findViewById(R.id.view_background);
-                fgLayout = (LinearLayout) itemView.findViewById(R.id.view_foreground);
-                txtDelete = (TextView) itemView.findViewById(R.id.textViewDelete);
-
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        selectedClient(clientList.get(getAdapterPosition()));
-                    }
-                });
-            }
-        }
-    }
-
     Client selectedClient;
 
     public void selectedClient(Client client) {
         selectedClient = client;
         txtSelectClient.setText(client.getClient().getFirst_name() + " " + client.getClient().getLast_name() + "\n" + client.getClient().getMobile());
-        selectClientWindow.dismiss();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null && data.getExtras() != null) {
+            Bundle bundle = data.getExtras();
+            if (bundle.getSerializable("CaseType") != null) {
+                selectedCaseType = (CasesTypeData) bundle.getSerializable("CaseType");
+                selectedCaseSubType = (CasesSubType) bundle.getSerializable("SubCaseType");
+                edtCaseType.setText(selectedCaseSubType.getSubcase_type_name());
+            } else if (bundle.getSerializable("Client") != null) {
+                selectedClient((Client) bundle.getSerializable("Client"));
+            } else if (bundle.getSerializable("Court") != null) {
+                selectedCourt((CourtData) bundle.getSerializable("Court"));
+            }
+        }
+
+    }
 }

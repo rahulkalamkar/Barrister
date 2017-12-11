@@ -85,7 +85,10 @@
         <activity android:name=".Activity.SubActivity.SelectSubDistrictActivity" />
         <activity android:name=".Activity.SubActivity.DateActivity" />
         <activity android:name=".Activity.SubActivity.EditCourtActivity" />
-        <activity android:name=".WebActivity"></activity>
+        <activity android:name=".WebActivity" />
+        <activity android:name=".Activity.InenerActivity.SelectCaseType" />
+        <activity android:name=".Activity.InenerActivity.SelectCourt" />
+        <activity android:name=".Activity.InenerActivity.SelectClient"></activity>
     </application>
 
 </manifest>
