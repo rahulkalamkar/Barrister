@@ -69,6 +69,7 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         initView();
+        disableError();
         retrofitManager = new RetrofitManager();
         getCourtType();
     }
@@ -194,21 +195,32 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
     public void checkValues() {
         if (TextUtils.isEmpty(edtCourtName.getText().toString())) {
             showOtherError();
+            disableError();
+            txtIPCourtName.setErrorEnabled(true);
             txtIPCourtName.setError("Enter court name");
         } else if (TextUtils.isEmpty(edtCourtNumber.getText().toString())) {
             showOtherError();
+            disableError();
+            txtIPCourtNumber.setErrorEnabled(true);
             txtIPCourtNumber.setError("Enter court number");
         } else if (TextUtils.isEmpty(edtCourtType.getText().toString())) {
             showOtherError();
+            disableError();
+            txtIPCourtType.setErrorEnabled(true);
             txtIPCourtType.setError("Enter court type");
         } else if (TextUtils.isEmpty(edtState.getText().toString())) {
             showOtherError();
+            disableError();
+            txtIPState.setErrorEnabled(true);
             txtIPState.setError("Enter State");
         } else if (TextUtils.isEmpty(edtDistrict.getText().toString())) {
             showOtherError();
+            disableError();
+            txtIPDistrict.setErrorEnabled(true);
             txtIPDistrict.setError("Enter District");
         } else {
             showOtherError();
+            disableError();
             saveCourt(edtCourtName.getText().toString(),
                     edtCourtNumber.getText().toString(),
                     edtCourtType.getText().toString(),
@@ -308,6 +320,15 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
     @Override
     public void onDataFailed(WebServiceError error) {
 
+    }
+
+    public void disableError() {
+        txtIPCourtName.setErrorEnabled(false);
+        txtIPCourtNumber.setErrorEnabled(false);
+        txtIPCourtType.setErrorEnabled(false);
+        txtIPState.setErrorEnabled(false);
+        txtIPDistrict.setErrorEnabled(false);
+        txtIPSubDistrict.setErrorEnabled(false);
     }
 
     @Override

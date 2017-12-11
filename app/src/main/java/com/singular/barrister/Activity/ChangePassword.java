@@ -48,23 +48,43 @@ public class ChangePassword extends AppCompatActivity implements IDataChangeList
         txtILedtOldPassword = (TextInputLayout) findViewById(R.id.edtTextOldPasswordError);
         txtILedtNewPassword = (TextInputLayout) findViewById(R.id.edtTextNewPasswordError);
         txtILedtNewPasswordConfirm = (TextInputLayout) findViewById(R.id.edtTextNewPasswordConfirmError);
+
+        txtILedtOldPassword.setErrorEnabled(false);
+        txtILedtNewPassword.setErrorEnabled(false);
+        txtILedtNewPasswordConfirm.setErrorEnabled(false);
     }
 
     public void checkValue() {
         if (TextUtils.isEmpty(edtOldPassword.getText().toString())) {
             txtILedtOldPassword.setError("Enter current password");
+            txtILedtOldPassword.setErrorEnabled(true);
+            txtILedtNewPassword.setErrorEnabled(false);
+            txtILedtNewPasswordConfirm.setErrorEnabled(false);
+
         } else if (TextUtils.isEmpty(edtNewPassword.getText().toString())) {
             txtILedtOldPassword.setError(null);
             txtILedtNewPassword.setError("Enter new password");
+            txtILedtOldPassword.setErrorEnabled(false);
+            txtILedtNewPassword.setErrorEnabled(true);
+            txtILedtNewPasswordConfirm.setErrorEnabled(false);
         } else if (TextUtils.isEmpty(edtNewPasswordConfirm.getText().toString())) {
             txtILedtOldPassword.setError(null);
             txtILedtNewPassword.setError(null);
             txtILedtNewPasswordConfirm.setError("Enter new password");
+            txtILedtOldPassword.setErrorEnabled(false);
+            txtILedtNewPassword.setErrorEnabled(false);
+            txtILedtNewPasswordConfirm.setErrorEnabled(true);
         } else if (!edtNewPassword.getText().toString().equalsIgnoreCase(edtNewPasswordConfirm.getText().toString())) {
             txtILedtOldPassword.setError(null);
             txtILedtNewPassword.setError(null);
             txtILedtNewPasswordConfirm.setError("Password doesn't match");
+            txtILedtOldPassword.setErrorEnabled(false);
+            txtILedtNewPassword.setErrorEnabled(true);
+            txtILedtNewPasswordConfirm.setErrorEnabled(true);
         } else {
+            txtILedtOldPassword.setErrorEnabled(false);
+            txtILedtNewPassword.setErrorEnabled(false);
+            txtILedtNewPasswordConfirm.setErrorEnabled(false);
             if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
                 retrofitManager.changePassword(this, new UserPreferance(getApplicationContext()).getToken(), edtOldPassword.getText().toString(),
                         edtNewPassword.getText().toString(), edtNewPasswordConfirm.getText().toString());

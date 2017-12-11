@@ -71,6 +71,14 @@ public class CreateAccount extends AppCompatActivity implements View.OnClickList
         txtIPPassword = (TextInputLayout) findViewById(R.id.editTextPasswordError);
         txtIPRefferalCode = (TextInputLayout) findViewById(R.id.editTextReferralCodeError);
 
+        txtIPNumber.setErrorEnabled(false);
+        txtIPEmailId.setErrorEnabled(false);
+        txtIPFirstName.setErrorEnabled(false);
+        txtIPLastName.setErrorEnabled(false);
+        txtIPPassword.setErrorEnabled(false);
+        txtIPRefferalCode.setErrorEnabled(false);
+
+
         txtIPNumber.setOnClickListener(this);
         btnCreate = (Button) findViewById(R.id.textViewRegister);
         btnCreate.setOnClickListener(this);
@@ -187,21 +195,27 @@ public class CreateAccount extends AppCompatActivity implements View.OnClickList
 
     public void checkValues() {
         if (TextUtils.isEmpty(edtNumber.getText().toString())) {
-            txtIPNumber.setError("Enter phone number");
             setOtherErrorNull();
+            txtIPNumber.setErrorEnabled(true);
+            txtIPNumber.setError("Enter phone number");
         } else if (TextUtils.isEmpty(edtEmailId.getText().toString())) {
             setOtherErrorNull();
+            txtIPEmailId.setErrorEnabled(true);
             txtIPEmailId.setError("Enter email id");
         } else if (TextUtils.isEmpty(edtPassword.getText().toString())) {
             setOtherErrorNull();
+            txtIPPassword.setErrorEnabled(true);
             txtIPPassword.setError("Enter password");
         } else if (TextUtils.isEmpty(edtFirstName.getText().toString())) {
             setOtherErrorNull();
+            txtIPFirstName.setErrorEnabled(true);
             txtIPFirstName.setError("Enter first name");
         } else if (TextUtils.isEmpty(edtLastName.getText().toString())) {
             setOtherErrorNull();
+            txtIPLastName.setErrorEnabled(true);
             txtIPLastName.setError("Enter last name");
         } else {
+            setOtherErrorNull();
             txtIPNumber.setError(null);
             txtIPEmailId.setError(null);
             txtIPPassword.setError(null);
@@ -224,6 +238,13 @@ public class CreateAccount extends AppCompatActivity implements View.OnClickList
         txtIPPassword.setError(null);
         txtIPFirstName.setError(null);
         txtIPLastName.setError(null);
+
+        txtIPNumber.setErrorEnabled(false);
+        txtIPEmailId.setErrorEnabled(false);
+        txtIPFirstName.setErrorEnabled(false);
+        txtIPLastName.setErrorEnabled(false);
+        txtIPPassword.setErrorEnabled(false);
+        txtIPRefferalCode.setErrorEnabled(false);
     }
 
     private String country_code = "+91";

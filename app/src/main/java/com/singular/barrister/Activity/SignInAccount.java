@@ -52,6 +52,9 @@ public class SignInAccount extends AppCompatActivity implements View.OnClickList
         txtILEdtNumber = (TextInputLayout) findViewById(R.id.editTextNumberError);
         txtILEdtPassword = (TextInputLayout) findViewById(R.id.editTextPasswordError);
 
+        txtILEdtNumber.setErrorEnabled(false);
+        txtILEdtPassword.setErrorEnabled(false);
+
         btnLogin = (Button) findViewById(R.id.textViewLogin);
         txtCreateNewAccount = (TextView) findViewById(R.id.textViewNoAccountCreateNew);
         txtForgotPassword = (TextView) findViewById(R.id.textViewForgotPassword);
@@ -68,9 +71,13 @@ public class SignInAccount extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
             case R.id.textViewLogin:
                 if (TextUtils.isEmpty(edtNumber.getText().toString())) {
+                    txtILEdtNumber.setErrorEnabled(true);
+                    txtILEdtPassword.setErrorEnabled(false);
                     txtILEdtNumber.setError("Enter phone number");
                     txtILEdtPassword.setError(null);
                 } else if (TextUtils.isEmpty(edtPassword.getText().toString())) {
+                    txtILEdtNumber.setErrorEnabled(false);
+                    txtILEdtPassword.setErrorEnabled(true);
                     txtILEdtPassword.setError("Enter password");
                     txtILEdtNumber.setError(null);
                 } else {

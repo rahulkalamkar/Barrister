@@ -104,6 +104,22 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
 
         caseTypeDataList = new ArrayList<CasesTypeData>();
         initView();
+        disableError();
+    }
+
+    public void disableError() {
+        txtILCaseStatus.setErrorEnabled(false);
+        txtILNextHearingDate.setErrorEnabled(false);
+        txtILCaseType.setErrorEnabled(false);
+        txtILSelectCourt.setErrorEnabled(false);
+        txtILCaseCNRNumber.setErrorEnabled(false);
+        txtILCaseRegisterNumber.setErrorEnabled(false);
+        txtILCaseRegisterDate.setErrorEnabled(false);
+        txtILCaseNotes.setErrorEnabled(false);
+        txtILOpoName.setErrorEnabled(false);
+        txtILOpoNumber.setErrorEnabled(false);
+        txtILOpoLawName.setErrorEnabled(false);
+        txtILOpoLawNumber.setErrorEnabled(false);
     }
 
     public void initView() {
@@ -318,28 +334,52 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         }
 
         if (TextUtils.isEmpty(edtCaseStatus.getText().toString())) {
+            disableError();
+            txtILCaseStatus.setErrorEnabled(true);
             txtILCaseStatus.setError("enter case status");
         } else if (TextUtils.isEmpty(edtNextHearingDate.getText().toString())) {
+            disableError();
+            txtILNextHearingDate.setErrorEnabled(true);
             txtILNextHearingDate.setError("enter next hearing date");
         } else if (TextUtils.isEmpty(edtCaseType.getText().toString())) {
+            disableError();
+            txtILCaseType.setErrorEnabled(true);
             txtILCaseType.setError("enter case type");
         } else if (TextUtils.isEmpty(edtSelectCourt.getText().toString())) {
+            disableError();
+            txtILSelectCourt.setErrorEnabled(true);
             txtILSelectCourt.setError("select court");
         } else if (TextUtils.isEmpty(edtCaseCNRNumber.getText().toString())) {
+            disableError();
+            txtILCaseCNRNumber.setErrorEnabled(true);
             txtILCaseCNRNumber.setError("enter case cnr number");
         } else if (TextUtils.isEmpty(edtCaseRegisterNumber.getText().toString())) {
+            disableError();
+            txtILCaseRegisterNumber.setErrorEnabled(true);
             txtILCaseRegisterNumber.setError("enter case register number");
         } else if (TextUtils.isEmpty(edtCaseRegisterDate.getText().toString())) {
+            disableError();
+            txtILCaseRegisterDate.setErrorEnabled(true);
             txtILCaseRegisterDate.setError("enter case register date");
         } else if (TextUtils.isEmpty(edtCaseNotes.getText().toString())) {
+            disableError();
+            txtILCaseNotes.setErrorEnabled(true);
             txtILCaseNotes.setError("enter case notes");
         } else if (TextUtils.isEmpty(edtOpoName.getText().toString())) {
+            disableError();
+            txtILOpoName.setErrorEnabled(true);
             txtILOpoName.setError("enter opposition name");
         } else if (TextUtils.isEmpty(edtOpoNumber.getText().toString())) {
+            disableError();
+            txtILOpoNumber.setErrorEnabled(true);
             txtILOpoNumber.setError("enter  opposition number");
         } else if (TextUtils.isEmpty(edtOpoLawyerName.getText().toString())) {
+            disableError();
+            txtILOpoLawName.setErrorEnabled(true);
             txtILOpoLawName.setError("enter opposition lawyer name");
         } else if (TextUtils.isEmpty(edtOpoLawyerNumber.getText().toString())) {
+            disableError();
+            txtILOpoLawNumber.setErrorEnabled(true);
             txtILOpoLawNumber.setError("enter opposition lawyer number");
         } else if (txtSelectClient.getText().toString().equalsIgnoreCase("")) {
             Toast.makeText(getApplicationContext(), "Select client name", Toast.LENGTH_SHORT).show();
@@ -347,6 +387,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             Toast.makeText(getApplicationContext(), "select client type", Toast.LENGTH_SHORT).show();
         } else {
             if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+                disableError();
                 mProgressBar.setVisibility(View.VISIBLE);
                 retrofitManager.addCase(this, new UserPreferance(getApplicationContext()).getToken(), selectedClient.getClient_id(), selectedClientType, selectedCourt.getId(), edtCaseCNRNumber.getText().toString(),
                         edtCaseRegisterNumber.getText().toString(),

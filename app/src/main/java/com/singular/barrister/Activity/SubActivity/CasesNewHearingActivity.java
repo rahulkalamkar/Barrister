@@ -53,6 +53,9 @@ public class CasesNewHearingActivity extends AppCompatActivity implements CaseLi
         txtILDate = (TextInputLayout) findViewById(R.id.editTextDateError);
         txtILNote = (TextInputLayout) findViewById(R.id.editTextCaseNotesError);
 
+        txtILDate.setErrorEnabled(false);
+        txtILNote.setErrorEnabled(false);
+
         caseId = getIntent().getExtras().getString("CaseID");
 
         edtDate.setOnClickListener(new View.OnClickListener() {
@@ -67,9 +70,13 @@ public class CasesNewHearingActivity extends AppCompatActivity implements CaseLi
 
     public void checkValues() {
         if (TextUtils.isEmpty(edtDate.getText().toString())) {
+            txtILDate.setErrorEnabled(true);
+            txtILNote.setErrorEnabled(false);
             txtILDate.setError("Select date");
             txtILNote.setError(null);
         } else if (TextUtils.isEmpty(edtCaseNotes.getText().toString())) {
+            txtILDate.setErrorEnabled(false);
+            txtILNote.setErrorEnabled(true);
             txtILDate.setError(null);
             txtILNote.setError("Enter notes");
         } else {
