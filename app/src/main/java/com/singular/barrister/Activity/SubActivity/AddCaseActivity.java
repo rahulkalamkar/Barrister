@@ -1,12 +1,14 @@
 package com.singular.barrister.Activity.SubActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,6 +44,7 @@ import com.singular.barrister.Database.Tables.Client.BaseClientTable;
 import com.singular.barrister.Database.Tables.Client.ClientTable;
 import com.singular.barrister.Database.Tables.CourtTable;
 import com.singular.barrister.Database.Tables.SubCaseTypeTable;
+import com.singular.barrister.DisplayCaseActivity;
 import com.singular.barrister.Interface.CaseListeners;
 import com.singular.barrister.Interface.RecycleItem;
 import com.singular.barrister.Model.Cases.Case;
@@ -151,7 +154,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         edtCaseStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectCaseStatus();
+                selectStatusAlert();
             }
         });
 
@@ -236,58 +239,50 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         return true;
     }
 
-    PopupWindow changeStatusWindow;
+    String selectedItem;
 
-    public void selectCaseStatus() {
+    public void selectStatusAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddCaseActivity.this);
+        builder.setTitle("Select case status");
 
-        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.change_case_status_window, null);
+        int i = 0;
 
-        changeStatusWindow = new PopupWindow(
-                customView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        );
-        if (Build.VERSION.SDK_INT >= 21) {
-            changeStatusWindow.setElevation(5.0f);
-        }
+        //list of items
+        final String[] items = {"In-Progress", "completed"};
+        builder.setSingleChoiceItems(items, i,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        selectedItem = items[which];
+                    }
+                });
 
-        changeStatusWindow.setOutsideTouchable(true);
-        changeStatusWindow.setFocusable(true);
-        final RadioButton radioButtonCompleted = (RadioButton) customView.findViewById(R.id.radioButton2);
-        final RadioButton radioButtonInProgress = (RadioButton) customView.findViewById(R.id.radioButton1);
+        String positiveText = getString(android.R.string.ok);
+        builder.setPositiveButton(positiveText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (selectedItem != null && !TextUtils.isEmpty(selectedItem)) {
+                            edtCaseStatus.setText(selectedItem);
+                        } else {
+                            selectedItem = items[0];
+                            edtCaseStatus.setText(selectedItem);
+                        }
+                    }
+                });
 
-        if (edtCaseStatus.getText().toString() != null && edtCaseStatus.getText().toString().equalsIgnoreCase("completed")) {
-            radioButtonCompleted.setChecked(true);
-            radioButtonInProgress.setChecked(false);
-        } else {
-            radioButtonCompleted.setChecked(false);
-            radioButtonInProgress.setChecked(true);
-        }
+        String negativeText = getString(android.R.string.cancel);
+        builder.setNegativeButton(negativeText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // negative button logic
+                    }
+                });
 
-        Button cancelButton = (Button) customView.findViewById(R.id.buttonCancel);
-        Button submitButton = (Button) customView.findViewById(R.id.buttonSave);
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeStatusWindow.dismiss();
-            }
-        });
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean isChanged = false;
-                if (radioButtonCompleted.isChecked()) {
-                    edtCaseStatus.setText("completed");
-                } else {
-                    edtCaseStatus.setText("In-Progress");
-                }
-                changeStatusWindow.dismiss();
-            }
-        });
-        changeStatusWindow.showAtLocation(edtCaseStatus, Gravity.CENTER, 0, 0);
+        AlertDialog dialog = builder.create();
+        // display dialog
+        dialog.show();
     }
 
     @Override

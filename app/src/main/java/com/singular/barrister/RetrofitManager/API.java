@@ -105,4 +105,6 @@ public interface API {
     @DELETE("{DELETE_CASE}")
     Call<SimpleMessageResponse> deleteCase(@Path(value = "DELETE_CASE", encoded = true) String path, @HeaderMap Map<String, String> headers);
 
+    @DELETE("{DELETE_COURT}")
+    Call<SimpleMessageResponse> deleteCourt(@Path(value = "DELETE_COURT", encoded = true) String path, @HeaderMap Map<String, String> headers);
 }

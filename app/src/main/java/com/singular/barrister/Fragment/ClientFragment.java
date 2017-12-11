@@ -14,6 +14,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -83,6 +84,8 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         retrofitManager = new RetrofitManager();
         clientList = new ArrayList<Client>();
         getClientList();
+
+        registerForContextMenu(mRecycleView);
     }
 
     public void showError() {
@@ -181,9 +184,36 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
 
     private int newPosition;
 
+    Client selectedClient;
+
     @Override
     public void onItemLongClick(Client client) {
-        showMenu(client);
+        selectedClient = client;
+        //showMenu(client);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, v.getId(), 0, "Delete");
+        menu.add(0, v.getId(), 0, "Call");
+        menu.add(0, v.getId(), 0, "SMS");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle() == "Call") {
+            Toast.makeText(getActivity(), "calling code", Toast.LENGTH_LONG).show();
+        } else if (item.getTitle() == "SMS") {
+            Toast.makeText(getActivity(), "sending sms code", Toast.LENGTH_LONG).show();
+        } else if (item.getTitle() == "Delete") {
+            retrofitManager.deleteClient(new UserPreferance(getActivity()).getToken(), selectedClient.getClient_id());
+            clientList.remove(selectedClient);
+            clientListAdapter.notifyDataSetChanged();
+        } else {
+            return false;
+        }
+        return true;
     }
 
     public void showMenu(final Client client) {

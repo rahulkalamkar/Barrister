@@ -9,8 +9,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
@@ -71,6 +73,7 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
         caseList = new ArrayList<Case>();
         getCasesList();
 
+        registerForContextMenu(mRecycleView);
     }
 
     public void getCasesList() {
@@ -159,9 +162,35 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
         startActivity(intent);
     }
 
+    public Case selectedItem;
+
     @Override
     public void onItemLongClick(Case aCase) {
-        showMenu(aCase);
+        selectedItem=aCase;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, v.getId(), 0, "Delete");
+        menu.add(0, v.getId(), 0, "Call");
+        menu.add(0, v.getId(), 0, "SMS");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle() == "Call") {
+            Toast.makeText(getActivity(), "calling code", Toast.LENGTH_LONG).show();
+        } else if (item.getTitle() == "SMS") {
+            Toast.makeText(getActivity(), "sending sms code", Toast.LENGTH_LONG).show();
+        } else if (item.getTitle() == "Delete") {
+            retrofitManager.deleteCase(new UserPreferance(getActivity()).getToken(), selectedItem.getId());
+            caseList.remove(selectedItem);
+            courtListAdapter.notifyDataSetChanged();
+        } else {
+            return false;
+        }
+        return true;
     }
 
     public void showMenu(final Case aCase) {

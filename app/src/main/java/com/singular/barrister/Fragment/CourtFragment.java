@@ -9,7 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -29,6 +31,7 @@ import com.singular.barrister.Database.Tables.CourtTable;
 import com.singular.barrister.Database.Tables.StateTable;
 import com.singular.barrister.DisplayCourtActivity;
 import com.singular.barrister.Interface.RecycleItem;
+import com.singular.barrister.Interface.RecycleItemCourt;
 import com.singular.barrister.Model.Cases.CaseDistrict;
 import com.singular.barrister.Model.Cases.CaseState;
 import com.singular.barrister.Model.Cases.CaseSubDistrict;
@@ -50,7 +53,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourtFragment extends Fragment implements IDataChangeListener<IModel> {
+public class CourtFragment extends Fragment implements IDataChangeListener<IModel>, RecycleItemCourt {
 
     private RecyclerView mRecycleView;
     private ProgressBar progressBar;
@@ -73,6 +76,7 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
         errorTextView = (TextView) getView().findViewById(R.id.textViewErrorText);
         courtList = new ArrayList<CourtData>();
         retrofitManager = new RetrofitManager();
+        registerForContextMenu(mRecycleView);
         getCourtList();
     }
 
@@ -109,7 +113,7 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
             CourtResponse courtResponse = (CourtResponse) response;
             if (courtResponse.getData().getCourt() != null) {
                 courtList.addAll(courtResponse.getData().getCourt());
-                courtListAdapter = new CourtListAdapter(getActivity(), courtList);
+                courtListAdapter = new CourtListAdapter(getActivity(), courtList, this);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mRecycleView.setLayoutManager(linearLayoutManager);
                 mRecycleView.setAdapter(courtListAdapter);
@@ -174,7 +178,7 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
             courtList.add(courtData);
         }
 
-        courtListAdapter = new CourtListAdapter(getActivity(), courtList);
+        courtListAdapter = new CourtListAdapter(getActivity(), courtList, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecycleView.setLayoutManager(linearLayoutManager);
         mRecycleView.setAdapter(courtListAdapter);
@@ -297,5 +301,47 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
     public void onSearch(String text) {
         if (courtListAdapter != null)
             courtListAdapter.getFilter().filter(text);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, v.getId(), 0, "Delete");
+        menu.add(0, v.getId(), 0, "Call");
+        menu.add(0, v.getId(), 0, "SMS");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle() == "Call") {
+            Toast.makeText(getActivity(), "calling code", Toast.LENGTH_LONG).show();
+        } else if (item.getTitle() == "SMS") {
+            Toast.makeText(getActivity(), "sending sms code", Toast.LENGTH_LONG).show();
+        } else if (item.getTitle() == "Delete") {
+            if (selectedItem != null) {
+                retrofitManager.deleteCourt(new UserPreferance(getActivity()).getToken(), selectedItem.getId());
+                courtList.remove(selectedItem);
+                courtListAdapter.notifyDataSetChanged();
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    CourtData selectedItem;
+
+    @Override
+    public void onItemClick(CourtData court) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Court", (Serializable) court);
+        Intent intent = new Intent(getActivity(), DisplayCourtActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemLongClick(CourtData court) {
+        selectedItem = court;
     }
 }

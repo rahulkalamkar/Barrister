@@ -535,6 +535,35 @@ public class RetrofitManager {
         }
     }
 
+    public void deleteCourt(/*final IDataChangeListener<IModel> callbackListener,*/ String token, String courtId) {
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Authorization", "Bearer " + token);
+
+        try {
+            URL url = new URL("http://singularsacademy.com/lawyer/public/api/courts/" + courtId);
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<SimpleMessageResponse> call = api.deleteCourt(apiName, headerMap);
+            call.enqueue(new Callback<SimpleMessageResponse>() {
+                @Override
+                public void onResponse(Call<SimpleMessageResponse> call, Response<SimpleMessageResponse> response) {
+                    //  callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<SimpleMessageResponse> call, Throwable t) {
+                    //   callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            //  callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
     public void updateClient(final IDataChangeListener<IModel> callbackListener, String token, String clientId, String first_name, String last_name) {
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", "Bearer " + token);

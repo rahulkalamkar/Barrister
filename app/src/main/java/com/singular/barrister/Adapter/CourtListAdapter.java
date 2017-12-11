@@ -12,6 +12,8 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.singular.barrister.DisplayCourtActivity;
+import com.singular.barrister.Interface.RecycleItemClient;
+import com.singular.barrister.Interface.RecycleItemCourt;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Court.CourtData;
 import com.singular.barrister.R;
@@ -28,10 +30,12 @@ public class CourtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     ArrayList<CourtData> arrayList;
     Context context;
 
-    public CourtListAdapter(Context context, ArrayList<CourtData> courtList) {
+    RecycleItemCourt recycleItem;
+
+    public CourtListAdapter(Context context, ArrayList<CourtData> courtList, RecycleItemCourt recycleItem) {
         this.courtList = courtList;
         this.arrayList = courtList;
-
+        this.recycleItem = recycleItem;
         this.context = context;
     }
 
@@ -142,11 +146,15 @@ public class CourtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Court", (Serializable) courtList.get(getAdapterPosition()));
-                    Intent intent = new Intent(context, DisplayCourtActivity.class);
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
+                    recycleItem.onItemClick(courtList.get(getAdapterPosition()));
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    recycleItem.onItemLongClick(courtList.get(getAdapterPosition()));
+                    return false;
                 }
             });
         }
