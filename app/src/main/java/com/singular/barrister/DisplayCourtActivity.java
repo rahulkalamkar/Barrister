@@ -111,6 +111,16 @@ public class DisplayCourtActivity extends AppCompatActivity {
         if (data != null && data.getExtras() != null && data.getExtras().getSerializable("NewCourt") != null) {
             aCourtData = (CourtData) data.getExtras().getSerializable("NewCourt");
             setData();
+            updateHomeScreen();
         }
     }
+
+
+    public void updateHomeScreen() {
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.setAction("com.singular.barrister");
+        sendBroadcast(intent);
+    }
+
 }

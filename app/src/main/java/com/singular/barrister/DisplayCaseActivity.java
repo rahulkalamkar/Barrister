@@ -43,7 +43,6 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
 
     LinearLayout layout;
     Case aCaseDetail;
-    PopupWindow changeStatusWindow;
     ProgressBar mProgressBar;
 
     @Override
@@ -243,10 +242,19 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
         if (resultCode == 1 && data.getStringExtra("hearing") != null) {
             txtHearing.setText(data.getStringExtra("hearing"));
             txtHearingDate.setText(data.getStringExtra("date"));
+            updateHomeScreen();
         } else if (data != null && data.getStringExtra("hearing") != null) {
             txtHearing.setText(data.getStringExtra("hearing"));
             txtHearingDate.setText(data.getStringExtra("date"));
+            updateHomeScreen();
         }
+    }
+
+    public void updateHomeScreen() {
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.setAction("com.singular.barrister");
+        sendBroadcast(intent);
     }
 
     @Override
@@ -256,6 +264,7 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
 
     @Override
     public void onDataReceived(IModel response) {
+        updateHomeScreen();
         mProgressBar.setVisibility(View.GONE);
     }
 

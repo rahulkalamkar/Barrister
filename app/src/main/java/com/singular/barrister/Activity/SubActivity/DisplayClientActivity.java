@@ -1,5 +1,6 @@
 package com.singular.barrister.Activity.SubActivity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -171,7 +172,15 @@ public class DisplayClientActivity extends AppCompatActivity implements IDataCha
         btnSubmit.setVisible(false);
         btnEdit.setVisible(true);
         displayName(true);
+        updateHomeScreen();
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    public void updateHomeScreen() {
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.setAction("com.singular.barrister");
+        sendBroadcast(intent);
     }
 
     @Override

@@ -88,7 +88,13 @@
         <activity android:name=".WebActivity" />
         <activity android:name=".Activity.InenerActivity.SelectCaseType" />
         <activity android:name=".Activity.InenerActivity.SelectCourt" />
-        <activity android:name=".Activity.InenerActivity.SelectClient"></activity>
+        <activity android:name=".Activity.InenerActivity.SelectClient"/>
+    <!--    <receiver android:name=".Activity.HomeScreen$MyReceiver" >
+            <intent-filter>
+                <action android:name="com.singular.barrister" >
+                </action>
+            </intent-filter>
+        </receiver>-->
     </application>
 
 </manifest>

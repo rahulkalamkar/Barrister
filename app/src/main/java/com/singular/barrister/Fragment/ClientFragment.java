@@ -95,6 +95,26 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         progressBar.setVisibility(View.GONE);
     }
 
+    public void refreshData() {
+        try {
+            if (clientList == null)
+                clientList = new ArrayList<Client>();
+            clientList.clear();
+
+            if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
+                progressBar.setVisibility(View.VISIBLE);
+                retrofitManager.getClientList(this, new UserPreferance(getActivity()).getToken());
+            } else {
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                List<BaseClientTable> list = getLocalData();
+                if (list != null)
+                    convertAndDisplay(list);
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
     public void getClientList() {
         if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
             progressBar.setVisibility(View.VISIBLE);

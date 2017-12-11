@@ -76,6 +76,31 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
         registerForContextMenu(mRecycleView);
     }
 
+    public void refreshData() {
+        try {
+            if (caseList == null)
+                caseList = new ArrayList<Case>();
+            caseList.clear();
+            if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
+                progressBar.setVisibility(View.VISIBLE);
+                retrofitManager.getCasesList(this, new UserPreferance(getActivity()).getToken());
+            } else {
+                List<CaseTable> list = new CaseQuery(getActivity()).getList();
+                if (list != null) {
+                    caseList = (ArrayList<Case>) new CaseQuery(getActivity()).convertListToOnLineList(list);
+                    courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    mRecycleView.setLayoutManager(linearLayoutManager);
+                    mRecycleView.setAdapter(courtListAdapter);
+                    progressBar.setVisibility(View.GONE);
+                }
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
     public void getCasesList() {
         if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
             progressBar.setVisibility(View.VISIBLE);
@@ -166,8 +191,9 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
 
     @Override
     public void onItemLongClick(Case aCase) {
-        selectedItem=aCase;
+        selectedItem = aCase;
     }
+
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

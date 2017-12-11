@@ -80,6 +80,26 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
         getCourtList();
     }
 
+    public void refreshData() {
+        try {
+            if (courtList == null)
+                courtList = new ArrayList<>();
+            courtList.clear();
+            if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
+                progressBar.setVisibility(View.VISIBLE);
+                retrofitManager.getCourtList(this, new UserPreferance(getActivity()).getToken());
+            } else {
+                List<CourtTable> list = getAllCourt();
+                if (list != null) {
+                    convertList(list);
+                }
+
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+        }
+    }
+
     public void showError() {
         errorTextView.setVisibility(View.VISIBLE);
         mRecycleView.setVisibility(View.GONE);

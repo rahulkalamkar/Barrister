@@ -57,7 +57,7 @@ public class HomeScreen extends AppCompatActivity {
         setContentView(R.layout.activity_home_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        registerReceiver();
         progressBar = (ProgressBar) findViewById(R.id.progressBar4);
         frameLayout = (FrameLayout) findViewById(R.id.fragmentContainer);
 
@@ -306,6 +306,46 @@ public class HomeScreen extends AppCompatActivity {
             }
         } else {
 
+        }
+    }
+
+    MyReceiver receiver;
+
+    public void registerReceiver() {
+        IntentFilter filter = new IntentFilter("com.singular.barrister");
+        receiver = new MyReceiver();
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver = null;
+        }
+        super.onDestroy();
+    }
+
+    public class MyReceiver extends BroadcastReceiver {
+
+        public MyReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refresh();
+        }
+    }
+
+    public void refresh() {
+      /*  if (tabLayout.getSelectedTabPosition() == 0) {
+        } else */
+        if (tabLayout.getSelectedTabPosition() == 1) {
+            casesFragment.refreshData();
+        } else if (tabLayout.getSelectedTabPosition() == 2) {
+            courtFragment.refreshData();
+        } else if (tabLayout.getSelectedTabPosition() == 3) {
+            clientFragment.refreshData();
         }
     }
 }
