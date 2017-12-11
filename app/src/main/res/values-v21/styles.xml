@@ -1,1 +1,46 @@
-<resources></resources>
+<resources>
+
+    <style name="MyDatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- this is new -->
+        <item name="colorAccent">@color/colorPrimary</item>
+
+        <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>
+        <item name="android:colorAccent">@color/textColorFaint</item>
+    </style>
+
+    <style name="MyDatePickerStyle" parent="@android:style/Widget.Material.Light.DatePicker">
+        <item name="android:headerBackground">@color/colorPrimary</item>
+        <item name="android:calendarTextColor">@color/colorPrimary</item>
+        <item name="android:dayOfWeekBackground">@color/colorPrimary</item>
+        <item name="android:yearListSelectorColor">@color/textColorFaint</item>
+        <item name="android:datePickerMode">calendar</item>
+        <item name="android:minDate">01/01/2000</item>
+    </style>
+
+    <style name="TimePicker"
+        parent="Theme.AppCompat.Light.Dialog">
+
+        <item name="android:dialogTheme">@style/Theme.Dialog</item> <!-- TimePicker dialog -->
+        <item name="android:alertDialogTheme">@style/Theme.Dialog</item> <!-- Alert dialog -->
+
+    </style>
+
+    <style name="Theme.Dialog"
+        parent="android:Theme.Material.Light.Dialog">
+
+        <item name="android:colorAccent">@color/colorPrimary</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/textColorFaint</item>
+        <item name="colorControlNormal">@android:color/holo_red_light</item>
+
+    </style>
+
+    <style name="Theme.MyTheme.TimePicker" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:timePickerMode">clock</item>
+        <item name="android:headerBackground">#ff555555</item>
+        <item name="android:numbersTextColor">#ff0000</item>
+        <item name="android:numbersSelectorColor">#ff00ff</item>
+        <item name="android:numbersBackgroundColor">#ff555555</item>
+        <item name="android:amPmTextColor">#00ff00</item>
+    </style>
+</resources>

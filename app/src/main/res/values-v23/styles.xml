@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.MyTheme.TimePicker" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:timePickerMode">clock</item>
+        <item name="android:headerBackground">@color/colorPrimary</item><!--
+        <item name="android:numbersInnerTextColor">#00ffff</item>-->
+<!--
+        <item name="android:numbersTextColor">#ff0000</item>-->
+        <item name="android:numbersSelectorColor">@color/colorPrimary_Refer</item>
+        <item name="android:numbersBackgroundColor">@color/colorPrimary</item><!--
+        <item name="android:amPmTextColor">#00ff00</item>-->
+    </style>
+</resources>

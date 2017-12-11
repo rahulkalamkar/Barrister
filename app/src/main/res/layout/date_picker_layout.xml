@@ -22,13 +22,12 @@
                 style="@style/MyDatePickerStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:calendarTextColor="#000000" />
+                android:layout_centerInParent="true" />
 
 
             <TimePicker
                 android:id="@+id/timePicker"
-                style="@style/MyTimePickerStyle"
+                style="@style/Theme.MyTheme.TimePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numbersTextColor="#ffffff"
