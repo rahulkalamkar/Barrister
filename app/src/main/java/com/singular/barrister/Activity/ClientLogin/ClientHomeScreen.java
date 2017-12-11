@@ -66,6 +66,15 @@ public class ClientHomeScreen extends AppCompatActivity {
             getSupportActionBar().setTitle(R.string.app_name);
 
         initializeTab();
+        showTodayFragment();
+    }
+
+    public void showTodayFragment()
+    {
+        clientTodayFragment = new ClientTodayFragment();
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragmentContainer, clientTodayFragment, "Today's Fragment").commit();
     }
 
     private TabLayout tabLayout;
