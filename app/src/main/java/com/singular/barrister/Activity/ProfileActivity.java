@@ -109,9 +109,18 @@ public class ProfileActivity extends AppCompatActivity implements IDataChangeLis
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (isEditing)
+                    finish();
+                else {
+                    isEditing = true;
+                    btnSubmit.setVisible(false);
+                    btnEdit.setVisible(true);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    mFragmentContainer.setVisibility(View.GONE);
+                }
                 break;
             case R.id.menuEdit:
+                isEditing = false;
                 btnSubmit.setVisible(true);
                 btnEdit.setVisible(false);
                 linearLayout.setVisibility(View.GONE);
@@ -119,11 +128,14 @@ public class ProfileActivity extends AppCompatActivity implements IDataChangeLis
                 showFragment();
                 break;
             case R.id.menuSubmit:
+                isEditing = true;
                 updateProfile();
                 break;
         }
         return true;
     }
+
+    boolean isEditing = true;
 
     public void updateProfile() {
         if (!TextUtils.isEmpty(editProfileFragment.getFirstName()) &&

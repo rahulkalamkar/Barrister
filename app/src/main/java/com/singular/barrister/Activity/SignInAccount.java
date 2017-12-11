@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.singular.barrister.Activity.ClientLogin.ClientHomeScreen;
 import com.singular.barrister.Model.RegisterResponse;
 import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.R;
@@ -173,8 +174,13 @@ public class SignInAccount extends AppCompatActivity implements View.OnClickList
                     , registerResponse.getData().getEnd_date()
                     , registerResponse.getData().getUser_type()
                     , registerResponse.getToken(), true);
-            Intent intent1 = new Intent(SignInAccount.this, HomeScreen.class);
-            startActivity(intent1);
+            if (registerResponse.getData().getUser_type().equalsIgnoreCase("lawyer")) {
+                Intent intent1 = new Intent(SignInAccount.this, HomeScreen.class);
+                startActivity(intent1);
+            } else {
+                Intent intent1 = new Intent(SignInAccount.this, ClientHomeScreen.class);
+                startActivity(intent1);
+            }
             finish();
         } else {
             showError();

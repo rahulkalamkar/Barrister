@@ -88,13 +88,11 @@
         <activity android:name=".WebActivity" />
         <activity android:name=".Activity.InenerActivity.SelectCaseType" />
         <activity android:name=".Activity.InenerActivity.SelectCourt" />
-        <activity android:name=".Activity.InenerActivity.SelectClient"/>
-    <!--    <receiver android:name=".Activity.HomeScreen$MyReceiver" >
-            <intent-filter>
-                <action android:name="com.singular.barrister" >
-                </action>
-            </intent-filter>
-        </receiver>-->
+        <activity android:name=".Activity.InenerActivity.SelectClient" />
+        <activity
+            android:name=".Activity.ClientLogin.ClientHomeScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

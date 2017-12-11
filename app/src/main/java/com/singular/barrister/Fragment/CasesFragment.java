@@ -103,7 +103,17 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
 
     public void getCasesList() {
         if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
-            progressBar.setVisibility(View.VISIBLE);
+            List<CaseTable> list = new CaseQuery(getActivity()).getList();
+            if (list != null) {
+                caseList = (ArrayList<Case>) new CaseQuery(getActivity()).convertListToOnLineList(list);
+                courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                mRecycleView.setLayoutManager(linearLayoutManager);
+                mRecycleView.setAdapter(courtListAdapter);
+                progressBar.setVisibility(View.GONE);
+            }
+            if (courtListAdapter == null)
+                progressBar.setVisibility(View.VISIBLE);
             retrofitManager.getCasesList(this, new UserPreferance(getActivity()).getToken());
         } else {
             List<CaseTable> list = new CaseQuery(getActivity()).getList();
@@ -143,12 +153,16 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
         if (response != null && response instanceof CasesResponse) {
             CasesResponse casesResponse = (CasesResponse) response;
             if (casesResponse.getData().getCaseList() != null) {
+                caseList.clear();
                 caseList.addAll(casesResponse.getData().getCaseList());
-                courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                mRecycleView.setLayoutManager(linearLayoutManager);
-                mRecycleView.setAdapter(courtListAdapter);
-                progressBar.setVisibility(View.GONE);
+                if (courtListAdapter == null) {
+                    courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    mRecycleView.setLayoutManager(linearLayoutManager);
+                    mRecycleView.setAdapter(courtListAdapter);
+                    progressBar.setVisibility(View.GONE);
+                } else
+                    courtListAdapter.notifyDataSetChanged();
                 if (caseList != null && caseList.size() > 0) {
                     CaseQuery caseQuery = new CaseQuery(getActivity());
                     caseQuery.addList(caseList);

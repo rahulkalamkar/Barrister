@@ -14,7 +14,7 @@ public class CourtState {
     @DatabaseField(columnName = "id",generatedId = true)
     int id;
 
-    @DatabaseField(columnName = "state_id", unique = true)
+    @DatabaseField(columnName = "state_id")
     String state_id;
 
     @DatabaseField(columnName = "parent_id", canBeNull = true)

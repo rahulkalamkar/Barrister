@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menuProfile"
+        android:title="@string/menu_profile" />
+    <item
+        android:id="@+id/menuLoveApp"
+        android:title="@string/menu_love_app" />
+    <item
+        android:id="@+id/menuContactUs"
+        android:title="@string/menu_contact_us" />
+
+    <item
+        android:id="@+id/menuLogout"
+        android:title="@string/menu_log_out" />
+
+    <item
+        android:id="@+id/menuSearch"
+        android:icon="@mipmap/ic_search_icon"
+        android:title="Search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
+</menu>

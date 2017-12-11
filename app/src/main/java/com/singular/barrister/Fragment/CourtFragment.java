@@ -108,7 +108,12 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
 
     public void getCourtList() {
         if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
-            progressBar.setVisibility(View.VISIBLE);
+            List<CourtTable> list = getAllCourt();
+            if (list != null) {
+                convertList(list);
+            }
+            if (courtListAdapter == null)
+                progressBar.setVisibility(View.VISIBLE);
             retrofitManager.getCourtList(this, new UserPreferance(getActivity()).getToken());
         } else {
             List<CourtTable> list = getAllCourt();
@@ -132,11 +137,15 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
         if (response != null && response instanceof CourtResponse) {
             CourtResponse courtResponse = (CourtResponse) response;
             if (courtResponse.getData().getCourt() != null) {
+                courtList.clear();
                 courtList.addAll(courtResponse.getData().getCourt());
-                courtListAdapter = new CourtListAdapter(getActivity(), courtList, this);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                mRecycleView.setLayoutManager(linearLayoutManager);
-                mRecycleView.setAdapter(courtListAdapter);
+                if (courtListAdapter == null) {
+                    courtListAdapter = new CourtListAdapter(getActivity(), courtList, this);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    mRecycleView.setLayoutManager(linearLayoutManager);
+                    mRecycleView.setAdapter(courtListAdapter);
+                } else
+                    courtListAdapter.notifyDataSetChanged();
                 saveLocally();
                 progressBar.setVisibility(View.GONE);
             } else if (courtResponse.getError() != null && courtResponse.getError().getStatus_code() == 401) {

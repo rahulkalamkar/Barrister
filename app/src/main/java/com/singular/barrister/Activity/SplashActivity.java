@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.singular.barrister.Activity.ClientLogin.ClientHomeScreen;
 import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.R;
 
@@ -19,8 +20,13 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 if (new UserPreferance(getApplicationContext()).isUserLoggedIn()) {
-                    startActivity(new Intent(SplashActivity.this,
-                            HomeScreen.class));
+                    if (new UserPreferance(getApplicationContext()).getUser_type().equalsIgnoreCase("lawyer")) {
+                        startActivity(new Intent(SplashActivity.this,
+                                HomeScreen.class));
+                    } else {
+                        startActivity(new Intent(SplashActivity.this,
+                                ClientHomeScreen.class));
+                    }
                 } else {
                     startActivity(new Intent(SplashActivity.this,
                             LandingScreen.class));

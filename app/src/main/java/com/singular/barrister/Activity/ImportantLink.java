@@ -39,6 +39,7 @@ public class ImportantLink extends AppCompatActivity {
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
     List<com.singular.barrister.Database.Tables.WebSite.ImportantLink> linkList;
+    List<com.singular.barrister.Database.Tables.WebSite.ImportantLink> tempLinkList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class ImportantLink extends AppCompatActivity {
 
         linkList = getList();
         if (linkList != null) {
-            ImportantListAdapter importantListAdapter = new ImportantListAdapter(getApplicationContext(), linkList);
+            importantListAdapter = new ImportantListAdapter(getApplicationContext(), linkList);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
             mRecycleView.setLayoutManager(linearLayoutManager);
             mRecycleView.setAdapter(importantListAdapter);
@@ -92,6 +93,9 @@ public class ImportantLink extends AppCompatActivity {
             String webName = importantLinkFragment.edtWebName.getText().toString();
             String webUrl = importantLinkFragment.edtWebSite.getText().toString();
 
+            importantLinkFragment.edtWebName.setText("");
+            importantLinkFragment.edtWebSite.setText("");
+
             com.singular.barrister.Database.Tables.WebSite.ImportantLink importantLink = new com.singular.barrister.Database.Tables.WebSite.ImportantLink(webName, webUrl);
 
             Dao<com.singular.barrister.Database.Tables.WebSite.ImportantLink, Integer> importantLinkIntegerDao;
@@ -107,6 +111,7 @@ public class ImportantLink extends AppCompatActivity {
             fragmentManager = getSupportFragmentManager();
             fragmentManager.popBackStack();
             frameLayout.setVisibility(View.GONE);
+            fetchList();
         }
     }
 
@@ -173,5 +178,25 @@ public class ImportantLink extends AppCompatActivity {
         return true;
     }
 
+    ImportantListAdapter importantListAdapter;
+
+    public void fetchList() {
+        if (linkList != null)
+            linkList.clear();
+        tempLinkList = getList();
+        linkList.addAll(tempLinkList);
+        if (linkList != null) {
+         /*   if (importantListAdapter != null)
+                importantListAdapter.notifyDataSetChanged();
+            else {*/
+            importantListAdapter = new ImportantListAdapter(getApplicationContext(), linkList);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+            mRecycleView.setLayoutManager(linearLayoutManager);
+            mRecycleView.setAdapter(importantListAdapter);
+            //   }
+            mRecycleView.setVisibility(View.VISIBLE);
+        }
+
+    }
 
 }

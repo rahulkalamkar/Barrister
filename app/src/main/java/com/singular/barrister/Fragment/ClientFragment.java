@@ -117,7 +117,12 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
 
     public void getClientList() {
         if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
-            progressBar.setVisibility(View.VISIBLE);
+            List<BaseClientTable> list = getLocalData();
+            if (list != null)
+                convertAndDisplay(list);
+
+            if (clientListAdapter == null)
+                progressBar.setVisibility(View.VISIBLE);
             retrofitManager.getClientList(this, new UserPreferance(getActivity()).getToken());
         } else {
             Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
@@ -169,12 +174,16 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         if (response != null && response instanceof ClientResponse) {
             ClientResponse clientResponse = (ClientResponse) response;
             if (clientResponse.getData().getClient() != null) {
+                clientList.clear();
                 clientList.addAll(clientResponse.getData().getClient());
                 saveClient();
-                clientListAdapter = new ClientListAdapter(getActivity(), clientList, this);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                mRecycleView.setLayoutManager(linearLayoutManager);
-                mRecycleView.setAdapter(clientListAdapter);
+                if (clientListAdapter == null) {
+                    clientListAdapter = new ClientListAdapter(getActivity(), clientList, this);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    mRecycleView.setLayoutManager(linearLayoutManager);
+                    mRecycleView.setAdapter(clientListAdapter);
+                } else
+                    clientListAdapter.notifyDataSetChanged();
                 progressBar.setVisibility(View.GONE);
             } else if (clientResponse.getError() != null && clientResponse.getError().getStatus_code() == 401) {
                 Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();

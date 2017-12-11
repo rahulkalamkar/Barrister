@@ -15,7 +15,7 @@ public class CourtSubDistrict {
     int id;
 
 
-    @DatabaseField(columnName = "subDistrictId", unique = true)
+    @DatabaseField(columnName = "subDistrictId")
     String subDistrictId;
 
     @DatabaseField(columnName = "parent_id", canBeNull = true)

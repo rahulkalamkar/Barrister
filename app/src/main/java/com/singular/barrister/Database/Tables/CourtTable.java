@@ -17,7 +17,6 @@ public class CourtTable {
     @DatabaseField(columnName = "id", generatedId = true)
     int id;
 
-
     @DatabaseField(columnName = "court_id", canBeNull = true, unique = true)
     String court_id;
 
