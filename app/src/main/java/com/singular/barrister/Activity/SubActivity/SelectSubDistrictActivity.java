@@ -113,6 +113,7 @@ public class SelectSubDistrictActivity extends AppCompatActivity implements IDat
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if(recycleAdapter!=null)
                 recycleAdapter.getFilter().filter(newText);
                 return true;
             }

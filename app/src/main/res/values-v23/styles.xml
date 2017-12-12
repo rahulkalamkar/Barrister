@@ -3,12 +3,17 @@
 
     <style name="Theme.MyTheme.TimePicker" parent="android:Widget.Material.Light.TimePicker">
         <item name="android:timePickerMode">clock</item>
-        <item name="android:headerBackground">@color/colorPrimary</item><!--
-        <item name="android:numbersInnerTextColor">#00ffff</item>-->
-<!--
-        <item name="android:numbersTextColor">#ff0000</item>-->
+        <item name="android:headerBackground">@color/colorPrimary</item>
         <item name="android:numbersSelectorColor">@color/colorPrimary_Refer</item>
-        <item name="android:numbersBackgroundColor">@color/colorPrimary</item><!--
-        <item name="android:amPmTextColor">#00ff00</item>-->
+        <item name="android:numbersBackgroundColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="MyDatePickerStyle" parent="@android:style/Widget.Material.Light.DatePicker">
+        <item name="android:headerBackground">@color/colorPrimary</item>
+        <item name="android:calendarTextColor">@color/colorPrimary</item>
+        <item name="android:dayOfWeekBackground">@color/colorPrimary</item>
+        <item name="android:yearListSelectorColor">@color/textColorFaint</item>
+        <item name="android:datePickerMode">calendar</item>
+        <item name="android:minDate">01/01/2000</item>
     </style>
 </resources>

@@ -124,6 +124,7 @@ public class SelectDistrictActivity extends AppCompatActivity implements StateSe
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if(recycleAdapter!=null)
                 recycleAdapter.getFilter().filter(newText);
                 return true;
             }

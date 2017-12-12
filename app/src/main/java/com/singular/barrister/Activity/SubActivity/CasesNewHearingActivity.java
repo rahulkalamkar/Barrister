@@ -1,7 +1,7 @@
 package com.singular.barrister.Activity.SubActivity;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -21,14 +21,16 @@ import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.R;
 import com.singular.barrister.RetrofitManager.RetrofitManager;
 import com.singular.barrister.Util.DatePickerWindow;
+import com.singular.barrister.Util.DateTimeWindow;
 import com.singular.barrister.Util.IDataChangeListener;
 import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.Calendar;
 
-public class CasesNewHearingActivity extends AppCompatActivity implements CaseListeners, IDataChangeListener<IModel> {
+public class CasesNewHearingActivity extends AppCompatActivity implements CaseListeners, IDataChangeListener<IModel>, DatePickerDialog.OnDateSetListener {
 
     TextInputEditText edtDate, edtCaseNotes;
     ProgressBar mProgressBar;
@@ -61,7 +63,7 @@ public class CasesNewHearingActivity extends AppCompatActivity implements CaseLi
         edtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerWindow datePickerWindow = new DatePickerWindow(getApplicationContext(), edtDate, CasesNewHearingActivity.this);
+                DateTimeWindow datePickerWindow = new DateTimeWindow(CasesNewHearingActivity.this, CasesNewHearingActivity.this);
             }
         });
     }
@@ -138,6 +140,11 @@ public class CasesNewHearingActivity extends AppCompatActivity implements CaseLi
 
     @Override
     public void onDataFailed(WebServiceError error) {
+
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
 
     }
 }

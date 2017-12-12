@@ -71,7 +71,8 @@ public class ProfileActivity extends AppCompatActivity implements IDataChangeLis
 
     public void getProfile() {
         if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
-            mProgressBar.setVisibility(View.VISIBLE);
+            setDataWithoutNetwork();
+            //mProgressBar.setVisibility(View.VISIBLE);
             retrofitManager.getProfile(this, new UserPreferance(getApplicationContext()).getToken());
         } else {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
@@ -139,8 +140,7 @@ public class ProfileActivity extends AppCompatActivity implements IDataChangeLis
 
     public void updateProfile() {
         if (!TextUtils.isEmpty(editProfileFragment.getFirstName()) &&
-                !TextUtils.isEmpty(editProfileFragment.getLastName()) &&
-                !TextUtils.isEmpty(editProfileFragment.getAddress())) {
+                !TextUtils.isEmpty(editProfileFragment.getLastName())) {
             if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
                 mProgressBar.setVisibility(View.VISIBLE);
                 retrofitManager = new RetrofitManager();

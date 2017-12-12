@@ -74,16 +74,18 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
             progressBar.setVisibility(View.VISIBLE);
             retrofitManager.getTodayCases(this, new UserPreferance(getActivity()).getToken());
         } else {
-            List<TodayCaseTable> list = new TodayCaseQuery(getActivity()).getList();
-            if (list != null) {
-                caseList = (ArrayList<Case>) new TodayCaseQuery(getActivity()).convertListToOnLineList(list);
-                TodaysCaseAdapter todaysCaseAdapter = new TodaysCaseAdapter(getActivity(), caseList);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                mRecyclerView.setLayoutManager(linearLayoutManager);
-                mRecyclerView.setAdapter(todaysCaseAdapter);
-                progressBar.setVisibility(View.GONE);
+            if (getActivity() != null) {
+                List<TodayCaseTable> list = new TodayCaseQuery(getActivity()).getList();
+                if (list != null) {
+                    caseList = (ArrayList<Case>) new TodayCaseQuery(getActivity()).convertListToOnLineList(list);
+                    TodaysCaseAdapter todaysCaseAdapter = new TodaysCaseAdapter(getActivity(), caseList);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    mRecyclerView.setLayoutManager(linearLayoutManager);
+                    mRecyclerView.setAdapter(todaysCaseAdapter);
+                    progressBar.setVisibility(View.GONE);
+                }
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -104,31 +106,39 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
             TodayResponse todayResponse = (TodayResponse) response;
             if (todayResponse.getData().getCaseList() != null) {
                 caseList.addAll(todayResponse.getData().getCaseList());
-                TodaysCaseAdapter todaysCaseAdapter = new TodaysCaseAdapter(getActivity(), caseList);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                mRecyclerView.setLayoutManager(linearLayoutManager);
-                mRecyclerView.setAdapter(todaysCaseAdapter);
-                progressBar.setVisibility(View.GONE);
-                if (caseList != null && caseList.size() > 0) {
-                    TodayCaseQuery caseQuery = new TodayCaseQuery(getActivity());
-                    caseQuery.addList(caseList);
+                if (getActivity() != null) {
+                    TodaysCaseAdapter todaysCaseAdapter = new TodaysCaseAdapter(getActivity(), caseList);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    mRecyclerView.setLayoutManager(linearLayoutManager);
+                    mRecyclerView.setAdapter(todaysCaseAdapter);
+                    progressBar.setVisibility(View.GONE);
+                    if (caseList != null && caseList.size() > 0) {
+                        TodayCaseQuery caseQuery = new TodayCaseQuery(getActivity());
+                        caseQuery.addList(caseList);
+                    } else {
+                        showError();
+                    }
                 } else {
                     showError();
                 }
             } else if (todayResponse.getError() != null && todayResponse.getError().getStatus_code() == 401) {
+                if (getActivity() != null) {
+                    Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
+                    new UserPreferance(getActivity()).logOut();
+                    Intent intent = new Intent(getActivity(), LandingScreen.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+            } else
+                showError();
+        } else {
+            if (getActivity() != null) {
                 Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
                 new UserPreferance(getActivity()).logOut();
                 Intent intent = new Intent(getActivity(), LandingScreen.class);
                 startActivity(intent);
                 getActivity().finish();
-            } else
-                showError();
-        } else {
-            Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
-            new UserPreferance(getActivity()).logOut();
-            Intent intent = new Intent(getActivity(), LandingScreen.class);
-            startActivity(intent);
-            getActivity().finish();
+            }
         }
     }
 

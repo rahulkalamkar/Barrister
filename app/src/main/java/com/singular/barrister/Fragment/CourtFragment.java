@@ -89,12 +89,14 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
                 progressBar.setVisibility(View.VISIBLE);
                 retrofitManager.getCourtList(this, new UserPreferance(getActivity()).getToken());
             } else {
-                List<CourtTable> list = getAllCourt();
-                if (list != null) {
-                    convertList(list);
-                }
+                if (getActivity() != null) {
+                    List<CourtTable> list = getAllCourt();
+                    if (list != null) {
+                        convertList(list);
+                    }
 
-                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                }
             }
         } catch (Exception e) {
         }
@@ -112,16 +114,17 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
             if (list != null) {
                 convertList(list);
             }
-            if (courtListAdapter == null)
+            if (courtList != null && courtList.size() == 0)
                 progressBar.setVisibility(View.VISIBLE);
             retrofitManager.getCourtList(this, new UserPreferance(getActivity()).getToken());
         } else {
-            List<CourtTable> list = getAllCourt();
-            if (list != null) {
-                convertList(list);
+            if (getActivity() != null) {
+                List<CourtTable> list = getAllCourt();
+                if (list != null) {
+                    convertList(list);
+                }
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
-
-            Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -139,29 +142,35 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
             if (courtResponse.getData().getCourt() != null) {
                 courtList.clear();
                 courtList.addAll(courtResponse.getData().getCourt());
-                if (courtListAdapter == null) {
-                    courtListAdapter = new CourtListAdapter(getActivity(), courtList, this);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    mRecycleView.setLayoutManager(linearLayoutManager);
-                    mRecycleView.setAdapter(courtListAdapter);
-                } else
-                    courtListAdapter.notifyDataSetChanged();
-                saveLocally();
-                progressBar.setVisibility(View.GONE);
+                if (getActivity() != null) {
+                    if (courtListAdapter == null) {
+                        courtListAdapter = new CourtListAdapter(getActivity(), courtList, this);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                        mRecycleView.setLayoutManager(linearLayoutManager);
+                        mRecycleView.setAdapter(courtListAdapter);
+                    } else
+                        courtListAdapter.notifyDataSetChanged();
+                    saveLocally();
+                    progressBar.setVisibility(View.GONE);
+                }
             } else if (courtResponse.getError() != null && courtResponse.getError().getStatus_code() == 401) {
+                if (getActivity() != null) {
+                    Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
+                    new UserPreferance(getActivity()).logOut();
+                    Intent intent = new Intent(getActivity(), LandingScreen.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+            } else
+                showError();
+        } else {
+            if (getActivity() != null) {
                 Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
                 new UserPreferance(getActivity()).logOut();
                 Intent intent = new Intent(getActivity(), LandingScreen.class);
                 startActivity(intent);
                 getActivity().finish();
-            } else
-                showError();
-        } else {
-            Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
-            new UserPreferance(getActivity()).logOut();
-            Intent intent = new Intent(getActivity(), LandingScreen.class);
-            startActivity(intent);
-            getActivity().finish();
+            }
         }
     }
 
@@ -171,9 +180,10 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
     }
 
     public List<CourtTable> getAllCourt() {
-        Dao<CourtTable, Integer> courtTableDao;
+        Dao<CourtTable, Integer> courtTableDao = null;
         try {
-            courtTableDao = getHelper(getActivity()).getCourtTableDao();
+            if (getActivity() != null && getHelper(getActivity()) != null)
+                courtTableDao = getHelper(getActivity()).getCourtTableDao();
             return courtTableDao.queryForAll();
         } catch (SQLException e) {
             return null;
@@ -206,11 +216,12 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
 
             courtList.add(courtData);
         }
-
-        courtListAdapter = new CourtListAdapter(getActivity(), courtList, this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        mRecycleView.setLayoutManager(linearLayoutManager);
-        mRecycleView.setAdapter(courtListAdapter);
+        if (getActivity() != null) {
+            courtListAdapter = new CourtListAdapter(getActivity(), courtList, this);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            mRecycleView.setLayoutManager(linearLayoutManager);
+            mRecycleView.setAdapter(courtListAdapter);
+        }
         progressBar.setVisibility(View.GONE);
     }
 
@@ -249,8 +260,10 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
     public void deleteCourt(CourtTable courtTable) {
         Dao<CourtTable, Integer> courtTableDao;
         try {
-            courtTableDao = getHelper(getActivity()).getCourtTableDao();
-            courtTableDao.delete(courtTable);
+            if (getActivity() != null && getHelper(getActivity()) != null) {
+                courtTableDao = getHelper(getActivity()).getCourtTableDao();
+                courtTableDao.delete(courtTable);
+            }
             Log.e("Court Table", "delete");
         } catch (SQLException e) {
             Log.e("Court table", "" + e);
@@ -261,8 +274,10 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
         List<CourtTable> list = null;
         Dao<CourtTable, Integer> courtTableIntegerDao;
         try {
-            courtTableIntegerDao = getHelper(getActivity()).getCourtTableDao();
-            list = courtTableIntegerDao.queryForEq("court_id", courtData.getId());
+            if (getActivity() != null && getHelper(getActivity()) != null) {
+                courtTableIntegerDao = getHelper(getActivity()).getCourtTableDao();
+                list = courtTableIntegerDao.queryForEq("court_id", courtData.getId());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -292,13 +307,15 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
 
         Dao<CourtTable, Integer> courtTableDao;
         try {
-            courtTableDao = getHelper(getActivity()).getCourtTableDao();
-            if (update) {
-                courtTableDao.update(courtTable);
-                Log.e("Court Table", "update");
-            } else {
-                courtTableDao.create(courtTable);
-                Log.e("Court Table", "inserted");
+            if (getActivity() != null && getHelper(getActivity()) != null) {
+                courtTableDao = getHelper(getActivity()).getCourtTableDao();
+                if (update) {
+                    courtTableDao.update(courtTable);
+                    Log.e("Court Table", "update");
+                } else {
+                    courtTableDao.create(courtTable);
+                    Log.e("Court Table", "inserted");
+                }
             }
         } catch (SQLException e) {
             Log.e("Court table", "" + e);
@@ -308,7 +325,7 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
     DatabaseHelper databaseHelper;
 
     private DatabaseHelper getHelper(Context context) {
-        if (databaseHelper == null) {
+        if (databaseHelper == null && context!=null) {
             databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);
         }
         return databaseHelper;
@@ -336,18 +353,12 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0, v.getId(), 0, "Delete");
-        menu.add(0, v.getId(), 0, "Call");
-        menu.add(0, v.getId(), 0, "SMS");
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        if (item.getTitle() == "Call") {
-            Toast.makeText(getActivity(), "calling code", Toast.LENGTH_LONG).show();
-        } else if (item.getTitle() == "SMS") {
-            Toast.makeText(getActivity(), "sending sms code", Toast.LENGTH_LONG).show();
-        } else if (item.getTitle() == "Delete") {
-            if (selectedItem != null) {
+        if (item.getTitle() == "Delete") {
+            if (selectedItem != null && getActivity() != null) {
                 retrofitManager.deleteCourt(new UserPreferance(getActivity()).getToken(), selectedItem.getId());
                 courtList.remove(selectedItem);
                 courtListAdapter.notifyDataSetChanged();
@@ -362,11 +373,13 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
 
     @Override
     public void onItemClick(CourtData court) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Court", (Serializable) court);
-        Intent intent = new Intent(getActivity(), DisplayCourtActivity.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        if (getActivity() != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Court", (Serializable) court);
+            Intent intent = new Intent(getActivity(), DisplayCourtActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
     }
 
     @Override

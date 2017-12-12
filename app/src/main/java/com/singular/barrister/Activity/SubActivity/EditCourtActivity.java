@@ -1,11 +1,13 @@
 package com.singular.barrister.Activity.SubActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -185,18 +188,18 @@ public class EditCourtActivity extends AppCompatActivity implements IDataChangeL
         edtState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (stateList != null) {
-                    if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("State", stateList);
-                        Intent intent = new Intent(getApplicationContext(), SelectStateActivity.class);
-                        intent.putExtras(bundle);
-                        startActivityForResult(intent, 1);
-                    } else {
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-                    }
+                if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+                    //   if (stateList != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("State", stateList);
+                    Intent intent = new Intent(getApplicationContext(), SelectStateActivity.class);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, 1);
+               /*     } else {
+                        getStateList();
+                    }*/
                 } else {
-                    getStateList();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -470,72 +473,36 @@ public class EditCourtActivity extends AppCompatActivity implements IDataChangeL
     PopupWindow courtTypeWindow;
 
     public void selectCourtType(View layout) {
-        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.activity_select_state, null);
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(EditCourtActivity.this);
+        builderSingle.setTitle("Court Type");
 
-        courtTypeWindow = new PopupWindow(
-                customView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        );
-        if (Build.VERSION.SDK_INT >= 21) {
-            courtTypeWindow.setElevation(5.0f);
-        }
-        LinearLayout linearLayout = (LinearLayout) customView.findViewById(R.id.layout);
-        linearLayout.setBackgroundColor(Color.parseColor("#99777777"));
-        RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recycleView);
-        SimpleRecycleAdapter simpleRecycleAdapter = new SimpleRecycleAdapter(getApplicationContext(), courtTypeList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(simpleRecycleAdapter);
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(EditCourtActivity.this, android.R.layout.select_dialog_item);
+        arrayAdapter.addAll(getList());
 
-        courtTypeWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String strName = arrayAdapter.getItem(which);
+                selectedCourtType(strName);
+            }
+        });
+        builderSingle.show();
     }
 
-    public class SimpleRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        Context context;
-        ArrayList<String> list;
-
-        public SimpleRecycleAdapter(Context context, ArrayList<String> list) {
-            this.context = context;
-            this.list = list;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.simple_list_item, parent, false);
-            return new SimpleRecycleAdapter.SimpleViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof SimpleRecycleAdapter.SimpleViewHolder) {
-                SimpleRecycleAdapter.SimpleViewHolder simpleViewHolder = (SimpleRecycleAdapter.SimpleViewHolder) holder;
-                simpleViewHolder.txtName.setText(list.get(position));
+    public ArrayList<String> getList() {
+        ArrayList<String> list = new ArrayList<>();
+        if (courtTypeList != null && courtTypeList.size() != 0) {
+            for (String str : courtTypeList) {
+                list.add(str);
             }
+        } else {
+            list.add("Trial Court");
+            list.add("Appeal Court");
+            list.add("High Court");
+            list.add("2nd Appeal Court");
+            list.add("Supreme Court");
         }
-
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
-
-        public class SimpleViewHolder extends RecyclerView.ViewHolder {
-            TextView txtName;
-
-            public SimpleViewHolder(View itemView) {
-                super(itemView);
-                txtName = (TextView) itemView.findViewById(R.id.textViewName);
-
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        selectedCourtType(list.get(getAdapterPosition()));
-                        courtTypeWindow.dismiss();
-                    }
-                });
-            }
-        }
+        return list;
     }
 
     public void selectedCourtType(String name) {

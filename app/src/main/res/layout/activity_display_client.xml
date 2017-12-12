@@ -59,10 +59,10 @@
                         android:id="@+id/EditTextFirstName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
                         android:hint="First name"
+                        android:maxLines="1"
                         android:paddingLeft="0dp"
+                        android:singleLine="true"
                         android:textColor="#777777"
                         android:textSize="16sp" />
 
@@ -79,10 +79,10 @@
                         android:id="@+id/EditTextLastName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
                         android:hint="Last name"
+                        android:maxLines="1"
                         android:paddingLeft="0dp"
+                        android:singleLine="true"
                         android:textColor="#777777"
                         android:textSize="16sp" />
 
@@ -120,23 +120,48 @@
                 </LinearLayout>
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/fab_margin"
-                    android:text="Phone"
-                    android:textColor="#000000"
-                    android:textSize="16sp" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_toLeftOf="@+id/imageViewCall"
+                        android:layout_toStartOf="@+id/imageViewCall"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/fab_margin"
+                            android:text="Phone"
+                            android:textColor="#000000"
+                            android:textSize="16sp" />
 
 
-                <TextView
-                    android:id="@+id/textViewNumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="Client number"
-                    android:textColor="#777777"
-                    android:textSize="16sp" />
+                        <TextView
+                            android:id="@+id/textViewNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="Client number"
+                            android:textColor="#777777"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/imageViewCall"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="@dimen/fab_margin"
+                        android:src="@mipmap/ic_green_contact_icon" />
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -144,23 +169,48 @@
                     android:layout_marginTop="@dimen/fab_margin"
                     android:background="#55777777" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/fab_margin"
-                    android:text="Email Id"
-                    android:textColor="#000000"
-                    android:textSize="16sp" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_toLeftOf="@+id/imageView"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/fab_margin"
+                            android:text="Email Id"
+                            android:textColor="#000000"
+                            android:textSize="16sp" />
 
 
-                <TextView
-                    android:id="@+id/textViewEmailId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="email id"
-                    android:textColor="#777777"
-                    android:textSize="16sp" />
+                        <TextView
+                            android:id="@+id/textViewEmailId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="email id"
+                            android:textColor="#777777"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/imageViewEmail"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="@dimen/fab_margin"
+                        android:src="@mipmap/ic_green_mail_icon" />
+                </RelativeLayout>
+
 
                 <View
                     android:layout_width="match_parent"
@@ -175,7 +225,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </RelativeLayout>
 
     </LinearLayout>

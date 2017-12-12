@@ -1,6 +1,7 @@
 package com.singular.barrister.Activity.SubActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ public class DisplayClientActivity extends AppCompatActivity implements IDataCha
     ProgressBar mProgressBar;
     FrameLayout mFragmentContainer;
     RetrofitManager retrofitManager;
+    ImageView imgCall, imgEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,8 @@ public class DisplayClientActivity extends AppCompatActivity implements IDataCha
         txtNumber = (TextView) findViewById(R.id.textViewNumber);
         txtEmailId = (TextView) findViewById(R.id.textViewEmailId);
         mFragmentContainer = (FrameLayout) findViewById(R.id.fragmentContainer);
-
+        imgCall = (ImageView) findViewById(R.id.imageViewCall);
+        imgEmail = (ImageView) findViewById(R.id.imageViewEmail);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         linearLayout = (LinearLayout) findViewById(R.id.profileContainer);
 
@@ -64,6 +68,33 @@ public class DisplayClientActivity extends AppCompatActivity implements IDataCha
         layoutEditContainer = (LinearLayout) findViewById(R.id.EditContainer);
         layoutNameContainer = (LinearLayout) findViewById(R.id.NameContainer);
         setData();
+
+        imgEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendEmail(client.getClient().getEmail());
+            }
+        });
+
+        imgCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String phone = "";
+                phone = client.getClient().getCountry_code() + " " + client.getClient().getMobile();
+                if (!TextUtils.isEmpty(phone)) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    public void sendEmail(String email) {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", email, null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 
     public void setData() {

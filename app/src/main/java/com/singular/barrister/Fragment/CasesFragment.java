@@ -2,12 +2,15 @@ package com.singular.barrister.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
@@ -42,6 +45,7 @@ import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,16 +89,18 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
                 progressBar.setVisibility(View.VISIBLE);
                 retrofitManager.getCasesList(this, new UserPreferance(getActivity()).getToken());
             } else {
-                List<CaseTable> list = new CaseQuery(getActivity()).getList();
-                if (list != null) {
-                    caseList = (ArrayList<Case>) new CaseQuery(getActivity()).convertListToOnLineList(list);
-                    courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    mRecycleView.setLayoutManager(linearLayoutManager);
-                    mRecycleView.setAdapter(courtListAdapter);
-                    progressBar.setVisibility(View.GONE);
+                if (getActivity() != null) {
+                    List<CaseTable> list = new CaseQuery(getActivity()).getList();
+                    if (list != null) {
+                        caseList = (ArrayList<Case>) new CaseQuery(getActivity()).convertListToOnLineList(list);
+                        courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                        mRecycleView.setLayoutManager(linearLayoutManager);
+                        mRecycleView.setAdapter(courtListAdapter);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
 
@@ -112,20 +118,22 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
                 mRecycleView.setAdapter(courtListAdapter);
                 progressBar.setVisibility(View.GONE);
             }
-            if (courtListAdapter == null)
+            if (caseList != null && caseList.size() == 0)
                 progressBar.setVisibility(View.VISIBLE);
             retrofitManager.getCasesList(this, new UserPreferance(getActivity()).getToken());
         } else {
-            List<CaseTable> list = new CaseQuery(getActivity()).getList();
-            if (list != null) {
-                caseList = (ArrayList<Case>) new CaseQuery(getActivity()).convertListToOnLineList(list);
-                courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                mRecycleView.setLayoutManager(linearLayoutManager);
-                mRecycleView.setAdapter(courtListAdapter);
-                progressBar.setVisibility(View.GONE);
+            if (getActivity() != null) {
+                List<CaseTable> list = new CaseQuery(getActivity()).getList();
+                if (list != null) {
+                    caseList = (ArrayList<Case>) new CaseQuery(getActivity()).convertListToOnLineList(list);
+                    courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    mRecycleView.setLayoutManager(linearLayoutManager);
+                    mRecycleView.setAdapter(courtListAdapter);
+                    progressBar.setVisibility(View.GONE);
+                }
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -156,34 +164,41 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
                 caseList.clear();
                 caseList.addAll(casesResponse.getData().getCaseList());
                 if (courtListAdapter == null) {
-                    courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    mRecycleView.setLayoutManager(linearLayoutManager);
-                    mRecycleView.setAdapter(courtListAdapter);
-                    progressBar.setVisibility(View.GONE);
+                    if (getActivity() != null) {
+                        courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                        mRecycleView.setLayoutManager(linearLayoutManager);
+                        mRecycleView.setAdapter(courtListAdapter);
+                        progressBar.setVisibility(View.GONE);
+                    }
                 } else
                     courtListAdapter.notifyDataSetChanged();
-                if (caseList != null && caseList.size() > 0) {
+                if (caseList != null && caseList.size() > 0 && getActivity() != null) {
                     CaseQuery caseQuery = new CaseQuery(getActivity());
                     caseQuery.addList(caseList);
                 } else {
                     showError();
                 }
             } else if (casesResponse.getError() != null && casesResponse.getError().getStatus_code() == 401) {
+                if (getActivity() != null) {
+                    Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
+                    new UserPreferance(getActivity()).logOut();
+                    Intent intent = new Intent(getActivity(), LandingScreen.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+            } else
+                showError();
+        } else {
+            if (getActivity() != null) {
                 Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
                 new UserPreferance(getActivity()).logOut();
                 Intent intent = new Intent(getActivity(), LandingScreen.class);
                 startActivity(intent);
                 getActivity().finish();
-            } else
-                showError();
-        } else {
-            Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
-            new UserPreferance(getActivity()).logOut();
-            Intent intent = new Intent(getActivity(), LandingScreen.class);
-            startActivity(intent);
-            getActivity().finish();
+            }
         }
+        progressBar.setVisibility(View.GONE);
     }
 
     public void onSearch(String text) {
@@ -194,11 +209,13 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
 
     @Override
     public void onItemClick(Case aCase) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Case", aCase);
-        Intent intent = new Intent(getActivity(), DisplayCaseActivity.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        if (getActivity() != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Case", aCase);
+            Intent intent = new Intent(getActivity(), DisplayCaseActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
     }
 
     public Case selectedItem;
@@ -220,62 +237,64 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle() == "Call") {
-            Toast.makeText(getActivity(), "calling code", Toast.LENGTH_LONG).show();
+            String phone = "";
+            phone = selectedItem.getClient().getCountry_code() + "" + selectedItem.getClient().getMobile();
+            if (!TextUtils.isEmpty(phone)) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                startActivity(intent);
+            }
         } else if (item.getTitle() == "SMS") {
-            Toast.makeText(getActivity(), "sending sms code", Toast.LENGTH_LONG).show();
+            String phone = "";
+            phone = selectedItem.getClient().getCountry_code() + "" + selectedItem.getClient().getMobile();
+            sendSMS(phone);
         } else if (item.getTitle() == "Delete") {
-            retrofitManager.deleteCase(new UserPreferance(getActivity()).getToken(), selectedItem.getId());
-            caseList.remove(selectedItem);
-            courtListAdapter.notifyDataSetChanged();
+            if (getActivity() != null) {
+                retrofitManager.deleteCase(new UserPreferance(getActivity()).getToken(), selectedItem.getId());
+                caseList.remove(selectedItem);
+                courtListAdapter.notifyDataSetChanged();
+            }
         } else {
             return false;
         }
         return true;
     }
 
-    public void showMenu(final Case aCase) {
-        LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.simple_list, null);
+    public void sendSMS(String number) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) // At least KitKat
+        {
+            try {
 
-        final PopupWindow menuWindow = new PopupWindow(
-                customView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        );
-        menuWindow.setOutsideTouchable(false);
-        menuWindow.setFocusable(true);
-        if (Build.VERSION.SDK_INT >= 21) {
-            menuWindow.setElevation(5.0f);
+                String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(getActivity()); // Need to change the build to API 19
+
+                Intent sendIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + Uri.encode(number)));
+                sendIntent.setType("text/plain");
+
+                if (defaultSmsPackageName != null)// Can be null in case that there is no default, then the user would be able to choose
+                // any app that support this intent.
+                {
+                    sendIntent.setPackage(defaultSmsPackageName);
+                }
+                startActivity(sendIntent);
+
+            } catch (Exception e) {
+                String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(getActivity()); // Need to change the build to API 19
+
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.setType("text/plain");
+
+                if (defaultSmsPackageName != null)// Can be null in case that there is no default, then the user would be able to choose
+                // any app that support this intent.
+                {
+                    sendIntent.setPackage(defaultSmsPackageName);
+                }
+                startActivity(sendIntent);
+            }
+        } else // For early versions, do what worked for you before.
+        {
+            Intent smsIntent = new Intent(android.content.Intent.ACTION_VIEW);
+            smsIntent.setType("vnd.android-dir/mms-sms");
+            smsIntent.putExtra("address", number);
+            startActivity(smsIntent);
         }
-
-        TextView textViewDelete = (TextView) customView.findViewById(R.id.menuDeleteButton);
-        TextView textViewCall = (TextView) customView.findViewById(R.id.menuCallButton);
-        TextView textViewMessage = (TextView) customView.findViewById(R.id.menuMessageButton);
-
-        textViewDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                retrofitManager.deleteCase(new UserPreferance(getActivity()).getToken(), aCase.getId());
-                caseList.remove(aCase);
-                courtListAdapter.notifyDataSetChanged();
-                menuWindow.dismiss();
-            }
-        });
-
-        textViewCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                menuWindow.dismiss();
-            }
-        });
-
-        textViewMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                menuWindow.dismiss();
-            }
-        });
-
-        menuWindow.showAtLocation(mRecycleView, Gravity.CENTER, 0, 0);
     }
 }

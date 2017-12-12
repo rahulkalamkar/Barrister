@@ -49,6 +49,7 @@ dependencies {
     compile 'com.android.support:support-v4:26.+'
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'com.j256.ormlite:ormlite-core:4.48'
+    compile 'com.wdullaer:materialdatetimepicker:2.3.0'
 
    // compile 'com.google.android.gms:play-services-auth-api-phone:11.6.0'
   //  compile 'com.google.android.gms:play-services-auth:11.6.0'

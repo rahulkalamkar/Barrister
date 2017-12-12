@@ -45,7 +45,7 @@ public class CaseQuery {
     }
 
     private DatabaseHelper getHelper(Context context) {
-        if (databaseHelper == null) {
+        if (databaseHelper == null && context != null) {
             databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);
         }
         return databaseHelper;
@@ -72,10 +72,12 @@ public class CaseQuery {
 
     public boolean checkCase(Case aCase) {
         List<CaseTable> list = null;
-        Dao<CaseTable, Integer> caseTableIntegerDao;
+        Dao<CaseTable, Integer> caseTableIntegerDao = null;
         try {
-            caseTableIntegerDao = getHelper(context).getACaseTableDao();
-            list = caseTableIntegerDao.queryForEq("case_id", aCase.getId());
+            if (context != null && getHelper(context) != null) {
+                caseTableIntegerDao = getHelper(context).getACaseTableDao();
+                list = caseTableIntegerDao.queryForEq("case_id", aCase.getId());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             Log.e("Case table list", "" + e);
@@ -95,9 +97,11 @@ public class CaseQuery {
 
         Dao<CaseTable, Integer> caseTableIntegerDao;
         try {
-            caseTableIntegerDao = getHelper(context).getACaseTableDao();
-            caseTableIntegerDao.update(caseTable);
-            Log.e("Case table", "updated");
+            if (context != null && getHelper(context) != null) {
+                caseTableIntegerDao = getHelper(context).getACaseTableDao();
+                caseTableIntegerDao.update(caseTable);
+                Log.e("Case table", "updated");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             Log.e("Case table", "" + e.getMessage());
@@ -129,9 +133,11 @@ public class CaseQuery {
     public void deleteCase(CaseTable caseTable) {
         Dao<CaseTable, Integer> caseTableIntegerDao;
         try {
-            caseTableIntegerDao = getHelper(context).getACaseTableDao();
-            caseTableIntegerDao.delete(caseTable);
-            Log.e("Case table", "deleted");
+            if (context != null && getHelper(context) != null) {
+                caseTableIntegerDao = getHelper(context).getACaseTableDao();
+                caseTableIntegerDao.delete(caseTable);
+                Log.e("Case table", "deleted");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             Log.e("Case table", "" + e.getMessage());
@@ -150,9 +156,11 @@ public class CaseQuery {
 
         Dao<CaseTable, Integer> caseTableIntegerDao;
         try {
-            caseTableIntegerDao = getHelper(context).getACaseTableDao();
-            caseTableIntegerDao.create(caseTable);
-            Log.e("Case table", "inserted");
+            if (context != null && getHelper(context) != null) {
+                caseTableIntegerDao = getHelper(context).getACaseTableDao();
+                caseTableIntegerDao.create(caseTable);
+                Log.e("Case table", "inserted");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             Log.e("Case table", "" + e.getMessage());
@@ -163,9 +171,11 @@ public class CaseQuery {
         List<CaseTable> list = null;
         Dao<CaseTable, Integer> caseTableIntegerDao;
         try {
-            caseTableIntegerDao = getHelper(context).getACaseTableDao();
-            list = caseTableIntegerDao.queryForAll();
-            Log.e("Case table list", "list" + list.size());
+            if (context != null && getHelper(context) != null) {
+                caseTableIntegerDao = getHelper(context).getACaseTableDao();
+                list = caseTableIntegerDao.queryForAll();
+                Log.e("Case table list", "list" + list.size());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             Log.e("Case table list", "" + e);
@@ -309,8 +319,10 @@ public class CaseQuery {
         Dao<CasePerson, Integer> casePersonIntegerDao;
         CasePerson casePerson = new CasePerson(persons.getCase_id(), persons.getOpp_name(), persons.getMobile(), persons.getCountry_code(), persons.getType());
         try {
-            casePersonIntegerDao = getHelper(context).getACasePersonDao();
-            casePersonIntegerDao.create(casePerson);
+            if (context != null && getHelper(context) != null) {
+                casePersonIntegerDao = getHelper(context).getACasePersonDao();
+                casePersonIntegerDao.create(casePerson);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -321,8 +333,10 @@ public class CaseQuery {
         List<CasePerson> casePersons = null;
         Dao<CasePerson, Integer> casePersonIntegerDao;
         try {
-            casePersonIntegerDao = getHelper(context).getACasePersonDao();
-            casePersons = casePersonIntegerDao.queryForEq("case_id", aCaseid);
+            if (context != null && getHelper(context) != null) {
+                casePersonIntegerDao = getHelper(context).getACasePersonDao();
+                casePersons = casePersonIntegerDao.queryForEq("case_id", aCaseid);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

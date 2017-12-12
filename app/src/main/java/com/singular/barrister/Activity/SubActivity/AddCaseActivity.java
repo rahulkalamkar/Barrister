@@ -62,7 +62,7 @@ import com.singular.barrister.Model.SimpleMessageResponse;
 import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.R;
 import com.singular.barrister.RetrofitManager.RetrofitManager;
-import com.singular.barrister.Util.DatePickerWindow;
+import com.singular.barrister.Util.DateTimeWindow;
 import com.singular.barrister.Util.IDataChangeListener;
 import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
@@ -177,7 +177,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         edtNextHearingDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerWindow datePickerWindow = new DatePickerWindow(getApplicationContext(), edtNextHearingDate, AddCaseActivity.this);
+                DateTimeWindow datePickerWindow = new DateTimeWindow(AddCaseActivity.this, AddCaseActivity.this);
                 datePickerWindow.showTimer(true);
             }
         });
@@ -196,7 +196,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             @Override
             public void onClick(View view) {
                 isForRegisterDate = true;
-                DatePickerWindow datePickerWindow = new DatePickerWindow(getApplicationContext(), edtCaseRegisterDate, AddCaseActivity.this);
+                DateTimeWindow datePickerWindow = new DateTimeWindow(AddCaseActivity.this, AddCaseActivity.this);
                 datePickerWindow.showTimer(true);
             }
         });
@@ -472,7 +472,16 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         } else if (response != null && response instanceof SimpleMessageResponse) {
             mProgressBar.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(), "Case added successFully", Toast.LENGTH_SHORT).show();
+            updateHomeScreen();
+            finish();
         }
+    }
+
+    public void updateHomeScreen() {
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.setAction("com.singular.barrister");
+        sendBroadcast(intent);
     }
 
     public void saveCaseType(ArrayList<CasesTypeData> caseTypeDataList) {

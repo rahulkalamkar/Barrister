@@ -3,8 +3,10 @@ package com.singular.barrister.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
@@ -105,10 +108,12 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
                 progressBar.setVisibility(View.VISIBLE);
                 retrofitManager.getClientList(this, new UserPreferance(getActivity()).getToken());
             } else {
-                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-                List<BaseClientTable> list = getLocalData();
-                if (list != null)
-                    convertAndDisplay(list);
+                if (getActivity() != null) {
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                    List<BaseClientTable> list = getLocalData();
+                    if (list != null)
+                        convertAndDisplay(list);
+                }
             }
         } catch (Exception e) {
 
@@ -121,14 +126,16 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             if (list != null)
                 convertAndDisplay(list);
 
-            if (clientListAdapter == null)
+            if (clientList != null && clientList.size() == 0)
                 progressBar.setVisibility(View.VISIBLE);
             retrofitManager.getClientList(this, new UserPreferance(getActivity()).getToken());
         } else {
-            Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
-            List<BaseClientTable> list = getLocalData();
-            if (list != null)
-                convertAndDisplay(list);
+            if (getActivity() != null) {
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                List<BaseClientTable> list = getLocalData();
+                if (list != null)
+                    convertAndDisplay(list);
+            }
         }
     }
 
@@ -149,11 +156,13 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             clientList.add(client);
         }
 
-        clientListAdapter = new ClientListAdapter(getActivity(), clientList, this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        mRecycleView.setLayoutManager(linearLayoutManager);
-        mRecycleView.setAdapter(clientListAdapter);
-        progressBar.setVisibility(View.GONE);
+        if (getActivity() != null) {
+            clientListAdapter = new ClientListAdapter(getActivity(), clientList, this);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            mRecycleView.setLayoutManager(linearLayoutManager);
+            mRecycleView.setAdapter(clientListAdapter);
+            progressBar.setVisibility(View.GONE);
+        }
 
     }
 
@@ -176,39 +185,47 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             if (clientResponse.getData().getClient() != null) {
                 clientList.clear();
                 clientList.addAll(clientResponse.getData().getClient());
-                saveClient();
-                if (clientListAdapter == null) {
-                    clientListAdapter = new ClientListAdapter(getActivity(), clientList, this);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    mRecycleView.setLayoutManager(linearLayoutManager);
-                    mRecycleView.setAdapter(clientListAdapter);
-                } else
-                    clientListAdapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
+                if (getActivity() != null) {
+                    saveClient();
+                    if (clientListAdapter == null) {
+                        clientListAdapter = new ClientListAdapter(getActivity(), clientList, this);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                        mRecycleView.setLayoutManager(linearLayoutManager);
+                        mRecycleView.setAdapter(clientListAdapter);
+                    } else
+                        clientListAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+                }
             } else if (clientResponse.getError() != null && clientResponse.getError().getStatus_code() == 401) {
+                if (getActivity() != null) {
+                    Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
+                    new UserPreferance(getActivity()).logOut();
+                    Intent intent = new Intent(getActivity(), LandingScreen.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+            } else
+                showError();
+        } else {
+            if (getActivity() != null) {
                 Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
                 new UserPreferance(getActivity()).logOut();
                 Intent intent = new Intent(getActivity(), LandingScreen.class);
                 startActivity(intent);
                 getActivity().finish();
-            } else
-                showError();
-        } else {
-            Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
-            new UserPreferance(getActivity()).logOut();
-            Intent intent = new Intent(getActivity(), LandingScreen.class);
-            startActivity(intent);
-            getActivity().finish();
+            }
         }
     }
 
     @Override
     public void onItemClick(Client client) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Client", client);
-        Intent intent = new Intent(getActivity(), DisplayClientActivity.class);
-        intent.putExtras(bundle);
-        getActivity().startActivity(intent);
+        if (getActivity() != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Client", client);
+            Intent intent = new Intent(getActivity(), DisplayClientActivity.class);
+            intent.putExtras(bundle);
+            getActivity().startActivity(intent);
+        }
     }
 
     private int newPosition;
@@ -232,73 +249,73 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle() == "Call") {
-            Toast.makeText(getActivity(), "calling code", Toast.LENGTH_LONG).show();
+            String phone = "";
+            phone = selectedClient.getClient().getCountry_code() + "" + selectedClient.getClient().getMobile();
+            if (!TextUtils.isEmpty(phone)) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                startActivity(intent);
+            }
         } else if (item.getTitle() == "SMS") {
-            Toast.makeText(getActivity(), "sending sms code", Toast.LENGTH_LONG).show();
+            String phone = "";
+            phone = selectedClient.getClient().getCountry_code() + "" + selectedClient.getClient().getMobile();
+            sendSMS(phone);
         } else if (item.getTitle() == "Delete") {
-            retrofitManager.deleteClient(new UserPreferance(getActivity()).getToken(), selectedClient.getClient_id());
-            clientList.remove(selectedClient);
-            clientListAdapter.notifyDataSetChanged();
+            if (getActivity() != null) {
+                retrofitManager.deleteClient(new UserPreferance(getActivity()).getToken(), selectedClient.getClient_id());
+                clientList.remove(selectedClient);
+                clientListAdapter.notifyDataSetChanged();
+            }
         } else {
             return false;
         }
         return true;
     }
 
-    public void showMenu(final Client client) {
-        LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.simple_list, null);
+    public void sendSMS(String number) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) // At least KitKat
+        {
+            try {
 
-        final PopupWindow menuWindow = new PopupWindow(
-                customView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        );
-        menuWindow.setOutsideTouchable(false);
-        menuWindow.setFocusable(true);
-        if (Build.VERSION.SDK_INT >= 21) {
-            menuWindow.setElevation(5.0f);
+                String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(getActivity()); // Need to change the build to API 19
+
+                Intent sendIntent = new Intent(Intent.ACTION_SEND, Uri.parse(number));
+                sendIntent.setType("text/plain");
+
+                if (defaultSmsPackageName != null)// Can be null in case that there is no default, then the user would be able to choose
+                // any app that support this intent.
+                {
+                    sendIntent.setPackage(defaultSmsPackageName);
+                }
+                startActivity(sendIntent);
+
+            } catch (Exception e) {
+                String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(getActivity()); // Need to change the build to API 19
+
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.setType("text/plain");
+
+                if (defaultSmsPackageName != null)// Can be null in case that there is no default, then the user would be able to choose
+                // any app that support this intent.
+                {
+                    sendIntent.setPackage(defaultSmsPackageName);
+                }
+                startActivity(sendIntent);
+            }
+        } else // For early versions, do what worked for you before.
+        {
+            Intent smsIntent = new Intent(android.content.Intent.ACTION_VIEW);
+            smsIntent.setType("vnd.android-dir/mms-sms");
+            smsIntent.putExtra("address", number);
+            startActivity(smsIntent);
         }
-
-        TextView textViewDelete = (TextView) customView.findViewById(R.id.menuDeleteButton);
-        TextView textViewCall = (TextView) customView.findViewById(R.id.menuCallButton);
-        TextView textViewMessage = (TextView) customView.findViewById(R.id.menuMessageButton);
-
-        textViewDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                retrofitManager.deleteClient(new UserPreferance(getActivity()).getToken(), client.getClient_id());
-                clientList.remove(client);
-                clientListAdapter.notifyDataSetChanged();
-                menuWindow.dismiss();
-            }
-        });
-
-        textViewCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                menuWindow.dismiss();
-            }
-        });
-
-        textViewMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                menuWindow.dismiss();
-            }
-        });
-
-        menuWindow.showAtLocation(mRecycleView, Gravity.CENTER, 0, 0);
-    }
-
-    public void removeClient(Client client) {
-        clientList.remove(client);
     }
 
     public List<BaseClientTable> getLocalData() {
-        Dao<BaseClientTable, Integer> baseClientTables;
+        Dao<BaseClientTable, Integer> baseClientTables = null;
         try {
-            baseClientTables = getHelper().getBaseClientTableDao();
+            if (getHelper() != null) {
+                baseClientTables = getHelper().getBaseClientTableDao();
+            }
             return baseClientTables.queryForAll();
         } catch (SQLException e) {
             return null;
@@ -340,13 +357,15 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
 
         Dao<BaseClientTable, Integer> baseClientTablesDao;
         try {
-            baseClientTablesDao = getHelper().getBaseClientTableDao();
-            if (update) {
-                baseClientTablesDao.update(baseClientTable);
-                Log.e("BAseClient Table", "updated");
-            } else {
-                baseClientTablesDao.create(baseClientTable);
-                Log.e("BAseClient Table", "inserted");
+            if (getHelper() != null) {
+                baseClientTablesDao = getHelper().getBaseClientTableDao();
+                if (update) {
+                    baseClientTablesDao.update(baseClientTable);
+                    Log.e("BAseClient Table", "updated");
+                } else {
+                    baseClientTablesDao.create(baseClientTable);
+                    Log.e("BAseClient Table", "inserted");
+                }
             }
         } catch (SQLException e) {
             Log.e("BAseClient table", "" + e);
@@ -357,9 +376,10 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
 
     public boolean checkClient(Client client) {
         List<BaseClientTable> list = null;
-        Dao<BaseClientTable, Integer> baseClientTablesDao;
+        Dao<BaseClientTable, Integer> baseClientTablesDao = null;
         try {
-            baseClientTablesDao = getHelper().getBaseClientTableDao();
+            if (getHelper() != null)
+                baseClientTablesDao = getHelper().getBaseClientTableDao();
             list = baseClientTablesDao.queryForEq("client_id", client.getClient_id());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -391,8 +411,10 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
     public void deleteClient(BaseClientTable baseClientTable) {
         Dao<BaseClientTable, Integer> baseClientTables;
         try {
-            baseClientTables = getHelper().getBaseClientTableDao();
-            baseClientTables.delete(baseClientTable);
+            if (getHelper() != null) {
+                baseClientTables = getHelper().getBaseClientTableDao();
+                baseClientTables.delete(baseClientTable);
+            }
             Log.e("BAseClient table", "deleted");
         } catch (Exception e) {
             Log.e("BAseClient table", "" + e);

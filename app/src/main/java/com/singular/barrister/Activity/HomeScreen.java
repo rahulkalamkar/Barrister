@@ -51,6 +51,7 @@ public class HomeScreen extends AppCompatActivity {
     FragmentTransaction transaction;
     ProgressBar progressBar;
 
+    FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +67,7 @@ public class HomeScreen extends AppCompatActivity {
         else if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(R.string.app_name);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,6 +91,7 @@ public class HomeScreen extends AppCompatActivity {
     }
 
     public void initializeFragments() {
+        fab.setVisibility(View.GONE);
         todaysFragment = new TodaysFragment();
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
@@ -112,21 +114,25 @@ public class HomeScreen extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
+                    fab.setVisibility(View.GONE);
                     todaysFragment = new TodaysFragment();
                     fragmentManager = getSupportFragmentManager();
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.fragmentContainer, todaysFragment, "Today's Fragment").commit();
                 } else if (tab.getPosition() == 1) {
+                    fab.setVisibility(View.VISIBLE);
                     casesFragment = new CasesFragment();
                     fragmentManager = getSupportFragmentManager();
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.fragmentContainer, casesFragment, "Cases Fragment").commit();
                 } else if (tab.getPosition() == 2) {
+                    fab.setVisibility(View.VISIBLE);
                     courtFragment = new CourtFragment();
                     fragmentManager = getSupportFragmentManager();
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.fragmentContainer, courtFragment, "Court Fragment").commit();
                 } else if (tab.getPosition() == 3) {
+                    fab.setVisibility(View.VISIBLE);
                     clientFragment = new ClientFragment();
                     fragmentManager = getSupportFragmentManager();
                     transaction = fragmentManager.beginTransaction();
@@ -284,21 +290,25 @@ public class HomeScreen extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == requestCode) {
             if (tabLayout.getSelectedTabPosition() == 0) {
+                fab.setVisibility(View.GONE);
                 todaysFragment = new TodaysFragment();
                 fragmentManager = getSupportFragmentManager();
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContainer, todaysFragment, "Today's Fragment").commit();
             } else if (tabLayout.getSelectedTabPosition() == 1) {
+                fab.setVisibility(View.VISIBLE);
                 casesFragment = new CasesFragment();
                 fragmentManager = getSupportFragmentManager();
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContainer, casesFragment, "Cases Fragment").commit();
             } else if (tabLayout.getSelectedTabPosition() == 2) {
+                fab.setVisibility(View.VISIBLE);
                 courtFragment = new CourtFragment();
                 fragmentManager = getSupportFragmentManager();
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContainer, courtFragment, "Court Fragment").commit();
             } else if (tabLayout.getSelectedTabPosition() == 3) {
+                fab.setVisibility(View.VISIBLE);
                 clientFragment = new ClientFragment();
                 fragmentManager = getSupportFragmentManager();
                 transaction = fragmentManager.beginTransaction();

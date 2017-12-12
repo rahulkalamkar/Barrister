@@ -11,25 +11,37 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.singular.barrister.Database.Query.StateTableQuery;
 import com.singular.barrister.Interface.StateSelection;
 import com.singular.barrister.Model.District;
 import com.singular.barrister.Model.State;
+import com.singular.barrister.Model.States.StateResponse;
 import com.singular.barrister.Model.SubDistrict;
+import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.R;
+import com.singular.barrister.RetrofitManager.RetrofitManager;
+import com.singular.barrister.Util.IDataChangeListener;
+import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.StatePopUpWindow;
+import com.singular.barrister.Util.WebServiceError;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-public class SelectStateActivity extends AppCompatActivity implements StateSelection {
+public class SelectStateActivity extends AppCompatActivity implements StateSelection, IDataChangeListener<IModel> {
 
     ArrayList<State> stateList;
     RecyclerView mRecycleView;
+    RetrofitManager retrofitManager;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +55,22 @@ public class SelectStateActivity extends AppCompatActivity implements StateSelec
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         mRecycleView = (RecyclerView) findViewById(R.id.recycleView);
-
+        progressBar = (ProgressBar) findViewById(R.id.progressBar5);
+        retrofitManager = new RetrofitManager();
         stateList = new ArrayList<State>();
-        stateList.addAll((ArrayList<State>) getIntent().getExtras().getSerializable("State"));
-        showList();
+        if ((ArrayList<State>) getIntent().getExtras().getSerializable("State") != null) {
+            stateList.addAll((ArrayList<State>) getIntent().getExtras().getSerializable("State"));
+            showList();
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
+            retrofitManager.getState(this, new UserPreferance(getApplicationContext()).getToken());
+        }
     }
 
     RecycleAdapter recycleAdapter;
 
     public void showList() {
-        recycleAdapter = new RecycleAdapter(getApplicationContext(), stateList,this);
+        recycleAdapter = new RecycleAdapter(getApplicationContext(), stateList, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecycleView.setLayoutManager(linearLayoutManager);
         mRecycleView.setAdapter(recycleAdapter);
@@ -96,7 +114,8 @@ public class SelectStateActivity extends AppCompatActivity implements StateSelec
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                recycleAdapter.getFilter().filter(newText);
+                if (recycleAdapter != null)
+                    recycleAdapter.getFilter().filter(newText);
                 return true;
             }
         });
@@ -136,6 +155,34 @@ public class SelectStateActivity extends AppCompatActivity implements StateSelec
 
     @Override
     public void getSelectedSubDistrict(SubDistrict subDistrict) {
+
+    }
+
+    @Override
+    public void onDataChanged() {
+
+    }
+
+    @Override
+    public void onDataReceived(IModel response) {
+        if (response != null && response instanceof StateResponse) {
+            StateResponse stateResponse = (StateResponse) response;
+            if (stateResponse.getData().getState() != null) {
+                stateList = new ArrayList<State>();
+                stateList.addAll(stateResponse.getData().getState());
+                StateTableQuery stateTableQuery = new StateTableQuery();
+                stateTableQuery.valuesFromServer(getApplicationContext(), stateList);
+                progressBar.setVisibility(View.GONE);
+                showList();
+            } else {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public void onDataFailed(WebServiceError error) {
 
     }
 }
