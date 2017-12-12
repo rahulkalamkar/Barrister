@@ -202,6 +202,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
                     android:background="#777777" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -265,10 +266,11 @@
 
                 <TextView
                     android:id="@+id/textViewClientEmailId"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:textColor="#777777"
+                    android:background="@drawable/ripple"
+                    android:textColor="#0000ff"
                     android:textSize="16sp" />
 
                 <View
@@ -287,10 +289,11 @@
 
                 <TextView
                     android:id="@+id/textViewClientPhone"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:textColor="#777777"
+                    android:background="@drawable/ripple"
+                    android:textColor="#0000ff"
                     android:textSize="16sp" />
 
                 <View
@@ -377,10 +380,11 @@
 
                 <TextView
                     android:id="@+id/textViewOPOPhone"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:textColor="#777777"
+                    android:background="@drawable/ripple"
+                    android:textColor="#0000ff"
                     android:textSize="16sp" />
 
                 <View
@@ -421,10 +425,11 @@
 
                 <TextView
                     android:id="@+id/textViewOPOLawyerPhone"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:textColor="#777777"
+                    android:background="@drawable/ripple"
+                    android:textColor="#0000ff"
                     android:textSize="16sp" />
 
             </LinearLayout>

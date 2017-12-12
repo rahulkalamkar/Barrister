@@ -1,12 +1,15 @@
 package com.singular.barrister.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.singular.barrister.DisplayCaseActivity;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Court.CourtData;
 import com.singular.barrister.R;
@@ -83,9 +86,19 @@ public class TodaysCaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public TodayViewHolder(View itemView) {
             super(itemView);
             txtClientOne = (TextView) itemView.findViewById(R.id.textViewClientOne);
-         //   txtClientTwo = (TextView) itemView.findViewById(R.id.textViewClientTwo);
             txtCourtName = (TextView) itemView.findViewById(R.id.textViewCourtName);
             txtAddress = (TextView) itemView.findViewById(R.id.textViewCourtAddress);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Case", caseList.get(getAdapterPosition()));
+                    Intent intent = new Intent(context, DisplayCaseActivity.class);
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }

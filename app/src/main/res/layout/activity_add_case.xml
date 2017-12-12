@@ -42,8 +42,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="CASE DETAIL"
-                    android:textColor="@color/colorPrimary"
+                    android:text="Case Detail"
+                    android:textColor="#009688"
                     android:textSize="16sp" />
 
                 <android.support.design.widget.TextInputLayout
@@ -179,8 +179,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
-                    android:text="CLIENT DETAIL"
-                    android:textColor="@color/colorPrimary"
+                    android:text="Client Detail"
+                    android:textColor="#009688"
                     android:textSize="16sp" />
 
                 <TextView
@@ -226,8 +226,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
-                    android:text="OPPOSITION DETAIL"
-                    android:textColor="@color/colorPrimary"
+                    android:text="Opposition Detail"
+                    android:textColor="#009688"
                     android:textSize="16sp" />
 
                 <android.support.design.widget.TextInputLayout

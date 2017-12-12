@@ -2,6 +2,7 @@ package com.singular.barrister;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.singular.barrister.Activity.SubActivity.CasesNewHearingActivity;
 import com.singular.barrister.Activity.SubActivity.HearingDateActivity;
@@ -31,6 +33,7 @@ import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.RetrofitManager.RetrofitManager;
 import com.singular.barrister.Util.IDataChangeListener;
 import com.singular.barrister.Util.IModel;
+import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
 
 import org.w3c.dom.Text;
@@ -72,6 +75,11 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
             return aCaseDetail.getPersons().get(0);
         else
             return aCaseDetail.getPersons().get(1);
+    }
+
+    public void call(String number) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", number, null));
+        startActivity(intent);
     }
 
     public void setData() {
@@ -118,6 +126,42 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
         txtOppositionNumber = (TextView) findViewById(R.id.textViewOPOPhone);
         txtOppositionLawyerName = (TextView) findViewById(R.id.textViewOPOLawyerName);
         txtOppositionLawyerNumber = (TextView) findViewById(R.id.textViewOPOLawyerPhone);
+
+        txtPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                call("+91" + txtPhone.getText().toString());
+            }
+        });
+
+        txtOppositionLawyerNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                call("+91" + txtOppositionLawyerNumber.getText().toString());
+            }
+        });
+
+        txtOppositionNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                call("+91" + txtOppositionNumber.getText().toString());
+            }
+        });
+
+        txtClientEmailId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendEmail(txtClientEmailId.getText().toString());
+            }
+        });
+    }
+
+    public void sendEmail(String emailId) {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", emailId, null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 
     public String getAddress() {
@@ -174,11 +218,14 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
                 break;
 
             case R.id.menuViewAllPastHearingDates:
-                Bundle bundle = new Bundle();
-                bundle.putString("Id", aCaseDetail.getId());
-                Intent intent1 = new Intent(getApplicationContext(), HearingDateActivity.class);
-                intent1.putExtras(bundle);
-                startActivity(intent1);
+                if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Id", aCaseDetail.getId());
+                    Intent intent1 = new Intent(getApplicationContext(), HearingDateActivity.class);
+                    intent1.putExtras(bundle);
+                    startActivity(intent1);
+                } else
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;
