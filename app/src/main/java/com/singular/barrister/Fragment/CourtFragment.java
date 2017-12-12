@@ -123,7 +123,7 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
                 if (list != null) {
                     convertList(list);
                 }
-                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                //          Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -325,7 +325,7 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
     DatabaseHelper databaseHelper;
 
     private DatabaseHelper getHelper(Context context) {
-        if (databaseHelper == null && context!=null) {
+        if (databaseHelper == null && context != null) {
             databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);
         }
         return databaseHelper;

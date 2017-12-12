@@ -132,7 +132,7 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
                     mRecycleView.setAdapter(courtListAdapter);
                     progressBar.setVisibility(View.GONE);
                 }
-                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
         }
     }

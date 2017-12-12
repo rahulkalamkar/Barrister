@@ -131,7 +131,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             retrofitManager.getClientList(this, new UserPreferance(getActivity()).getToken());
         } else {
             if (getActivity() != null) {
-                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+           //     Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                 List<BaseClientTable> list = getLocalData();
                 if (list != null)
                     convertAndDisplay(list);

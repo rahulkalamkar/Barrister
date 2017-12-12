@@ -84,7 +84,7 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
                     mRecyclerView.setAdapter(todaysCaseAdapter);
                     progressBar.setVisibility(View.GONE);
                 }
-                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+           //     Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
         }
     }
