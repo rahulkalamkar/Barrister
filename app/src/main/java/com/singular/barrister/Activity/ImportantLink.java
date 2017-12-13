@@ -68,6 +68,7 @@ public class ImportantLink extends AppCompatActivity {
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isEditing = true;
                 showEditScreen(true);
                 actionButton.setVisibility(View.GONE);
                 btnSubmit.setVisible(true);
@@ -162,13 +163,24 @@ public class ImportantLink extends AppCompatActivity {
         return true;
     }
 
+    boolean isEditing = false;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (isEditing) {
+                    btnSubmit.setVisible(false);
+                    btnEdit.setVisible(false);
+                    actionButton.setVisibility(View.VISIBLE);
+                    showEditScreen(true);
+                    isEditing = false;
+                } else {
+                    finish();
+                }
                 break;
             case R.id.menuSubmit:
+                isEditing = false;
                 btnSubmit.setVisible(false);
                 btnEdit.setVisible(false);
                 actionButton.setVisibility(View.VISIBLE);

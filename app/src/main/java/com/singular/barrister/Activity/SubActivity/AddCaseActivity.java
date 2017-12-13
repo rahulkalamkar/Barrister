@@ -373,6 +373,10 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             disableError();
             txtILOpoNumber.setErrorEnabled(true);
             txtILOpoNumber.setError("enter  opposition number");
+        } else if (edtOpoNumber.getText().toString().length() < 10 || edtOpoNumber.getText().toString().length() != 10) {
+            disableError();
+            txtILOpoNumber.setErrorEnabled(true);
+            txtILOpoNumber.setError("enter  valid opposition number");
         } else if (TextUtils.isEmpty(edtOpoLawyerName.getText().toString())) {
             disableError();
             txtILOpoLawName.setErrorEnabled(true);
@@ -381,6 +385,10 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             disableError();
             txtILOpoLawNumber.setErrorEnabled(true);
             txtILOpoLawNumber.setError("enter opposition lawyer number");
+        } else if (edtOpoLawyerNumber.getText().toString().length() < 10 || edtOpoLawyerNumber.getText().toString().length() != 10) {
+            disableError();
+            txtILOpoLawNumber.setErrorEnabled(true);
+            txtILOpoLawNumber.setError("enter valid opposition lawyer number");
         } else if (txtSelectClient.getText().toString().equalsIgnoreCase("")) {
             Toast.makeText(getApplicationContext(), "Select client name", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(selectedClientType)) {
@@ -713,7 +721,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
 
     public void selectedClient(Client client) {
         selectedClient = client;
-        txtSelectClient.setText(client.getClient().getFirst_name() + " " + client.getClient().getLast_name() + "\n" + client.getClient().getMobile());
+        txtSelectClient.setText(client.getClient().getFirst_name() + " " + client.getClient().getLast_name());
     }
 
     @Override

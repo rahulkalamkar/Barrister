@@ -149,18 +149,27 @@ public class DisplayClientActivity extends AppCompatActivity implements IDataCha
         return true;
     }
 
+    boolean isEditing = false;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (isEditing) {
+                    isEditing = false;
+                    layoutNameContainer.setVisibility(View.VISIBLE);
+                    layoutEditContainer.setVisibility(View.GONE);
+                } else
+                    finish();
                 break;
             case R.id.menuEdit:
+                isEditing = true;
                 btnSubmit.setVisible(true);
                 btnEdit.setVisible(false);
                 displayName(false);
                 break;
             case R.id.menuSubmit:
+                isEditing = false;
                 checkData();
                 break;
         }

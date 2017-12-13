@@ -138,7 +138,7 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
     }
 
     public void showError() {
-        errorTextView.setText("There is no case added yet!");
+        errorTextView.setText("You have not added any case yet, click on + to add new ");
         errorTextView.setVisibility(View.VISIBLE);
         mRecycleView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);

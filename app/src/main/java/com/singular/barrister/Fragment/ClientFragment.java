@@ -92,7 +92,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
     }
 
     public void showError() {
-        errorTextView.setText("There is no client added yet!");
+        errorTextView.setText("You have not added any client yet, click on + to add new ");
         errorTextView.setVisibility(View.VISIBLE);
         mRecycleView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
