@@ -26,6 +26,19 @@ public class CourtState {
     @DatabaseField(columnName = "name")
     String name;
 
+    public String getState_id() {
+        return state_id;
+    }
+
+    public void setState_id(String state_id) {
+        this.state_id = state_id;
+    }
+
+    public void setId(int id) {
+
+        this.id = id;
+    }
+
     @DatabaseField(columnName = "location_type", canBeNull = true)
     String location_type;
 
@@ -43,7 +56,9 @@ public class CourtState {
         this.parent_id = parent_id;
         this.external_id = external_id;
     }
-
+    public Integer getIndex() {
+        return id;
+    }
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }

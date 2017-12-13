@@ -16,6 +16,14 @@ public class ClientTable implements Serializable {
 
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public ClientTable(String id, String first_name, String last_name, String country_code, String mobile, String email, String address, String user_type, String referral_code,
                        String parent_user_id, String used_referral_code, String device_type, String device_token, String subscription, String created_at, String updated_at) {
         this.client_id = id;
@@ -23,6 +31,7 @@ public class ClientTable implements Serializable {
         this.last_name = last_name;
         this.country_code = country_code;
         this.mobile = mobile;
+
         this.email = email;
         this.address = address;
         this.user_type = user_type;

@@ -51,7 +51,17 @@ public class CasesHearingTable {
     String case_id;
     @DatabaseField(columnName = "case_hearing_date", canBeNull = true)
     String case_hearing_date;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @DatabaseField(columnName = "case_decision", canBeNull = true)
+
     String case_decision;
 
     @DatabaseField(columnName = "case_disposed", canBeNull = true)

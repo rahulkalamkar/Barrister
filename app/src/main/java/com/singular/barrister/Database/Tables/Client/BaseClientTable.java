@@ -12,11 +12,19 @@ public class BaseClientTable {
     @DatabaseField(columnName = "id", generatedId = true,unique = true)
     int id;
 
+    public int getId() {
+        return id;
+    }
+
     @DatabaseField(columnName = "base_id")
     String base_id;
 
     @DatabaseField(columnName = "created_at")
     String created_at;
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @DatabaseField(columnName = "client_id")
     String client_id;

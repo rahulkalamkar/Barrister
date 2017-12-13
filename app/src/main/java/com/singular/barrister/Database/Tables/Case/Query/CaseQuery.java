@@ -16,6 +16,10 @@ import com.singular.barrister.Database.Tables.Case.CaseTable;
 import com.singular.barrister.Database.Tables.Case.CasesCaseType;
 import com.singular.barrister.Database.Tables.Case.CasesHearingTable;
 import com.singular.barrister.Database.Tables.Case.CasesSubCaseType;
+import com.singular.barrister.Database.Tables.CourtDistrict;
+import com.singular.barrister.Database.Tables.CourtState;
+import com.singular.barrister.Database.Tables.CourtSubDistrict;
+import com.singular.barrister.Database.Tables.CourtTable;
 import com.singular.barrister.Model.Cases.Case;
 import com.singular.barrister.Model.Cases.CaseClient;
 import com.singular.barrister.Model.Cases.CaseDistrict;
@@ -99,14 +103,150 @@ public class CaseQuery {
         try {
             if (context != null && getHelper(context) != null) {
                 caseTableIntegerDao = getHelper(context).getACaseTableDao();
-                caseTableIntegerDao.update(caseTable);
-                Log.e("Case table", "updated");
+                CaseTable caseTable1 = getCase(caseTable);
+                if (caseTable1 != null) {
+                    caseTable.setId(caseTable1.getId());
+                }
+                updateTables(caseTable, caseTable1);
+                int i = caseTableIntegerDao.update(caseTable);
+                Log.e("Case table", "updated" + i);
             }
         } catch (SQLException e) {
             e.printStackTrace();
             Log.e("Case table", "" + e.getMessage());
         }
     }
+
+    public void updateTables(CaseTable newCaseTable, CaseTable oldCaseTable) {
+        try {
+
+            if (oldCaseTable != null) {
+                if (oldCaseTable.getClient() != null) {
+                    CaseClientTable caseClientTable = newCaseTable.getClient();
+                    caseClientTable.setId(oldCaseTable.getClient().getId());
+                    Dao<CaseClientTable, Integer> caseClientTableIntegerDao = getHelper(context).getACaseClientTableDao();
+                    caseClientTableIntegerDao.update(caseClientTable);
+                } else {
+                    CaseClientTable caseClientTable = newCaseTable.getClient();
+                    Dao<CaseClientTable, Integer> caseClientTableIntegerDao = getHelper(context).getACaseClientTableDao();
+                    caseClientTableIntegerDao.create(caseClientTable);
+                }
+
+                if (oldCaseTable.getCasesCaseType() != null) {
+                    CasesCaseType casesCaseType = newCaseTable.getCasesCaseType();
+                    casesCaseType.setId(oldCaseTable.getCasesCaseType().getId());
+
+                    Dao<CasesCaseType, Integer> casesCaseTypeIntegerDao = getHelper(context).getACasesCaseTypeDao();
+                    casesCaseTypeIntegerDao.update(casesCaseType);
+                } else {
+                    CasesCaseType casesCaseType = newCaseTable.getCasesCaseType();
+                    Dao<CasesCaseType, Integer> casesCaseTypeIntegerDao = getHelper(context).getACasesCaseTypeDao();
+                    casesCaseTypeIntegerDao.create(casesCaseType);
+                }
+
+                if (oldCaseTable.getCasesSubCaseType() != null) {
+                    CasesSubCaseType casesSubCaseType = newCaseTable.getCasesSubCaseType();
+                    casesSubCaseType.setId(oldCaseTable.getCasesSubCaseType().getId());
+                    Dao<CasesSubCaseType, Integer> casesSubCaseTypeIntegerDao = getHelper(context).getACasesSubCaseTypeDao();
+                    casesSubCaseTypeIntegerDao.update(casesSubCaseType);
+                } else {
+                    CasesSubCaseType casesSubCaseType = newCaseTable.getCasesSubCaseType();
+                    Dao<CasesSubCaseType, Integer> casesSubCaseTypeIntegerDao = getHelper(context).getACasesSubCaseTypeDao();
+                    casesSubCaseTypeIntegerDao.create(casesSubCaseType);
+                }
+
+                if (oldCaseTable.getCourt() != null) {
+                    CaseCourtTable caseCourtTable = newCaseTable.getCourt();
+                    caseCourtTable.setId(oldCaseTable.getCourt().getId());
+                    Dao<CaseCourtTable, Integer> caseCourtTableIntegerDao = getHelper(context).getACaseCourtTableDao();
+                    updateTable(oldCaseTable.getCourt(), caseCourtTable);
+                    caseCourtTableIntegerDao.update(caseCourtTable);
+                } else {
+                    CaseCourtTable caseCourtTable = newCaseTable.getCourt();
+                    Dao<CaseCourtTable, Integer> caseCourtTableIntegerDao = getHelper(context).getACaseCourtTableDao();
+                    caseCourtTableIntegerDao.create(caseCourtTable);
+                }
+
+                if (oldCaseTable.getHearingTable() != null) {
+                    CasesHearingTable casesHearingTable = newCaseTable.getHearingTable();
+                    casesHearingTable.setId(oldCaseTable.getHearingTable().getId());
+                    Dao<CasesHearingTable, Integer> casesHearingTableIntegerDao = getHelper(context).getACaseHearingTableDao();
+                    casesHearingTableIntegerDao.update(casesHearingTable);
+                } else {
+                    CasesHearingTable casesHearingTable = newCaseTable.getHearingTable();
+                    Dao<CasesHearingTable, Integer> casesHearingTableIntegerDao = getHelper(context).getACaseHearingTableDao();
+                    casesHearingTableIntegerDao.create(casesHearingTable);
+                }
+
+            }
+
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void updateTable(CaseCourtTable table, CaseCourtTable newTable) {
+        try {
+            if (table == null)
+                return;
+
+            CaseCourtState courtState = newTable.getCourtState();
+            if (courtState != null && table.getCourtState() != null) {
+                courtState.setId(table.getCourtState().getIndex());
+                Dao<CaseCourtState, Integer> courtStateIntegerDao = getHelper(context).getACaseCourtStateDao();
+                courtStateIntegerDao.update(courtState);
+            } else {
+                Dao<CaseCourtState, Integer> courtStateIntegerDao = getHelper(context).getACaseCourtStateDao();
+                courtStateIntegerDao.create(courtState);
+            }
+
+            CaseCourtDistrict courtDistrict = newTable.getCourtDistrict();
+            if (courtDistrict != null && table.getCourtDistrict() != null) {
+                courtDistrict.setId(table.getCourtDistrict().getIndex());
+                Dao<CaseCourtDistrict, Integer> courtDistrictIntegerDao = getHelper(context).getACaseCourtDistrictDao();
+                courtDistrictIntegerDao.update(courtDistrict);
+            } else {
+                Dao<CaseCourtDistrict, Integer> courtDistrictIntegerDao = getHelper(context).getACaseCourtDistrictDao();
+                courtDistrictIntegerDao.create(courtDistrict);
+            }
+
+            CaseCourtSubDistrict courtSubDistrict = newTable.getCourtSubDistrict();
+            if (courtSubDistrict != null && table.getCourtSubDistrict() != null) {
+                courtSubDistrict.setId(table.getCourtSubDistrict().getIndex());
+                Dao<CaseCourtSubDistrict, Integer> courtSubDistrictIntegerDao = getHelper(context).getACaseCourtSubDistrictDao();
+                courtSubDistrictIntegerDao.update(courtSubDistrict);
+            } else {
+                if (courtSubDistrict != null) {
+                    Dao<CaseCourtSubDistrict, Integer> courtSubDistrictIntegerDao = getHelper(context).getACaseCourtSubDistrictDao();
+                    courtSubDistrictIntegerDao.create(courtSubDistrict);
+                }
+            }
+        } catch (SQLException e) {
+            Log.e("Court table", "" + e);
+        }
+    }
+
+
+    public CaseTable getCase(CaseTable aCase) {
+        List<CaseTable> list = null;
+        Dao<CaseTable, Integer> caseTableIntegerDao = null;
+        try {
+            if (context != null && getHelper(context) != null) {
+                caseTableIntegerDao = getHelper(context).getACaseTableDao();
+                list = caseTableIntegerDao.queryForEq("case_id", aCase.getCase_id());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Log.e("Case table list", "" + e);
+        }
+
+        if (list != null && list.size() > 0) {
+            return list.get(0);
+        } else {
+            return null;
+        }
+    }
+
 
     public void compareAndSyncDB(ArrayList<Case> caseArrayList) {
         if (caseArrayList == null)

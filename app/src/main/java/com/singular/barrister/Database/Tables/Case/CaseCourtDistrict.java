@@ -13,6 +13,21 @@ public class CaseCourtDistrict {
 
     @DatabaseField(columnName = "id",generatedId = true)
     int id;
+    public Integer getIndex() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getDistrict_id() {
+        return district_id;
+    }
+
+    public void setDistrict_id(String district_id) {
+        this.district_id = district_id;
+    }
 
     @DatabaseField(columnName = "district_id")
     String district_id;

@@ -38,7 +38,17 @@ public class CaseTable {
     String case_type;
     @DatabaseField(columnName = "case_sub_type", canBeNull = true)
     String case_sub_type;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @DatabaseField(columnName = "case_status", canBeNull = true)
+
     String case_status;
 
     public CasesHearingTable getHearingTable() {

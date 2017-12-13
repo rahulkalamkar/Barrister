@@ -11,7 +11,7 @@ import com.j256.ormlite.table.DatabaseTable;
 public class CaseCourtSubDistrict {
     private static final long serialVersionUID = -222864131214757024L;
 
-    @DatabaseField(columnName = "id",generatedId = true)
+    @DatabaseField(columnName = "id", generatedId = true)
     int id;
 
 
@@ -20,6 +20,22 @@ public class CaseCourtSubDistrict {
 
     @DatabaseField(columnName = "parent_id", canBeNull = true)
     String parent_id;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Integer getIndex() {
+        return id;
+    }
+
+    public String getSubDistrictId() {
+        return subDistrictId;
+    }
+
+    public void setSubDistrictId(String subDistrictId) {
+        this.subDistrictId = subDistrictId;
+    }
 
     @DatabaseField(columnName = "external_id", canBeNull = true)
     String external_id;

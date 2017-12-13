@@ -11,8 +11,12 @@ import com.j256.ormlite.table.DatabaseTable;
 public class CourtDistrict {
     private static final long serialVersionUID = -222864131214757024L;
 
-    @DatabaseField(columnName = "id",generatedId = true)
+    @DatabaseField(columnName = "id", generatedId = true)
     int id;
+
+    public Integer getIndex() {
+        return id;
+    }
 
     @DatabaseField(columnName = "district_id")
     String district_id;
@@ -25,6 +29,18 @@ public class CourtDistrict {
 
     @DatabaseField(columnName = "name")
     String name;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getDistrict_id() {
+        return district_id;
+    }
+
+    public void setDistrict_id(String district_id) {
+        this.district_id = district_id;
+    }
 
     @DatabaseField(columnName = "location_type", canBeNull = true)
     String location_type;

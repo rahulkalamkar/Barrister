@@ -131,7 +131,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             retrofitManager.getClientList(this, new UserPreferance(getActivity()).getToken());
         } else {
             if (getActivity() != null) {
-           //     Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                //     Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                 List<BaseClientTable> list = getLocalData();
                 if (list != null)
                     convertAndDisplay(list);
@@ -353,16 +353,26 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
                 client.getClient().getParent_user_id(), client.getClient().getUsed_referral_code(), client.getClient().getDevice_type(),
                 client.getClient().getDevice_token(), client.getClient().getSubscription(), client.getClient().getCreated_at(), client.getClient().getUpdated_at());
 
-        BaseClientTable baseClientTable = new BaseClientTable(client.getId(), client.getCreated_at(), client.getClient_id(), clientTable);
 
         Dao<BaseClientTable, Integer> baseClientTablesDao;
         try {
             if (getHelper() != null) {
                 baseClientTablesDao = getHelper().getBaseClientTableDao();
                 if (update) {
-                    baseClientTablesDao.update(baseClientTable);
-                    Log.e("BAseClient Table", "updated");
+                    clientTable.setId(getClient(client.getClient_id()).getClientTable().getId());
+                    BaseClientTable baseClientTable = new BaseClientTable(client.getId(), client.getCreated_at(), client.getClient_id(), clientTable);
+
+
+                    Dao<ClientTable,Integer> clientTableDao=getHelper().getClientTableDao();
+                    clientTableDao.update(clientTable);
+
+                    baseClientTable.setId(getClient(client.getClient_id()).getId());
+
+
+                    int i = baseClientTablesDao.update(baseClientTable);
+                    Log.e("BAseClient Table", "updated" + i);
                 } else {
+                    BaseClientTable baseClientTable = new BaseClientTable(client.getId(), client.getCreated_at(), client.getClient_id(), clientTable);
                     baseClientTablesDao.create(baseClientTable);
                     Log.e("BAseClient Table", "inserted");
                 }
@@ -372,6 +382,22 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         } catch (Exception e) {
             Log.e("BAseClient table", "" + e);
         }
+    }
+
+    public BaseClientTable getClient(String id) {
+        List<BaseClientTable> list = null;
+        Dao<BaseClientTable, Integer> baseClientTablesDao = null;
+        try {
+            if (getHelper() != null)
+                baseClientTablesDao = getHelper().getBaseClientTableDao();
+            list = baseClientTablesDao.queryForEq("client_id", id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (list != null && list.size() > 0)
+            return list.get(0);
+        else
+            return null;
     }
 
     public boolean checkClient(Client client) {

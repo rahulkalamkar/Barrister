@@ -143,7 +143,16 @@ public class SelectCaseType extends AppCompatActivity implements IDataChangeList
 
         return true;
     }*/
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+      switch (item.getItemId()) {
+          case android.R.id.home:
+              finish();
+              break;
+      }
 
+      return true;
+  }
     SimpleRecycleAdapter simpleRecycleAdapter;
 
     public void showList() {

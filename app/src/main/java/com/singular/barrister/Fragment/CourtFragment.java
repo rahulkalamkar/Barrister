@@ -270,6 +270,24 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
         }
     }
 
+    public CourtTable getCourt(CourtTable courtData) {
+        List<CourtTable> list = null;
+        Dao<CourtTable, Integer> courtTableIntegerDao;
+        try {
+            if (getActivity() != null && getHelper(getActivity()) != null) {
+                courtTableIntegerDao = getHelper(getActivity()).getCourtTableDao();
+                list = courtTableIntegerDao.queryForEq("court_id", courtData.getCourt_id());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (list != null && list.size() > 0)
+            return list.get(0);
+        else
+            return null;
+    }
+
     public boolean checkCourt(CourtData courtData) {
         List<CourtTable> list = null;
         Dao<CourtTable, Integer> courtTableIntegerDao;
@@ -310,11 +328,58 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
             if (getActivity() != null && getHelper(getActivity()) != null) {
                 courtTableDao = getHelper(getActivity()).getCourtTableDao();
                 if (update) {
-                    courtTableDao.update(courtTable);
-                    Log.e("Court Table", "update");
+                    CourtTable table = getCourt(courtTable);
+                    if (table != null) {
+                        updateTable(table, courtTable);
+                        courtTable.setId(table.getId());
+                    }
+                    int i = courtTableDao.update(courtTable);
+                    Log.e("Court Table", "update" + i);
                 } else {
                     courtTableDao.create(courtTable);
                     Log.e("Court Table", "inserted");
+                }
+            }
+        } catch (SQLException e) {
+            Log.e("Court table", "" + e);
+        }
+    }
+
+    public void updateTable(CourtTable table, CourtTable newTable) {
+        try {
+            if (table == null)
+                return;
+            if (getActivity() != null && getHelper(getActivity()) != null) {
+                CourtState courtState = newTable.getCourtState();
+                if (courtState != null && table.getCourtState() != null) {
+                    courtState.setId(table.getCourtState().getIndex());
+                    Dao<CourtState, Integer> courtStateIntegerDao = getHelper(getActivity()).getCourtStateDao();
+                    courtStateIntegerDao.update(courtState);
+                } else {
+                    Dao<CourtState, Integer> courtStateIntegerDao = getHelper(getActivity()).getCourtStateDao();
+                    courtStateIntegerDao.create(courtState);
+                }
+
+                CourtDistrict courtDistrict = newTable.getCourtDistrict();
+                if (courtDistrict != null && table.getCourtDistrict() != null) {
+                    courtDistrict.setId(table.getCourtDistrict().getIndex());
+                    Dao<CourtDistrict, Integer> courtDistrictIntegerDao = getHelper(getActivity()).getCourtDistrictDao();
+                    courtDistrictIntegerDao.update(courtDistrict);
+                } else {
+                    Dao<CourtDistrict, Integer> courtDistrictIntegerDao = getHelper(getActivity()).getCourtDistrictDao();
+                    courtDistrictIntegerDao.create(courtDistrict);
+                }
+
+                CourtSubDistrict courtSubDistrict = newTable.getCourtSubDistrict();
+                if (courtSubDistrict != null && table.getCourtSubDistrict() != null) {
+                    courtSubDistrict.setId(table.getCourtSubDistrict().getIndex());
+                    Dao<CourtSubDistrict, Integer> courtSubDistrictIntegerDao = getHelper(getActivity()).getCourtSubDistrictDao();
+                    courtSubDistrictIntegerDao.update(courtSubDistrict);
+                } else {
+                    if (courtSubDistrict != null) {
+                        Dao<CourtSubDistrict, Integer> courtSubDistrictIntegerDao = getHelper(getActivity()).getCourtSubDistrictDao();
+                        courtSubDistrictIntegerDao.create(courtSubDistrict);
+                    }
                 }
             }
         } catch (SQLException e) {

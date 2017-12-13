@@ -18,7 +18,24 @@ public class CourtSubDistrict {
     @DatabaseField(columnName = "subDistrictId")
     String subDistrictId;
 
+    public String getSubDistrictId() {
+        return subDistrictId;
+    }
+
+    public void setSubDistrictId(String subDistrictId) {
+        this.subDistrictId = subDistrictId;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Integer getIndex() {
+        return id;
+    }
+
     @DatabaseField(columnName = "parent_id", canBeNull = true)
+
     String parent_id;
 
     @DatabaseField(columnName = "external_id", canBeNull = true)

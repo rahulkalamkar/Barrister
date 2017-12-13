@@ -49,6 +49,14 @@ public class CaseClientTable {
         return first_name;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setFirst_name(String first_name) {
         this.first_name = first_name;
     }
