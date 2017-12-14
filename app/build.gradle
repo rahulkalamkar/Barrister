@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
-
+    apply plugin: 'com.google.gms.google-services'
     defaultConfig {
         applicationId "com.singular.barrister"
         minSdkVersion 15
@@ -13,9 +13,17 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            release {
+                minifyEnabled true
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
         }
     }
 }
@@ -48,5 +56,6 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-core:4.48'
     compile 'com.wdullaer:materialdatetimepicker:2.3.0'
 
+    compile 'com.google.firebase:firebase-messaging:+'
     testCompile 'junit:junit:4.12'
 }

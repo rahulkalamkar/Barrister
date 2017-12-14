@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "278790432962",
+    "firebase_url": "https://barrister-3db68.firebaseio.com",
+    "project_id": "barrister-3db68",
+    "storage_bucket": "barrister-3db68.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278790432962:android:68f158e7701e99b5",
+        "android_client_info": {
+          "package_name": "com.singular.barrister"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278790432962-78n2gmbg5uhdc4t3icauklmam5sslvmh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.singular.barrister",
+            "certificate_hash": "948001eda61d806514d03fb1ecaeb7df491c35b7"
+          }
+        },
+        {
+          "client_id": "278790432962-pn6eevmf8mlv1eu25nj1cvusfuprp3be.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrFfhyRYIbT6wF83ZFtI-N7mBj08P6pvY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "278790432962-pn6eevmf8mlv1eu25nj1cvusfuprp3be.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
