@@ -65,6 +65,7 @@ public class ImportantListAdapter extends RecyclerView.Adapter<RecyclerView.View
                     bundle.putString("Url", list.get(getAdapterPosition()).getWeb_site());
                     Intent i = new Intent(context, WebActivity.class);
                     i.putExtras(bundle);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(i);
                 }
             });

@@ -70,6 +70,7 @@ public class ImportantLink extends AppCompatActivity {
             public void onClick(View view) {
                 isEditing = true;
                 showEditScreen(true);
+                btnEdit.setVisible(false);
                 actionButton.setVisibility(View.GONE);
                 btnSubmit.setVisible(true);
             }
@@ -171,9 +172,13 @@ public class ImportantLink extends AppCompatActivity {
             case android.R.id.home:
                 if (isEditing) {
                     btnSubmit.setVisible(false);
-                    btnEdit.setVisible(false);
+                    btnEdit.setVisible(true);
                     actionButton.setVisibility(View.VISIBLE);
-                    showEditScreen(true);
+                    mRecycleView.setVisibility(View.VISIBLE);
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentManager.popBackStack();
+                    frameLayout.setVisibility(View.GONE);
+                    fetchList();
                     isEditing = false;
                 } else {
                     finish();
