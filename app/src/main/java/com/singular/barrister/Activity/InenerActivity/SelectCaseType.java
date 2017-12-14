@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -79,6 +80,7 @@ public class SelectCaseType extends AppCompatActivity implements IDataChangeList
         if (caseTypeDataList == null)
             caseTypeDataList = new ArrayList<CasesTypeData>();
         caseTypeDataList.addAll(convertListToCaseType());
+        tempArrayList = caseTypeDataList;
         if (caseTypeDataList != null && caseTypeDataList.size() > 0) {
             showList();
         } else if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
@@ -88,7 +90,7 @@ public class SelectCaseType extends AppCompatActivity implements IDataChangeList
         }
     }
 
-  /*  @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.searchmenu, menu);
@@ -126,11 +128,48 @@ public class SelectCaseType extends AppCompatActivity implements IDataChangeList
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                simpleRecycleAdapter.getFilter().filter(newText);
+                filterAndNotify(newText);
+                //  simpleRecycleAdapter.getFilter().filter(newText);
                 return true;
             }
         });
         return true;
+    }
+
+    ArrayList<CasesTypeData> tempArrayList;
+
+    public void filterAndNotify(String charString) {
+        if (caseTypeDataList != null) {
+            if (TextUtils.isEmpty(charString)) {
+                tempArrayList.clear();
+                tempArrayList.addAll(convertListToCaseType());
+                caseTypeDataList = tempArrayList;
+                simpleRecycleAdapter.notifyDataSetChanged();
+            } else {
+                tempArrayList.clear();
+                tempArrayList.addAll(convertListToCaseType());
+                ArrayList<CasesTypeData> filteredList = new ArrayList<CasesTypeData>();
+                filteredList.clear();
+                for (CasesTypeData cases : tempArrayList) {
+                    ArrayList<CasesSubType> newList = new ArrayList<>();
+                    newList.clear();
+                    if (cases.getSubCaseData() != null)
+                        for (CasesSubType casesSubType : cases.getSubCaseData()) {
+                            if (casesSubType.getSubcase_type_name().toLowerCase().contains(charString.toLowerCase())) {
+                                newList.add(casesSubType);
+                            }
+                        }
+
+                    cases.setSubCaseData(newList);
+
+                    if (cases.getSubCaseData() != null && cases.getSubCaseData().size() > 0) {
+                        filteredList.add(cases);
+                    }
+                }
+                caseTypeDataList = filteredList;
+                simpleRecycleAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     @Override
@@ -142,17 +181,8 @@ public class SelectCaseType extends AppCompatActivity implements IDataChangeList
         }
 
         return true;
-    }*/
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-      switch (item.getItemId()) {
-          case android.R.id.home:
-              finish();
-              break;
-      }
+    }
 
-      return true;
-  }
     SimpleRecycleAdapter simpleRecycleAdapter;
 
     public void showList() {
@@ -236,34 +266,6 @@ public class SelectCaseType extends AppCompatActivity implements IDataChangeList
         }
     }
 
-    public void getCourtType(final IDataChangeListener<IModel> callbackListener, String token) {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", "Bearer " + token);
-        try {
-            URL url = new URL("http://singularsacademy.com/lawyer/public/api/casetype");
-            String baseUrl = url.getProtocol() + "://" + url.getHost();
-            String apiName = url.getPath();
-            String parameters = url.getQuery();
-
-            API api = APIClient.getClient(baseUrl).create(API.class);
-            Call<CasesTypeResponse> call = api.getCaseType(apiName, headerMap);
-            call.enqueue(new Callback<CasesTypeResponse>() {
-                @Override
-                public void onResponse(Call<CasesTypeResponse> call, Response<CasesTypeResponse> response) {
-                    callbackListener.onDataReceived(response.body());
-                }
-
-                @Override
-                public void onFailure(Call<CasesTypeResponse> call, Throwable t) {
-                    callbackListener.onDataReceived(null);
-                }
-            });
-        } catch (MalformedURLException e) {
-            callbackListener.onDataReceived(null);
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onDataChanged() {
 
@@ -277,6 +279,7 @@ public class SelectCaseType extends AppCompatActivity implements IDataChangeList
                 caseTypeDataList.addAll(casesTypeResponse.getData().getCasetype());
                 saveCaseType(caseTypeDataList);
                 showList();
+                tempArrayList = caseTypeDataList;
             }
         }
     }
@@ -347,13 +350,15 @@ public class SelectCaseType extends AppCompatActivity implements IDataChangeList
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof SimpleRecycleAdapter.SimpleViewHolder) {
                 SimpleRecycleAdapter.SimpleViewHolder simpleViewHolder = (SimpleRecycleAdapter.SimpleViewHolder) holder;
-                simpleViewHolder.txtName.setText(list.get(position).getCase_type_name());
 
-                simpleSubListAdapter = new SimpleSubListAdapter(context, list.get(position).getSubCaseData());
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-                simpleViewHolder.recyclerView.setLayoutManager(linearLayoutManager);
-                simpleViewHolder.recyclerView.setAdapter(simpleSubListAdapter);
-                // simpleViewHolder.recyclerView.setVisibility(View.VISIBLE);
+                if (list.get(position).getSubCaseData() != null) {
+                    simpleViewHolder.txtName.setText(list.get(position).getCase_type_name());
+                    simpleSubListAdapter = new SimpleSubListAdapter(context, list.get(position).getSubCaseData());
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                    simpleViewHolder.recyclerView.setLayoutManager(linearLayoutManager);
+                    simpleViewHolder.recyclerView.setAdapter(simpleSubListAdapter);
+
+                }// simpleViewHolder.recyclerView.setVisibility(View.VISIBLE);
 
             }
         }
@@ -435,7 +440,6 @@ public class SelectCaseType extends AppCompatActivity implements IDataChangeList
                 viewHorizontal = (View) itemView.findViewById(R.id.horizontalView);
                 viewHorizontal.setVisibility(View.GONE);
                 txtName = (TextView) itemView.findViewById(R.id.textViewName);
-                txtName.setBackgroundColor(Color.parseColor("#99777777"));
 
                 recyclerView = (RecyclerView) itemView.findViewById(R.id.caseSubTypeRecycleView);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -480,7 +484,10 @@ public class SelectCaseType extends AppCompatActivity implements IDataChangeList
 
         @Override
         public int getItemCount() {
-            return casesSubTypes.size();
+            if (casesSubTypes == null)
+                return 0;
+            else
+                return casesSubTypes.size();
         }
 
         @Override
