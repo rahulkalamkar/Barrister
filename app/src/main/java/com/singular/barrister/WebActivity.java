@@ -62,11 +62,10 @@ public class WebActivity extends AppCompatActivity {
             view.loadUrl(url);
             return true;
         }
-/*
         @Override
         public void onPageFinished(WebView view, String url) {
             mProgressBar.setVisibility(View.GONE);
             super.onPageFinished(view, url);
-        }*/
+        }
     }
 }

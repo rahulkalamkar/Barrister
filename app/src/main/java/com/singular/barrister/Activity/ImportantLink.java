@@ -92,6 +92,12 @@ public class ImportantLink extends AppCompatActivity {
 
     public void saveData() {
         if (importantLinkFragment.checkValues()) {
+
+            isEditing = false;
+            btnSubmit.setVisible(false);
+            btnEdit.setVisible(false);
+            actionButton.setVisibility(View.VISIBLE);
+
             String webName = importantLinkFragment.edtWebName.getText().toString();
             String webUrl = importantLinkFragment.edtWebSite.getText().toString();
 
@@ -185,10 +191,7 @@ public class ImportantLink extends AppCompatActivity {
                 }
                 break;
             case R.id.menuSubmit:
-                isEditing = false;
-                btnSubmit.setVisible(false);
-                btnEdit.setVisible(false);
-                actionButton.setVisibility(View.VISIBLE);
+
                 showEditScreen(false);
                 break;
         }
