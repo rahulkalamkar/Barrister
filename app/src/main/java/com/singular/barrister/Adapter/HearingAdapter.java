@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.singular.barrister.Model.Cases.CaseHearing;
 import com.singular.barrister.R;
+import com.singular.barrister.Util.Utils;
 
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ public class HearingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HearingViewHolder) {
             HearingViewHolder hearingViewHolder = (HearingViewHolder) holder;
-            hearingViewHolder.textViewHearingDate.setText(hearings.get(position).getCase_hearing_date());
+            hearingViewHolder.textViewHearingDate.setText(Utils.getDateFormat(hearings.get(position).getCase_hearing_date()));
             hearingViewHolder.textViewHearingText.setText(hearings.get(position).getCase_decision());
         }
     }

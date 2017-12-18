@@ -66,6 +66,7 @@ import com.singular.barrister.Util.DateTimeWindow;
 import com.singular.barrister.Util.IDataChangeListener;
 import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
+import com.singular.barrister.Util.Utils;
 import com.singular.barrister.Util.WebServiceError;
 
 import org.json.JSONException;
@@ -301,12 +302,16 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         dialog.show();
     }
 
+    String selectedHearingDate, selectedRegisterDate;
+
     @Override
     public void dateTime(String date) {
         if (isForRegisterDate) {
-            edtCaseRegisterDate.setText(date);
+            selectedRegisterDate = date;
+            edtCaseRegisterDate.setText(Utils.getDateFormatTime(selectedRegisterDate));
         } else {
-            edtNextHearingDate.setText(date);
+            selectedHearingDate = date;
+            edtNextHearingDate.setText(Utils.getDateFormat(selectedHearingDate));
         }
         isForRegisterDate = false;
     }
@@ -399,7 +404,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
                 mProgressBar.setVisibility(View.VISIBLE);
                 retrofitManager.addCase(this, new UserPreferance(getApplicationContext()).getToken(), selectedClient.getClient_id(), selectedClientType, selectedCourt.getId(), edtCaseCNRNumber.getText().toString(),
                         edtCaseRegisterNumber.getText().toString(),
-                        edtCaseRegisterDate.getText().toString(),
+                        selectedRegisterDate,
                         selectedCaseType.getCase_type_id(), selectedCaseSubType.getSubcase_type_id(),
                         edtCaseStatus.getText().toString(),
                         getJSONFORMAT(edtOpoLawyerName.getText().toString(), "91", edtOpoLawyerNumber.getText().toString()),
@@ -416,7 +421,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
     public String getJSON() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("case_hearing_date", edtNextHearingDate.getText().toString());
+            jsonObject.put("case_hearing_date", /*edtNextHearingDate.getText().toString()*/selectedHearingDate);
             jsonObject.put("case_decision", edtCaseNotes.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();

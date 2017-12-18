@@ -34,6 +34,7 @@ import com.singular.barrister.RetrofitManager.RetrofitManager;
 import com.singular.barrister.Util.IDataChangeListener;
 import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
+import com.singular.barrister.Util.Utils;
 import com.singular.barrister.Util.WebServiceError;
 
 import org.w3c.dom.Text;
@@ -89,11 +90,11 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
         txtCourtName.setText(aCaseDetail.getCourt().getCourt_name());
         txtCRNNumber.setText(aCaseDetail.getCase_cnr_number());
         txtRegisterNumber.setText(aCaseDetail.getCase_register_number());
-        txtRegisterDate.setText(aCaseDetail.getCase_register_date());
+        txtRegisterDate.setText(Utils.getDateFormatTime(aCaseDetail.getCase_register_date()));
 
 
         txtHearing.setText(aCaseDetail.getHearing() != null ? (aCaseDetail.getHearing().getCase_decision() != null ? aCaseDetail.getHearing().getCase_decision() : "") : "");
-        txtHearingDate.setText(aCaseDetail.getHearing() != null ? (aCaseDetail.getHearing().getCase_hearing_date() != null ? aCaseDetail.getHearing().getCase_hearing_date() : "") : "");
+        txtHearingDate.setText(aCaseDetail.getHearing() != null ? (aCaseDetail.getHearing().getCase_hearing_date() != null ? Utils.getDateFormat(aCaseDetail.getHearing().getCase_hearing_date()) : "") : "");
         if (aCaseDetail.getClient() != null) {
             txtClientName.setText(aCaseDetail.getClient().getFirst_name() + " " + aCaseDetail.getClient().getLast_name());
             txtClientEmailId.setText(aCaseDetail.getClient().getEmail());
