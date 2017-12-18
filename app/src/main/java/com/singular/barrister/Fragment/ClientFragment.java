@@ -60,6 +60,9 @@ import com.singular.barrister.Util.WebServiceError;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -159,6 +162,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         }
 
         if (getActivity() != null) {
+            Collections.sort(clientList, Client.ClientComparator);
             clientListAdapter = new ClientListAdapter(getActivity(), clientList, this);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             mRecycleView.setLayoutManager(linearLayoutManager);
@@ -187,6 +191,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             if (clientResponse.getData().getClient() != null) {
                 clientList.clear();
                 clientList.addAll(clientResponse.getData().getClient());
+                Collections.sort(clientList, Client.ClientComparator);
                 if (getActivity() != null) {
                     saveClient();
                     if (clientListAdapter == null) {
@@ -217,6 +222,14 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
                 getActivity().finish();
             }
         }
+    }
+
+    public void sorting() {
+        Collections.sort(clientList, new Comparator<Client>() {
+            public int compare(Client s1, Client s2) {
+                return s1.getClient().getFirst_name().compareToIgnoreCase(s2.getClient().getFirst_name());
+            }
+        });
     }
 
     @Override
