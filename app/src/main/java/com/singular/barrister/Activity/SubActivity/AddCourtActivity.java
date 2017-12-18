@@ -156,9 +156,9 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
         edtDistrict.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selectedState != null) {
+                if (selectedState != null) {/*
                     selectedSubDistrict = null;
-                    edtSubDistrict.setText("");
+                    edtSubDistrict.setText("");*/
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("StateId", selectedState.getId());
                     Intent intent = new Intent(getApplicationContext(), SelectDistrictActivity.class);
@@ -351,6 +351,8 @@ public class AddCourtActivity extends AppCompatActivity implements IDataChangeLi
         } else if (resultCode == 2) {
             selectedDistrict = (District) data.getExtras().getSerializable("District");
             edtDistrict.setText(selectedDistrict.getName());
+            selectedSubDistrict = null;
+            edtSubDistrict.setText("");
         } else if (resultCode == 3) {
             selectedSubDistrict = (SubDistrict) data.getExtras().getSerializable("SubDistrict");
             edtSubDistrict.setText(selectedSubDistrict.getName());

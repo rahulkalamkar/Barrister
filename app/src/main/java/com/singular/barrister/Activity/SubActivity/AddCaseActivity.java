@@ -265,7 +265,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         int i = 0;
 
         //list of items
-        final String[] items = {"In-Progress", "completed"};
+        final String[] items = {"In-progress", "completed"};
         builder.setSingleChoiceItems(items, i,
                 new DialogInterface.OnClickListener() {
                     @Override

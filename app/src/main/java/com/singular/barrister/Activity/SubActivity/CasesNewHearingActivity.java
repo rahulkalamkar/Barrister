@@ -25,6 +25,7 @@ import com.singular.barrister.Util.DateTimeWindow;
 import com.singular.barrister.Util.IDataChangeListener;
 import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
+import com.singular.barrister.Util.Utils;
 import com.singular.barrister.Util.WebServiceError;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -87,7 +88,7 @@ public class CasesNewHearingActivity extends AppCompatActivity implements CaseLi
             if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
                 mProgressBar.setVisibility(View.VISIBLE);
                 retrofitManager = new RetrofitManager();
-                retrofitManager.addHearingDate(this, new UserPreferance(getApplicationContext()).getToken(), caseId, edtDate.getText().toString(), edtCaseNotes.getText().toString());
+                retrofitManager.addHearingDate(this, new UserPreferance(getApplicationContext()).getToken(), caseId, selectedDate, edtCaseNotes.getText().toString());
             } else {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
@@ -123,9 +124,12 @@ public class CasesNewHearingActivity extends AppCompatActivity implements CaseLi
         return true;
     }
 
+    String selectedDate = "";
+
     @Override
     public void dateTime(String date) {
-        edtDate.setText(date);
+        selectedDate = date;
+        edtDate.setText(Utils.getDateFormat(selectedDate));
     }
 
     @Override

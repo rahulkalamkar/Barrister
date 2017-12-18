@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FAFAFA"
+    android:background="@drawable/ripple"
     android:paddingLeft="8dp"
     android:paddingRight="@dimen/fab_margin"
     android:paddingTop="8dp">
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:background="@drawable/ripple"
+                android:background="@android:color/transparent"
                 android:orientation="vertical"
                 android:padding="5dp">
 

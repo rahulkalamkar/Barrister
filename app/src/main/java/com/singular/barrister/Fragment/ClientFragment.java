@@ -33,6 +33,8 @@ import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.singular.barrister.Activity.LandingScreen;
 import com.singular.barrister.Activity.SubActivity.DisplayClientActivity;
 import com.singular.barrister.Adapter.ClientListAdapter;
@@ -244,6 +246,21 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         menu.add(0, v.getId(), 0, "Delete");
         menu.add(0, v.getId(), 0, "Call");
         menu.add(0, v.getId(), 0, "SMS");
+        menu.add(0, v.getId(), 0, "Email");
+        menu.add(0, v.getId(), 0, "WhatsApp");
+    }
+
+    private void openWhatsApp(String phone) {
+        String smsNumber = phone;
+        try {
+            Uri uri = Uri.parse("smsto:" + smsNumber);
+            Intent i = new Intent(Intent.ACTION_SENDTO, uri);
+            i.putExtra("sms_body", smsNumber);
+            i.setPackage("com.whatsapp");
+            startActivity(i);
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Whats app not found", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -259,6 +276,15 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             String phone = "";
             phone = selectedClient.getClient().getCountry_code() + "" + selectedClient.getClient().getMobile();
             sendSMS(phone);
+        } else if (item.getTitle() == "WhatsApp") {
+            String phone = "";
+            phone = selectedClient.getClient().getMobile();
+            openWhatsApp(phone);
+        } else if (item.getTitle() == "Email") {
+            if (selectedClient.getClient().getEmail() != null) {
+                sendEmail(selectedClient.getClient().getEmail());
+            } else
+                sendEmail("");
         } else if (item.getTitle() == "Delete") {
             if (getActivity() != null) {
                 retrofitManager.deleteClient(new UserPreferance(getActivity()).getToken(), selectedClient.getClient_id());
@@ -269,6 +295,14 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             return false;
         }
         return true;
+    }
+
+    public void sendEmail(String emailId) {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", emailId, null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+        startActivity(Intent.createChooser(emailIntent, ""));
     }
 
     public void sendSMS(String number) {
@@ -363,7 +397,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
                     BaseClientTable baseClientTable = new BaseClientTable(client.getId(), client.getCreated_at(), client.getClient_id(), clientTable);
 
 
-                    Dao<ClientTable,Integer> clientTableDao=getHelper().getClientTableDao();
+                    Dao<ClientTable, Integer> clientTableDao = getHelper().getClientTableDao();
                     clientTableDao.update(clientTable);
 
                     baseClientTable.setId(getClient(client.getClient_id()).getId());

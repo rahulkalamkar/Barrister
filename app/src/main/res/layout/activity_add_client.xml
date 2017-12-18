@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/hint_first_name"
-                android:inputType="textPersonName"
+                android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                 android:maxLines="1"
                 android:singleLine="true" />
 
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/hint_last_name"
-                android:inputType="textPersonName"
+                android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                 android:maxLines="1"
                 android:singleLine="true" />
 
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/hint_email_id"
-                android:inputType="textPersonName"
+                android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                 android:maxLines="1"
                 android:singleLine="true" />
 

@@ -49,6 +49,7 @@
                         android:id="@+id/editTextCourtName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                         android:hint="Court name"
                         android:maxLines="1" />
 
@@ -81,6 +82,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
+                        android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                         android:hint="Court type"
                         android:maxLines="1" />
 
@@ -98,6 +100,7 @@
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:hint="State"
+                        android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -114,6 +117,7 @@
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:hint="District"
+                        android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -129,6 +133,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
+                        android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                         android:hint="Sub district"
                         android:maxLines="1" />
 

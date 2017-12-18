@@ -132,7 +132,7 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
                     mRecycleView.setAdapter(courtListAdapter);
                     progressBar.setVisibility(View.GONE);
                 }
-            //    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -232,6 +232,30 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
         menu.add(0, v.getId(), 0, "Delete");
         menu.add(0, v.getId(), 0, "Call");
         menu.add(0, v.getId(), 0, "SMS");
+        menu.add(0, v.getId(), 0, "Email");
+        menu.add(0, v.getId(), 0, "WhatsApp");
+    }
+
+    public void sendEmail(String emailId) {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", emailId, null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+        startActivity(Intent.createChooser(emailIntent,""));
+    }
+
+    private void openWhatsApp(String phone) {
+        String smsNumber = phone;
+        try {
+            Uri uri = Uri.parse("smsto:" + smsNumber);
+            Intent i = new Intent(Intent.ACTION_SENDTO, uri);
+            i.putExtra("sms_body", smsNumber);
+            i.setPackage("com.whatsapp");
+            startActivity(i);
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Whats app not found", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
@@ -243,10 +267,19 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
                 startActivity(intent);
             }
+        } else if (item.getTitle() == "Email") {
+            if (selectedItem.getClient().getEmail() != null) {
+                sendEmail(selectedItem.getClient().getEmail());
+            } else
+                sendEmail("");
         } else if (item.getTitle() == "SMS") {
             String phone = "";
             phone = selectedItem.getClient().getCountry_code() + "" + selectedItem.getClient().getMobile();
             sendSMS(phone);
+        } else if (item.getTitle() == "WhatsApp") {
+            String phone = "";
+            phone = selectedItem.getClient().getMobile();
+            openWhatsApp(phone);
         } else if (item.getTitle() == "Delete") {
             if (getActivity() != null) {
                 retrofitManager.deleteCase(new UserPreferance(getActivity()).getToken(), selectedItem.getId());

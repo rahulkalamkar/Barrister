@@ -139,6 +139,7 @@ public class CasesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 for (Case cases : casesList) {
                     String secondWord = getOppositionName(cases);
                     if (cases.getClient().getFirst_name().toLowerCase().contains(charString.toLowerCase()) ||
+                            cases.getCase_cnr_number().toLowerCase().contains(charString.toLowerCase()) ||
                             cases.getClient().getLast_name().toLowerCase().contains(charString.toLowerCase()) ||
                             secondWord.toLowerCase().contains(charString.toLowerCase()) ||
                             cases.getCourt().getCourt_name().toLowerCase().contains(charString.toLowerCase()) ||

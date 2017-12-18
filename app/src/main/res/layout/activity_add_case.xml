@@ -59,6 +59,7 @@
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:hint="Case status"
+                        android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -75,6 +76,7 @@
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:hint="Next hearing date"
+                        android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -91,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:hint="Case type"
-                         />
+                        android:inputType="textNoSuggestions|textCapWords|textCapSentences" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -107,6 +109,7 @@
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:hint="Select court"
+                        android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -121,8 +124,8 @@
                         android:id="@+id/EditTextCaseCNRNummber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
                         android:hint="Case CNR number"
+                        android:inputType="number"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -155,6 +158,7 @@
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:hint="Case register date"
+                        android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -170,6 +174,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Case notes"
+                        android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -241,6 +246,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Name"
+                        android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -257,6 +263,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Phone"
                         android:inputType="number"
+                        android:maxLength="10"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -273,6 +280,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Lawyer Name"
+                        android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -289,6 +297,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Lawyer Phone"
                         android:inputType="number"
+                        android:maxLength="10"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>

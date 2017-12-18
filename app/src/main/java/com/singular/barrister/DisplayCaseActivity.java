@@ -247,7 +247,7 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
         }
 
         //list of items
-        final String[] items = {"in-Progress", "completed"};
+        final String[] items = {"in-progress", "completed"};
         builder.setSingleChoiceItems(items, i,
                 new DialogInterface.OnClickListener() {
                     @Override

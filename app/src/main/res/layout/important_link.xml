@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Website name"
+            android:inputType="textNoSuggestions"
             android:maxLines="1" />
 
     </android.support.design.widget.TextInputLayout>
@@ -32,6 +33,7 @@
             android:id="@+id/editTextWebSiteUrl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textNoSuggestions"
             android:hint="Website url" />
 
     </android.support.design.widget.TextInputLayout>
