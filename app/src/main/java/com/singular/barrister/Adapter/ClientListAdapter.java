@@ -66,6 +66,14 @@ public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             clientViewHolder.txtInitial.setText(clientArrayList.get(position).getClient().getFirst_name().substring(0, 1).toUpperCase() + clientArrayList.get(position).getClient().getLast_name().substring(0, 1).toUpperCase());
             clientViewHolder.txtStateName.setText("+" + clientArrayList.get(position).getClient().getCountry_code() + " " +
                     clientArrayList.get(position).getClient().getMobile());
+
+            if (position % 2 == 0) {
+                clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_green);
+            } else if (position % 3 == 0) {
+                clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_blue);
+            } else {
+                clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_red);
+            }
         }
     }
 
@@ -129,10 +137,10 @@ public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
 
-
     public class ClientViewHolder extends RecyclerView.ViewHolder {
         public TextView txtCourtName, txtStateName, txtInitial;
         public LinearLayout fgLayout;
+
         public ClientViewHolder(View itemView) {
             super(itemView);
             txtCourtName = (TextView) itemView.findViewById(R.id.textViewCourtName);

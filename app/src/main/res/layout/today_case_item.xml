@@ -3,7 +3,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:background="@drawable/ripple"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/fab_margin"
+    android:paddingLeft="@dimen/fab_margin"
+    android:paddingRight="@dimen/fab_margin">
 
     <TextView
         android:id="@+id/textViewClientOne"
@@ -13,40 +17,6 @@
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold" />
-    <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="5">
-
-        <TextView
-            android:id="@+id/textViewClientOne"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Rahul Kalamkar"
-            android:textColor="#000000"
-            android:textSize="20sp" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="VS"
-            android:textColor="#ff0000"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textViewClientTwo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Hungama"
-            android:textColor="#000000"
-            android:textSize="20sp"/>
-    </LinearLayout>-->
 
     <TextView
         android:id="@+id/textViewCourtName"
@@ -70,7 +40,6 @@
         android:layout_width="match_parent"
         android:layout_height="0.2dp"
         android:layout_marginTop="@dimen/fab_margin"
-        android:background="#99777777"
-        android:layout_marginBottom="@dimen/fab_margin"/>
+        android:background="#99777777" />
 
 </LinearLayout>
