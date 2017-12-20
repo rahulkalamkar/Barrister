@@ -39,15 +39,14 @@ public class TodaysCaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TodayViewHolder) {
             TodayViewHolder todayViewHolder = (TodayViewHolder) holder;
-
+            todayViewHolder.txtClientOne.setText(caseList.get(position).getClient().getFirst_name() + " " + caseList.get(position).getClient()
+                    .getLast_name());
             if (caseList.get(position).getClient() != null) {
                 if (caseList.get(position).getPersons().get(0).getType().equalsIgnoreCase("Client")) {
-                    todayViewHolder.txtClientOne.setText(caseList.get(position).getClient().getFirst_name() + " " + caseList.get(position).getClient()
-                            .getLast_name() + " VS " + caseList.get(position).getPersons().get(0).getOpp_name());
+                    todayViewHolder.txtClientTwo.setText(caseList.get(position).getPersons().get(0).getOpp_name());
 
                 } else {
-                    todayViewHolder.txtClientOne.setText(caseList.get(position).getClient().getFirst_name() + " " + caseList.get(position).getClient()
-                            .getLast_name() + " VS " + caseList.get(position).getPersons().get(1).getOpp_name());
+                    todayViewHolder.txtClientTwo.setText(caseList.get(position).getPersons().get(1).getOpp_name());
                 }
             }
 
@@ -85,6 +84,7 @@ public class TodaysCaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public TodayViewHolder(View itemView) {
             super(itemView);
+            txtClientTwo = (TextView) itemView.findViewById(R.id.textViewClientTwo);
             txtClientOne = (TextView) itemView.findViewById(R.id.textViewClientOne);
             txtCourtName = (TextView) itemView.findViewById(R.id.textViewCourtName);
             txtAddress = (TextView) itemView.findViewById(R.id.textViewCourtAddress);

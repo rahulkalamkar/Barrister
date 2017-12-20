@@ -34,6 +34,7 @@ import com.singular.barrister.Util.IDataChangeListener;
 import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
+import com.singular.barrister.WebActivity;
 
 public class CreateAccount extends AppCompatActivity implements View.OnClickListener, IDataChangeListener<IModel> {
 
@@ -78,7 +79,7 @@ public class CreateAccount extends AppCompatActivity implements View.OnClickList
         txtIPPassword.setErrorEnabled(false);
         txtIPRefferalCode.setErrorEnabled(false);
 
-
+        edtNumber.setOnClickListener(this);
         txtIPNumber.setOnClickListener(this);
         btnCreate = (Button) findViewById(R.id.textViewRegister);
         btnCreate.setOnClickListener(this);
@@ -123,8 +124,7 @@ public class CreateAccount extends AppCompatActivity implements View.OnClickList
         AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
                 new AccountKitConfiguration.AccountKitConfigurationBuilder(
                         LoginType.PHONE,
-                        AccountKitActivity.ResponseType.TOKEN); // or .ResponseType.TOKEN
-        // ... perform additional configuration ...
+                        AccountKitActivity.ResponseType.TOKEN);
         intent.putExtra(
                 AccountKitActivity.ACCOUNT_KIT_ACTIVITY_CONFIGURATION,
                 configurationBuilder.build());
@@ -253,10 +253,18 @@ public class CreateAccount extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.textViewPrivacy:
-                Intent intent = new Intent(CreateAccount.this, PrivacyPolicy.class);
-                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString("Name", getResources().getString(R.string.privacy_policy));
+                bundle.putString("Url", "http://www.barristerdiary.com/privacy.html");
+                Intent i = new Intent(getApplicationContext(), WebActivity.class);
+                i.putExtras(bundle);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                /*Intent intent = new Intent(CreateAccount.this, PrivacyPolicy.class);
+                startActivity(intent);*/
                 break;
 
+            case R.id.editTextPhoneNumberError:
             case R.id.editTextPhoneNumber:
                 progressBar.setVisibility(View.VISIBLE);
                 initAccountKitSmsFlow();

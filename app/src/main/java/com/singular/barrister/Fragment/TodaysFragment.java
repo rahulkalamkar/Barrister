@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.singular.barrister.Activity.LandingScreen;
 import com.singular.barrister.Adapter.CasesListAdapter;
 import com.singular.barrister.Adapter.TodaysCaseAdapter;
+import com.singular.barrister.Custom.RecyclerViewPager;
 import com.singular.barrister.Database.Tables.Case.CaseTable;
 import com.singular.barrister.Database.Tables.Case.Query.CaseQuery;
 import com.singular.barrister.Database.Tables.Today.Query.TodayCaseQuery;
@@ -45,11 +47,13 @@ import java.util.List;
 
 public class TodaysFragment extends Fragment implements IDataChangeListener<IModel> {
 
+    protected RecyclerViewPager mCustomRecyclerView;
     private ProgressBar progressBar;
     TextView errorTextView;
+    FrameLayout frameLayout;
     private RetrofitManager retrofitManager;
     private ArrayList<Case> caseList;
-    RecyclerView mRecyclerView;
+    //   RecyclerView mRecyclerView;
 
     @Nullable
     @Override
@@ -60,8 +64,10 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycleView);
+        frameLayout = (FrameLayout) getView().findViewById(R.id.frameLayout1);
+        mCustomRecyclerView = (RecyclerViewPager) getView().findViewById(R.id.viewpager);
+        // mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycleView);
+        initRecycleView();
         progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
         errorTextView = (TextView) getView().findViewById(R.id.textViewErrorText);
         retrofitManager = new RetrofitManager();
@@ -79,12 +85,14 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
                 if (list != null) {
                     caseList = (ArrayList<Case>) new TodayCaseQuery(getActivity()).convertListToOnLineList(list);
                     TodaysCaseAdapter todaysCaseAdapter = new TodaysCaseAdapter(getActivity(), caseList);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    mRecyclerView.setLayoutManager(linearLayoutManager);
-                    mRecyclerView.setAdapter(todaysCaseAdapter);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,
+                            false);
+                    mCustomRecyclerView.setLayoutManager(linearLayoutManager);
+                    mCustomRecyclerView.setAdapter(todaysCaseAdapter);
+                    frameLayout.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
                 }
-           //     Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                //     Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -92,12 +100,88 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
     public void showError() {
         errorTextView.setText("There is no case for a day!");
         errorTextView.setVisibility(View.VISIBLE);
+        frameLayout.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onDataChanged() {
 
+    }
+
+    public void initRecycleView() {
+        mCustomRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int scrollState) {
+//                updateState(scrollState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+                int childCount = mCustomRecyclerView.getChildCount();
+                int width = mCustomRecyclerView.getChildAt(0).getWidth();
+                int padding = (mCustomRecyclerView.getWidth() - width) / 2;
+
+                for (int j = 0; j < childCount; j++) {
+                    View v = recyclerView.getChildAt(j);
+                    float rate = 0;
+                    ;
+                    if (v.getLeft() <= padding) {
+                        if (v.getLeft() >= padding - v.getWidth()) {
+                            rate = (padding - v.getLeft()) * 1f / v.getWidth();
+                        } else {
+                            rate = 1;
+                        }
+                        v.setScaleY(1 - rate * 0.1f);
+                        v.setScaleX(1 - rate * 0.1f);
+
+                    } else {
+                        if (v.getLeft() <= recyclerView.getWidth() - padding) {
+                            rate = (recyclerView.getWidth() - padding - v.getLeft()) * 1f / v.getWidth();
+                        }
+                        v.setScaleY(0.9f + rate * 0.1f);
+                        v.setScaleX(0.9f + rate * 0.1f);
+                    }
+                }
+            }
+        });
+        mCustomRecyclerView.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
+            @Override
+            public void OnPageChanged(int oldPosition, int newPosition) {
+                Log.d("test", "oldPosition:" + oldPosition + " newPosition:" + newPosition);
+            }
+        });
+
+        mCustomRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (mCustomRecyclerView.getChildCount() < 3) {
+                    if (mCustomRecyclerView.getChildAt(1) != null) {
+                        if (mCustomRecyclerView.getCurrentPosition() == 0) {
+                            View v1 = mCustomRecyclerView.getChildAt(1);
+                            v1.setScaleY(0.9f);
+                            v1.setScaleX(0.9f);
+                        } else {
+                            View v1 = mCustomRecyclerView.getChildAt(0);
+                            v1.setScaleY(0.9f);
+                            v1.setScaleX(0.9f);
+                        }
+                    }
+                } else {
+                    if (mCustomRecyclerView.getChildAt(0) != null) {
+                        View v0 = mCustomRecyclerView.getChildAt(0);
+                        v0.setScaleY(0.9f);
+                        v0.setScaleX(0.9f);
+                    }
+                    if (mCustomRecyclerView.getChildAt(2) != null) {
+                        View v2 = mCustomRecyclerView.getChildAt(2);
+                        v2.setScaleY(0.9f);
+                        v2.setScaleX(0.9f);
+                    }
+                }
+
+            }
+        });
     }
 
     @Override
@@ -108,9 +192,11 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
                 caseList.addAll(todayResponse.getData().getCaseList());
                 if (getActivity() != null) {
                     TodaysCaseAdapter todaysCaseAdapter = new TodaysCaseAdapter(getActivity(), caseList);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    mRecyclerView.setLayoutManager(linearLayoutManager);
-                    mRecyclerView.setAdapter(todaysCaseAdapter);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,
+                            false);
+                    mCustomRecyclerView.setLayoutManager(linearLayoutManager);
+                    mCustomRecyclerView.setAdapter(todaysCaseAdapter);
+                    frameLayout.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
                     if (caseList != null && caseList.size() > 0) {
                         TodayCaseQuery caseQuery = new TodayCaseQuery(getActivity());
