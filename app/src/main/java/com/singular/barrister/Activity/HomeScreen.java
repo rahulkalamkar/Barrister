@@ -405,12 +405,11 @@ public class HomeScreen extends AppCompatActivity {
     private void displayFirebaseRegId() {
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
         String regId = pref.getString("regId", null);
-
-        Log.e("HomeScreen", "Firebase reg id: " + regId);
-
-        if (!TextUtils.isEmpty(regId))
+        if (!TextUtils.isEmpty(regId)) {
+            RetrofitManager retrofitManager=new RetrofitManager();
+            retrofitManager.updateToken(regId,new UserPreferance(this).getToken());
             Log.e("HomeScreen", "Firebase Reg Id: " + regId);
-        else
+        } else
             Log.e("HomeScreen", "Firebase Reg Id is not received yet!");
     }
 

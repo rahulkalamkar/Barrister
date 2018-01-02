@@ -77,43 +77,52 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="16dp"
+            android:orientation="horizontal"
             android:weightSum="4">
 
             <ImageView
+                android:id="@+id/ic_call"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/ripple"
                 android:src="@mipmap/ic_launcher_cal" />
 
             <ImageView
+                android:id="@+id/ic_messge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@mipmap/ic_launcher_cal" />
+                android:background="@drawable/ripple"
+                android:src="@mipmap/ic_launcher_white_message" />
 
             <ImageView
+                android:id="@+id/ic_mail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@mipmap/ic_launcher_cal" />
+                android:background="@drawable/ripple"
+                android:src="@mipmap/ic_launcher_white_email" />
 
             <ImageView
+                android:id="@+id/ic_whatsapp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@mipmap/ic_launcher_cal" />
+                android:background="@drawable/ripple"
+                android:src="@mipmap/ic_launcher_white_whatsapp" />
         </LinearLayout>
 
         <TextView
+            android:id="@+id/txtViewAllHearings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:gravity="center"
             android:background="@drawable/today_text_button"
+            android:gravity="center"
+            android:padding="10dp"
             android:text="View all hearing dates"
-            android:padding="5dp"
             android:textColor="#fafafa"
             android:textSize="16sp" />
 

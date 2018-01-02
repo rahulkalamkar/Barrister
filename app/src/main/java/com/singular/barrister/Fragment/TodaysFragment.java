@@ -77,7 +77,21 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
 
     public void getCasesList() {
         if (new NetworkConnection(getActivity()).isNetworkAvailable()) {
-            progressBar.setVisibility(View.VISIBLE);
+            if (getActivity() != null) {
+                List<TodayCaseTable> list = new TodayCaseQuery(getActivity()).getList();
+                if (list != null) {
+                    caseList = (ArrayList<Case>) new TodayCaseQuery(getActivity()).convertListToOnLineList(list);
+                    TodaysCaseAdapter todaysCaseAdapter = new TodaysCaseAdapter(getActivity(), caseList);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,
+                            false);
+                    mCustomRecyclerView.setLayoutManager(linearLayoutManager);
+                    mCustomRecyclerView.setAdapter(todaysCaseAdapter);
+                    frameLayout.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+            if (caseList != null && caseList.size() == 0)
+                progressBar.setVisibility(View.VISIBLE);
             retrofitManager.getTodayCases(this, new UserPreferance(getActivity()).getToken());
         } else {
             if (getActivity() != null) {
@@ -92,7 +106,6 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
                     frameLayout.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
                 }
-                //     Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
         }
     }

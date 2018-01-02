@@ -1,5 +1,7 @@
 package com.singular.barrister.RetrofitManager;
 
+import android.util.Log;
+
 import com.singular.barrister.Model.CaseHearingResponse;
 import com.singular.barrister.Model.Cases.CasesResponse;
 import com.singular.barrister.Model.CasesTypeResponse;
@@ -62,6 +64,40 @@ public class RetrofitManager {
             callbackListener.onDataReceived(null);
             e.printStackTrace();
         }
+    }
+
+    public void updateToken(String profileToken, String token) {
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("Authorization", "Bearer " + token);
+
+        HashMap<String, String> queryMap = new HashMap<String, String>();
+        queryMap.put("deviceToken", profileToken);
+        queryMap.put("deviceType", "android");
+
+        try {
+            URL url = new URL("http://www.singularsacademy.com/lawyer/public/api/updatedevicetoken");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<RegisterResponse> call = api.updateProfileToken(apiName, hashMap, queryMap);
+            call.enqueue(new Callback<RegisterResponse>() {
+                @Override
+                public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                    Log.e("Token","Updated");
+                }
+
+                @Override
+                public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                    Log.e("Token","error");
+                }
+            });
+        } catch (MalformedURLException e) {
+            Log.e("Token","error");
+            e.printStackTrace();
+        }
+
     }
 
     public void setLogin(final IDataChangeListener<IModel> callbackListener, String number, String password, String token) {

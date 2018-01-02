@@ -3,7 +3,6 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
-    apply plugin: 'com.google.gms.google-services'
     defaultConfig {
         multiDexEnabled true
         applicationId "com.singular.barrister"
@@ -60,6 +59,12 @@ dependencies {
 
     compile 'com.google.firebase:firebase-messaging:11.8.0'
 
+    compile 'com.google.android.gms:play-services-base:11.8.0'
+    compile 'com.google.android.gms:play-services-auth-api-phone:11.8.0'
+    compile 'com.google.android.gms:play-services-auth:11.8.0'
+
     compile 'com.android.support:multidex:1.0.1'
     testCompile 'junit:junit:4.12'
 }
+
+apply plugin: 'com.google.gms.google-services'

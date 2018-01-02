@@ -107,4 +107,8 @@ public interface API {
 
     @DELETE("{DELETE_COURT}")
     Call<SimpleMessageResponse> deleteCourt(@Path(value = "DELETE_COURT", encoded = true) String path, @HeaderMap Map<String, String> headers);
+
+    @POST("{UPDATE_TOKEN}")
+    Call<RegisterResponse> updateProfileToken(@Path(value = "UPDATE_TOKEN", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
+
 }
