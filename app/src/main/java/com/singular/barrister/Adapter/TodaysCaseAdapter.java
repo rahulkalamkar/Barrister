@@ -118,15 +118,12 @@ public class TodaysCaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             txtViewHearing.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (new NetworkConnection(context).isNetworkAvailable()) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("Id", caseList.get(getAdapterPosition()).getId());
-                        Intent intent1 = new Intent(context, HearingDateActivity.class);
-                        intent1.putExtras(bundle);
-                        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent1);
-                    } else
-                        Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Id", caseList.get(getAdapterPosition()).getId());
+                    Intent intent1 = new Intent(context, HearingDateActivity.class);
+                    intent1.putExtras(bundle);
+                    intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent1);
                 }
             });
 

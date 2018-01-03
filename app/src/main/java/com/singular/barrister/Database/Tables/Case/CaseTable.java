@@ -15,7 +15,7 @@ import java.util.List;
  * Created by rahul.kalamkar on 12/4/2017.
  */
 
-@DatabaseTable(tableName = "CaseTable")
+@DatabaseTable(tableName = "CasesTable")
 public class CaseTable {
     @DatabaseField(columnName = "id", generatedId = true)
     int id;

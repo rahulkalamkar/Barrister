@@ -18,6 +18,7 @@ import com.singular.barrister.Database.Tables.Case.CaseTable;
 import com.singular.barrister.Database.Tables.Case.CasesCaseType;
 import com.singular.barrister.Database.Tables.Case.CasesHearingTable;
 import com.singular.barrister.Database.Tables.Case.CasesSubCaseType;
+import com.singular.barrister.Database.Tables.CaseHearingListTable;
 import com.singular.barrister.Database.Tables.CaseTypeTable;
 import com.singular.barrister.Database.Tables.Client.BaseClientTable;
 import com.singular.barrister.Database.Tables.Client.ClientTable;
@@ -52,7 +53,7 @@ import java.sql.SQLException;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String DATABASE_NAME = "barrister.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private Dao<StateTable, Integer> stateTableDao;
     private Dao<CourtTypeTable, Integer> courtTypeTableDao;
@@ -75,6 +76,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<CasesSubCaseType, Integer> aCasesSubCaseTypeDao;
     private Dao<CaseTable, Integer> aCaseTableDao;
     private Dao<CasesHearingTable, Integer> aCaseHearingTableDao;
+
+    private Dao<CaseHearingListTable, Integer> aCaseHearingListDao;
 
     private Dao<TodayCaseClientTable, Integer> aTodayCaseClientTableDao;
     private Dao<TodayCaseCourtDistrict, Integer> aTodayCaseCourtDistrictDao;
@@ -117,6 +120,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, ClientTable.class);
             TableUtils.createTable(connectionSource, CaseTypeTable.class);
             TableUtils.createTable(connectionSource, SubCaseTypeTable.class);
+
+            TableUtils.createTable(connectionSource, CaseHearingListTable.class);
 
             // Cases related table
             TableUtils.createTable(connectionSource, CaseClientTable.class);
@@ -187,6 +192,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, TodayCasesHearingTable.class);
             TableUtils.createTable(connectionSource, ImportantLink.class);
 
+            TableUtils.createTable(connectionSource, CaseHearingListTable.class);
             onCreate(sqliteDatabase, connectionSource);
 
         } catch (SQLException e) {
@@ -195,6 +201,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
+    public Dao<CaseHearingListTable, Integer> getCaseHearingListDao() throws SQLException {
+        if (aCaseHearingListDao == null) {
+            aCaseHearingListDao = getDao(CaseHearingListTable.class);
+        }
+        return aCaseHearingListDao;
+    }
     // Create the getDao methods of all database tables to access those from android code.
     // Insert, delete, read, update everything will be happened through DAOs
 

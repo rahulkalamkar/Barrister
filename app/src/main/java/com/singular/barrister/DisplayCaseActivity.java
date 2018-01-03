@@ -219,14 +219,11 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
                 break;
 
             case R.id.menuViewAllPastHearingDates:
-                if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("Id", aCaseDetail.getId());
-                    Intent intent1 = new Intent(getApplicationContext(), HearingDateActivity.class);
-                    intent1.putExtras(bundle);
-                    startActivity(intent1);
-                } else
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                Bundle bundle = new Bundle();
+                bundle.putString("Id", aCaseDetail.getId());
+                Intent intent1 = new Intent(getApplicationContext(), HearingDateActivity.class);
+                intent1.putExtras(bundle);
+                startActivity(intent1);
                 break;
         }
         return true;
