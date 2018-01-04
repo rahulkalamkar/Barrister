@@ -7,55 +7,16 @@
     tools:context="com.singular.barrister.Activity.SplashActivity">
 
 
-
     <LinearLayout
-        android:id="@+id/app_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/textViewLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/logo"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimaryDark" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/app_title_bold"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="23sp"
-            android:textStyle="bold" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/your_online_diary_small"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-    <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/app_logo"
         android:layout_centerHorizontal="true"
         android:gravity="center|bottom"
         android:orientation="vertical">
 
-        <Button
+        <TextView
             android:id="@+id/button_create_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,7 +26,8 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/create_account"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/button_sign_in"
@@ -75,6 +37,61 @@
             android:layout_marginTop="20dp"
             android:background="@android:color/transparent"
             android:text="@string/sign_in"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp" />
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayout3"
+        android:layout_centerHorizontal="true">
+
+        <LinearLayout
+            android:id="@+id/app_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-10dp"
+                android:includeFontPadding="false"
+                android:text="@string/logo"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="70sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/colorPrimaryDark" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_title_bold"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/your_online_diary_small"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

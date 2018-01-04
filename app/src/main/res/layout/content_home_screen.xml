@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:background="@color/colorAccent" />
+            android:background="@color/colorPrimary" />
 
         <FrameLayout
             android:id="@+id/fragmentContainer"

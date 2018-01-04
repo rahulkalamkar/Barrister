@@ -68,11 +68,17 @@ public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     clientArrayList.get(position).getClient().getMobile());
 
             if (position % 2 == 0) {
-                clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_green);
+                if (position % 4 == 0) {
+                    clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_four);
+                } else
+                    clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_green);
             } else if (position % 3 == 0) {
-                clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_green);
+                if (position % 6 == 0) {
+                    clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_five);
+                }
+                clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_blue);
             } else {
-                clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_green);
+                clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_red);
             }
         }
     }

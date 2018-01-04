@@ -11,6 +11,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.singular.barrister.R;
 
@@ -18,16 +19,18 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class LandingScreen extends AppCompatActivity implements View.OnClickListener {
-    private Button createAccountButton,signInButton;
+    private Button signInButton;
+    TextView createAccountButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_screen);
 
-        createAccountButton = (Button) findViewById(R.id.button_create_account);
-        signInButton=(Button)findViewById(R.id.button_sign_in);
-
+        createAccountButton = (TextView) findViewById(R.id.button_create_account);
+        signInButton = (Button) findViewById(R.id.button_sign_in);
+        signInButton.setTransformationMethod(null);
+        createAccountButton.setTransformationMethod(null);
         signInButton.setOnClickListener(this);
         createAccountButton.setOnClickListener(this);
     }
@@ -35,16 +38,15 @@ public class LandingScreen extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
 
-        switch (view.getId())
-        {
-            case R.id.button_create_account :
+        switch (view.getId()) {
+            case R.id.button_create_account:
                 Intent intent = new Intent(LandingScreen.this, CreateAccount.class);
                 startActivity(intent);
                 finish();
                 break;
 
-            case R.id.button_sign_in :
-                Intent  intent1=new Intent(LandingScreen.this,SignInAccount.class);
+            case R.id.button_sign_in:
+                Intent intent1 = new Intent(LandingScreen.this, SignInAccount.class);
                 startActivity(intent1);
                 finish();
                 break;
@@ -76,12 +78,12 @@ public class LandingScreen extends AppCompatActivity implements View.OnClickList
             }
         } catch (PackageManager.NameNotFoundException e1) {
             Log.e("Name not found", e1.toString());
-        }
-        catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             Log.e("No such an algorithm", e.toString());
         } catch (Exception e) {
             Log.e("Exception", e.toString());
         }
 
-        return key;}
+        return key;
+    }
 }
