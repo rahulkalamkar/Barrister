@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:text="Call us"
-                    android:textColor="#000000"
+                    android:textColor="@color/colorTextBlack"
                     android:textSize="16sp"
                     android:visibility="gone" />
 
@@ -76,7 +76,7 @@
                                 android:paddingLeft="10dp"
                                 android:paddingTop="10dp"
                                 android:text="+91 9724283616"
-                                android:textColor="#000000"
+                                android:textColor="@color/colorTextBlack"
                                 android:textSize="16sp" />
 
                             <TextView
@@ -84,7 +84,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
                                 android:text="Mobile"
-                                android:textColor="#777777"
+                                android:textColor="@color/colorTextBlackLight"
                                 android:textSize="12sp" />
                         </LinearLayout>
 
@@ -101,7 +101,7 @@
                                 android:paddingLeft="10dp"
                                 android:paddingTop="10dp"
                                 android:text="+91 8980899345"
-                                android:textColor="#000000"
+                                android:textColor="@color/colorTextBlack"
                                 android:textSize="16sp" />
 
                             <TextView
@@ -109,14 +109,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
                                 android:text="Mobile"
-                                android:textColor="#777777"
+                                android:textColor="@color/colorTextBlackLight"
                                 android:textSize="12sp" />
 
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="0.2dp"
                                 android:layout_marginTop="10dp"
-                                android:background="#777777" />
+                                android:background="@color/colorTextBlackLight" />
                         </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>
@@ -136,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:text="Send us email"
-                    android:textColor="#000000"
+                    android:textColor="@color/colorTextBlack"
                     android:textSize="16sp"
                     android:visibility="gone" />
 
@@ -170,14 +170,14 @@
                             android:gravity="center_vertical"
                             android:paddingLeft="10dp"
                             android:text="barristerapp@gmail.com"
-                            android:textColor="#000000"
+                            android:textColor="@color/colorTextBlack"
                             android:textSize="16sp" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.2dp"
                             android:layout_marginTop="10dp"
-                            android:background="#777777"
+                            android:background="@color/colorTextBlackLight"
                             android:visibility="gone" />
                     </LinearLayout>
                 </RelativeLayout>

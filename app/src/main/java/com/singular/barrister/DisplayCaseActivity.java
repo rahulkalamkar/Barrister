@@ -191,10 +191,19 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
         }
     }
 
+    MenuItem change, add;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.casemenu, menu);
+        change = menu.findItem(R.id.menuChangeCaseStatus);
+        add = menu.findItem(R.id.menuAddNewHearingDates);
+
+        if (!new UserPreferance(getApplicationContext()).getUser_type().equalsIgnoreCase("lawyer")) {
+            change.setVisible(false);
+            add.setVisible(false);
+        }
         return true;
     }
 

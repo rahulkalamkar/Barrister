@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="First Name"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:textSize="16sp" />
 
         <EditText
@@ -27,7 +27,7 @@
             android:inputType="textNoSuggestions|textCapWords|textCapSentences"
             android:paddingLeft="0dp"
             android:text="Rahul"
-            android:textColor="#777777"
+            android:textColor="@color/colorTextBlackLight"
             android:textSize="16sp" />
 
         <View
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:text="Last Name"
             android:layout_marginTop="@dimen/fab_margin"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:textSize="16sp" />
 
         <EditText
@@ -51,7 +51,7 @@
             android:maxLines="1"
             android:inputType="textNoSuggestions|textCapWords|textCapSentences"
             android:text="Kalamkar"
-            android:textColor="#777777"
+            android:textColor="@color/colorTextBlackLight"
             android:paddingLeft="0dp"
             android:textSize="16sp" />
 
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fab_margin"
             android:text="Email id"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:textSize="16sp" />
 
         <TextView
@@ -75,21 +75,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="rahulbkalamkar@gmail.com"
-            android:textColor="#777777"
+            android:textColor="@color/colorTextBlackLight"
             android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             android:layout_marginTop="10dp"
-            android:background="#777777" />
+            android:background="@color/colorTextBlackLight" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fab_margin"
             android:text="Phone number"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:textSize="16sp" />
 
         <TextView
@@ -98,21 +98,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="+91 9762 99 3179"
-            android:textColor="#777777"
+            android:textColor="@color/colorTextBlackLight"
             android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             android:layout_marginTop="10dp"
-            android:background="#777777" />
+            android:background="@color/colorTextBlackLight" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fab_margin"
             android:text="Address"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:visibility="gone"
             android:textSize="16sp" />
 
@@ -122,7 +122,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:text="101, Guru krupa building, Navghar Lane-1 Mulund East"
-            android:textColor="#777777"
+            android:textColor="@color/colorTextBlackLight"
             android:textSize="16sp" />
 
         <View

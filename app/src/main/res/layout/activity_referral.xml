@@ -37,7 +37,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:text="@string/refer_second_passage"
-        android:textColor="#777777"
+        android:textColor="@color/colorTextBlackLight"
         android:textSize="14sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

@@ -70,9 +70,9 @@ public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (position % 2 == 0) {
                 clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_green);
             } else if (position % 3 == 0) {
-                clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_blue);
+                clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_green);
             } else {
-                clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_red);
+                clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_green);
             }
         }
     }

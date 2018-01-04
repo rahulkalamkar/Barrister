@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Change Status"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="In-Progress"
-                android:textColor="#000000"
+                android:textColor="@color/colorTextBlack"
                 android:textSize="18sp" />
 
             <RadioButton
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Completed"
-                android:textColor="#000000"
+                android:textColor="@color/colorTextBlack"
                 android:textSize="18sp" />
         </RadioGroup>
 

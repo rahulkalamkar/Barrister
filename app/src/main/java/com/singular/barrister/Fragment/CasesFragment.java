@@ -124,13 +124,15 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
         } else {
             if (getActivity() != null) {
                 List<CaseTable> list = new CaseQuery(getActivity()).getList();
-                if (list != null) {
+                if (list != null && list.size()!=0) {
                     caseList = (ArrayList<Case>) new CaseQuery(getActivity()).convertListToOnLineList(list);
                     courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                     mRecycleView.setLayoutManager(linearLayoutManager);
                     mRecycleView.setAdapter(courtListAdapter);
                     progressBar.setVisibility(View.GONE);
+                } else {
+                    showError();
                 }
                 //    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
@@ -138,7 +140,7 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
     }
 
     public void showError() {
-        errorTextView.setText("You have not added any case yet, click on + to add new ");
+        errorTextView.setText("You have not added any case yet, \nclick on + to add new ");
         errorTextView.setVisibility(View.VISIBLE);
         mRecycleView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
@@ -241,7 +243,7 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
                 "mailto", emailId, null));
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
         emailIntent.putExtra(Intent.EXTRA_TEXT, "");
-        startActivity(Intent.createChooser(emailIntent,""));
+        startActivity(Intent.createChooser(emailIntent, ""));
     }
 
     private void openWhatsApp(String phone) {

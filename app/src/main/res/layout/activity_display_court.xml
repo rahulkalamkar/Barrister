@@ -24,26 +24,26 @@
             android:layout_height="wrap_content"
             android:text="Name"
             android:textSize="16sp"
-            android:textColor="#000000"/>
+            android:textColor="@color/colorTextBlack"/>
         <TextView
             android:id="@+id/textViewCourtName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="hknk"
             android:layout_marginTop="3dp"
-            android:textColor="#777777"
+            android:textColor="@color/colorTextBlackLight"
             android:textSize="16sp"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             android:layout_marginTop="10dp"
-            android:background="#777777"/>
+            android:background="@color/colorTextBlackLight"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Number"
             android:textSize="16sp"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:layout_marginTop="10dp"/>
         <TextView
             android:id="@+id/textViewCourtNumber"
@@ -51,19 +51,19 @@
             android:layout_height="wrap_content"
             android:text="hknk"
             android:layout_marginTop="3dp"
-            android:textColor="#777777"
+            android:textColor="@color/colorTextBlackLight"
             android:textSize="16sp"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             android:layout_marginTop="10dp"
-            android:background="#777777"/>
+            android:background="@color/colorTextBlackLight"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Type"
             android:textSize="16sp"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:layout_marginTop="10dp"/>
         <TextView
             android:id="@+id/textViewCourtType"
@@ -71,20 +71,20 @@
             android:layout_height="wrap_content"
             android:text="hknk"
             android:layout_marginTop="3dp"
-            android:textColor="#777777"
+            android:textColor="@color/colorTextBlackLight"
             android:textSize="16sp"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             android:layout_marginTop="10dp"
-            android:background="#777777"/>
+            android:background="@color/colorTextBlackLight"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="State"
             android:textSize="16sp"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlackLight"
             android:layout_marginTop="10dp"/>
         <TextView
             android:id="@+id/textViewCourtState"
@@ -92,20 +92,20 @@
             android:layout_height="wrap_content"
             android:text="hknk"
             android:layout_marginTop="3dp"
-            android:textColor="#777777"
+            android:textColor="@color/colorTextBlackLight"
             android:textSize="16sp"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             android:layout_marginTop="10dp"
-            android:background="#777777"/>
+            android:background="@color/colorTextBlackLight"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="District"
             android:textSize="16sp"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:layout_marginTop="10dp"/>
         <TextView
             android:id="@+id/textViewCourtDistrict"
@@ -113,19 +113,19 @@
             android:layout_height="wrap_content"
             android:text="hknk"
             android:layout_marginTop="3dp"
-            android:textColor="#777777"
+            android:textColor="@color/colorTextBlackLight"
             android:textSize="16sp"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             android:layout_marginTop="10dp"
-            android:background="#777777"/>
+            android:background="@color/colorTextBlackLight"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SubDistrict"
             android:textSize="16sp"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:layout_marginTop="10dp"/>
         <TextView
             android:id="@+id/textViewCourtSubDistrict"
@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:text="hknk"
             android:layout_marginTop="3dp"
-            android:textColor="#777777"
+            android:textColor="@color/colorTextBlackLight"
             android:textSize="16sp"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -97,7 +97,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
     }
 
     public void showError() {
-        errorTextView.setText("You have not added any client yet, click on + to add new ");
+        errorTextView.setText("You have not added any client yet, \nclick on + to add new ");
         errorTextView.setVisibility(View.VISIBLE);
         mRecycleView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
@@ -138,8 +138,11 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             if (getActivity() != null) {
                 //     Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                 List<BaseClientTable> list = getLocalData();
-                if (list != null)
+                if (list != null && list.size()!=0) {
                     convertAndDisplay(list);
+                } else {
+                    showError();
+                }
             }
         }
     }

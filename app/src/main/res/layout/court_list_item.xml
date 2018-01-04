@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
             android:text="Rahul Kalamkar"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:textSize="16sp" />
 
         <TextView
@@ -57,7 +57,7 @@
             android:layout_marginTop="3dp"
             android:fontFamily="sans-serif"
             android:text="Jalna"
-            android:textColor="#777777"
+            android:textColor="@color/colorTextBlackLight"
             android:textSize="14sp" />
 
         <View

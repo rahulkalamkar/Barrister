@@ -65,6 +65,7 @@ public class SignInAccount extends AppCompatActivity implements View.OnClickList
         txtCreateNewAccount.setOnClickListener(this);
         txtForgotPassword.setOnClickListener(this);
         txtPrivacyPolicy.setOnClickListener(this);
+
     }
 
     @Override
@@ -85,6 +86,11 @@ public class SignInAccount extends AppCompatActivity implements View.OnClickList
                     RetrofitManager retrofitManager = new RetrofitManager();
                     if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
                         progressBar.setVisibility(View.VISIBLE);
+                        try {
+                            getApplicationContext().deleteDatabase("barrister.db");
+                        } catch (Exception e) {
+
+                        }
                         retrofitManager.setLogin(this, edtNumber.getText().toString().trim(), edtPassword.getText().toString(), "");
                     } else {
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();

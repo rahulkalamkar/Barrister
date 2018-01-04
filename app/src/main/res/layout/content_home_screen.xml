@@ -7,7 +7,8 @@
     android:background="#FAFAFA"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.singular.barrister.Activity.HomeScreen"
-    tools:showIn="@layout/activity_home_screen">
+    tools:showIn="@layout/activity_home_screen"
+    >
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -18,7 +19,8 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1">
+        tools:layout_constraintTop_creator="1"
+        >
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
@@ -26,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:background="@color/colorPrimary" />
+            android:background="@color/colorAccent" />
 
         <FrameLayout
             android:id="@+id/fragmentContainer"

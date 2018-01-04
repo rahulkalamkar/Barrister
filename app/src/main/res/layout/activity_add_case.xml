@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Case Detail"
-                    android:textColor="#009688"
+                    android:textColor="@color/textLightGreen"
                     android:textSize="16sp" />
 
                 <android.support.design.widget.TextInputLayout
@@ -185,7 +185,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:text="Client Detail"
-                    android:textColor="#009688"
+                    android:textColor="@color/textLightGreen"
                     android:textSize="16sp" />
 
                 <TextView
@@ -194,7 +194,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:text="Select Client"
-                    android:textColor="#777777"
+                    android:textColor="@color/colorTextBlackLight"
                     android:textSize="16sp" />
 
                 <RadioGroup
@@ -207,7 +207,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Petitioner"
-                        android:textColor="#000000"
+                        android:textColor="@color/colorTextBlack"
                         android:textSize="16sp" />
 
                     <RadioButton
@@ -215,7 +215,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Defender"
-                        android:textColor="#000000"
+                        android:textColor="@color/colorTextBlack"
                         android:textSize="16sp" />
 
                     <RadioButton
@@ -223,7 +223,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Third party"
-                        android:textColor="#000000"
+                        android:textColor="@color/colorTextBlack"
                         android:textSize="16sp" />
                 </RadioGroup>
 
@@ -232,7 +232,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:text="Opposition Detail"
-                    android:textColor="#009688"
+                    android:textColor="@color/textLightGreen"
                     android:textSize="16sp" />
 
                 <android.support.design.widget.TextInputLayout

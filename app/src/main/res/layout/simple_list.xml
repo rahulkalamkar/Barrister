@@ -22,7 +22,7 @@
             android:paddingLeft="@dimen/fab_margin"
             android:paddingRight="@dimen/fab_margin"
             android:text="Delete"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:textSize="18sp" />
 
         <View
@@ -40,7 +40,7 @@
             android:paddingLeft="@dimen/fab_margin"
             android:paddingRight="@dimen/fab_margin"
             android:text="Call"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:textSize="18sp" />
 
 
@@ -59,7 +59,7 @@
             android:paddingLeft="@dimen/fab_margin"
             android:paddingRight="@dimen/fab_margin"
             android:text="Message"
-            android:textColor="#000000"
+            android:textColor="@color/colorTextBlack"
             android:textSize="18sp" />
     </LinearLayout>
 </RelativeLayout>

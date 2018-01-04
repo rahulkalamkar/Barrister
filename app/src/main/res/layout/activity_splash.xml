@@ -20,19 +20,19 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/logo"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="30sp"
             android:textStyle="bold" />
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@color/colorPrimary" />
+            android:background="@color/colorPrimaryDark" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_title_bold"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="23sp"
             android:textStyle="bold" />
 

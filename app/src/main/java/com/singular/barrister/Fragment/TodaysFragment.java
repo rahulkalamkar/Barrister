@@ -96,7 +96,7 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
         } else {
             if (getActivity() != null) {
                 List<TodayCaseTable> list = new TodayCaseQuery(getActivity()).getList();
-                if (list != null) {
+                if (list != null && list.size()!=0) {
                     caseList = (ArrayList<Case>) new TodayCaseQuery(getActivity()).convertListToOnLineList(list);
                     TodaysCaseAdapter todaysCaseAdapter = new TodaysCaseAdapter(getActivity(), caseList);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,
@@ -105,6 +105,9 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
                     mCustomRecyclerView.setAdapter(todaysCaseAdapter);
                     frameLayout.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
+                }
+                else{
+                    showError();
                 }
             }
         }

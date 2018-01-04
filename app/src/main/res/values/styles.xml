@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionBarTheme">@style/AppBaseTheme.Toolbar</item>
     </style>
     <!-- Base application theme. -->
     <style name="AppThemeWithoutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -19,7 +20,10 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
+    <!--Action bar-->
+    <style name="AppBaseTheme.Toolbar" parent="Widget.AppCompat.ActionBar.Solid">
+        <item name="android:textColorPrimary">#000000</item>
+    </style>
     <style name="AppLoginTheme" parent="Theme.AccountKit" />
 
     <style name="AppThemeRefer" parent="Theme.AppCompat.Light.DarkActionBar">

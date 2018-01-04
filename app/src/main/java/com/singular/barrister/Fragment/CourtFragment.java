@@ -120,8 +120,11 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
         } else {
             if (getActivity() != null) {
                 List<CourtTable> list = getAllCourt();
-                if (list != null) {
+                if (list != null && list.size()!=0) {
                     convertList(list);
+                }
+                else{
+                    showError();
                 }
                 //          Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }

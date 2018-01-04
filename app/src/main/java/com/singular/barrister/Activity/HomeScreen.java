@@ -18,6 +18,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -71,9 +72,9 @@ public class HomeScreen extends AppCompatActivity {
         frameLayout = (FrameLayout) findViewById(R.id.fragmentContainer);
 
         if (getActionBar() != null)
-            getActionBar().setTitle(R.string.app_name);
+            getActionBar().setTitle(Html.fromHtml("<font color=\"black\">" + getString(R.string.app_name) + "</font>"));
         else if (getSupportActionBar() != null)
-            getSupportActionBar().setTitle(R.string.app_name);
+            getSupportActionBar().setTitle(Html.fromHtml("<font color=\"black\">" + getString(R.string.app_name) + "</font>"));
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -112,8 +113,8 @@ public class HomeScreen extends AppCompatActivity {
 
     private void initializeTab() {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setTabTextColors(Color.parseColor("#55FFFFFF"), Color.parseColor("#FFFFFF"));
-        tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#FFFFFF"));
+        tabLayout.setTabTextColors(Color.parseColor("#55000000"), Color.parseColor("#000000"));
+        tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#000000"));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab1));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab2));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab3));
@@ -255,6 +256,11 @@ public class HomeScreen extends AppCompatActivity {
 
     public void logOut() {
         if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+            try {
+                getApplicationContext().deleteDatabase("barrister.db");
+            } catch (Exception e) {
+
+            }
             RetrofitManager retrofitManager = new RetrofitManager();
             retrofitManager.setLogOut(new UserPreferance(getApplicationContext()).getToken());
             new UserPreferance(getApplicationContext()).logOut();
@@ -406,8 +412,8 @@ public class HomeScreen extends AppCompatActivity {
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
         String regId = pref.getString("regId", null);
         if (!TextUtils.isEmpty(regId)) {
-            RetrofitManager retrofitManager=new RetrofitManager();
-            retrofitManager.updateToken(regId,new UserPreferance(this).getToken());
+            RetrofitManager retrofitManager = new RetrofitManager();
+            retrofitManager.updateToken(regId, new UserPreferance(this).getToken());
             Log.e("HomeScreen", "Firebase Reg Id: " + regId);
         } else
             Log.e("HomeScreen", "Firebase Reg Id is not received yet!");

@@ -17,8 +17,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="You have not added any court yet, click on + to add new "
-        android:textColor="#000000"
+        android:gravity="center"
+        android:padding="@dimen/fab_margin"
+        android:text="You have not added any court yet,\nclick on + to add new "
+        android:textColor="@color/colorTextBlack"
         android:visibility="gone" />
 
     <ProgressBar
