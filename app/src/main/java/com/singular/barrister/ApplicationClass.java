@@ -110,6 +110,6 @@ public class ApplicationClass extends MultiDexApplication {
             }
         };
 
-        mTimer1.schedule(mTt1, 1, 30000);
+        mTimer1.schedule(mTt1, 1, 180000);
     }
 }
