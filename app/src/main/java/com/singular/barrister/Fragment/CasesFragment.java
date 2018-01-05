@@ -23,6 +23,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.singular.barrister.Activity.LandingScreen;
 import com.singular.barrister.Adapter.CasesListAdapter;
 import com.singular.barrister.Adapter.CourtListAdapter;
@@ -64,7 +67,7 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_court, container, false);
+        return inflater.inflate(R.layout.fragment_case, container, false);
     }
 
     @Override
@@ -75,9 +78,18 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
         errorTextView = (TextView) getView().findViewById(R.id.textViewErrorText);
         retrofitManager = new RetrofitManager();
         caseList = new ArrayList<Case>();
+        ads();
         getCasesList();
 
         registerForContextMenu(mRecycleView);
+    }
+
+    private AdView mAdView;
+
+    public void ads() {
+        mAdView = getView().findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     public void refreshData() {
@@ -124,7 +136,7 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
         } else {
             if (getActivity() != null) {
                 List<CaseTable> list = new CaseQuery(getActivity()).getList();
-                if (list != null && list.size()!=0) {
+                if (list != null && list.size() != 0) {
                     caseList = (ArrayList<Case>) new CaseQuery(getActivity()).convertListToOnLineList(list);
                     courtListAdapter = new CasesListAdapter(getActivity(), caseList, this);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

@@ -35,7 +35,7 @@ public class ApplicationClass extends MultiDexApplication {
         context = this;
         Fabric.with(this, new Crashlytics());
         // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(this, "ca-app-pub-2696210102764869~2529670089");
         fullScreenAds();
     }
 
@@ -45,7 +45,7 @@ public class ApplicationClass extends MultiDexApplication {
     public void fullScreenAds() {
         isFirstTime = true;
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdUnitId("ca-app-pub-2696210102764869/1364762227");
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
         adListener();
         startTimer();

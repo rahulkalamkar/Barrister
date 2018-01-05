@@ -71,8 +71,6 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
     ProgressBar progressBar;
-    private AdView mAdView;
-    private InterstitialAd mInterstitialAd;
     FloatingActionButton fab;
 
     private boolean mSearchViewAdded = false;
@@ -136,17 +134,11 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
             }
         });
 
-        ads();
         initializeNotification();
         initializeTab();
         initializeFragments();
     }
 
-    public void ads() {
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-    }
 
     public void initializeFragments() {
         fab.setVisibility(View.GONE);

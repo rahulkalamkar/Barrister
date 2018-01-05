@@ -75,7 +75,7 @@ public class ProfileActivity extends AppCompatActivity implements IDataChangeLis
             //mProgressBar.setVisibility(View.VISIBLE);
             retrofitManager.getProfile(this, new UserPreferance(getApplicationContext()).getToken());
         } else {
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             setDataWithoutNetwork();
         }
     }

@@ -15,6 +15,7 @@
             android:id="@+id/frameLayout1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/adView"
             android:layout_centerInParent="true">
 
             <com.singular.barrister.Custom.RecyclerViewPager
@@ -27,6 +28,16 @@
                 app:rvp_singlePageFling="true"
                 app:rvp_triggerOffset="0.1" />
         </FrameLayout>
+
+
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-2696210102764869/6243707904" />
 
         <TextView
             android:id="@+id/textViewErrorText"

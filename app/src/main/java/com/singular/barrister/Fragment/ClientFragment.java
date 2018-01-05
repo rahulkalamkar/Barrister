@@ -31,6 +31,9 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
@@ -80,7 +83,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_court, container, false);
+        return inflater.inflate(R.layout.fragment_client, container, false);
     }
 
     @Override
@@ -91,9 +94,18 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         errorTextView = (TextView) getView().findViewById(R.id.textViewErrorText);
         retrofitManager = new RetrofitManager();
         clientList = new ArrayList<Client>();
+        ads();
         getClientList();
 
         registerForContextMenu(mRecycleView);
+    }
+
+    private AdView mAdView;
+
+    public void ads() {
+        mAdView = getView().findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     public void showError() {

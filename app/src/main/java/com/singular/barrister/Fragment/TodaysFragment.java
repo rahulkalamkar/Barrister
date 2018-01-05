@@ -19,6 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.singular.barrister.Activity.LandingScreen;
 import com.singular.barrister.Adapter.CasesListAdapter;
 import com.singular.barrister.Adapter.TodaysCaseAdapter;
@@ -68,11 +70,18 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
         mCustomRecyclerView = (RecyclerViewPager) getView().findViewById(R.id.viewpager);
         // mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycleView);
         initRecycleView();
+        ads();
         progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
         errorTextView = (TextView) getView().findViewById(R.id.textViewErrorText);
         retrofitManager = new RetrofitManager();
         caseList = new ArrayList<Case>();
         getCasesList();
+    }
+    private AdView mAdView;
+    public void ads() {
+        mAdView = getView().findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     public void getCasesList() {

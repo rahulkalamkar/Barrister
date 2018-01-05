@@ -18,6 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.singular.barrister.Activity.HomeScreen;
@@ -77,7 +80,15 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
         courtList = new ArrayList<CourtData>();
         retrofitManager = new RetrofitManager();
         registerForContextMenu(mRecycleView);
+        ads();
         getCourtList();
+    }
+    private AdView mAdView;
+
+    public void ads() {
+        mAdView = getView().findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     public void refreshData() {
