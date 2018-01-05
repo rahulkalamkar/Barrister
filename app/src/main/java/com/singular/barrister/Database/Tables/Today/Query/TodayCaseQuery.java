@@ -57,6 +57,33 @@ public class TodayCaseQuery {
         }
     }
 
+    public void deleteAllTable() {
+        try {
+            List<TodayCaseTable> list = getList();
+
+            if (list == null && list.size() == 0)
+                return;
+            for (TodayCaseTable caseTable : list) {
+                deleteAll(caseTable);
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void deleteAll(TodayCaseTable todayCaseTable) {
+        Dao<TodayCaseTable, Integer> caseTableIntegerDao;
+        try {
+            if (getHelper(context) != null) {
+                caseTableIntegerDao = getHelper(context).getATodayCaseTableDao();
+                caseTableIntegerDao.delete(todayCaseTable);
+            }
+            Log.e("BAseClient table", "deleted");
+        } catch (Exception e) {
+            Log.e("BAseClient table", "" + e);
+        }
+    }
+
     public void addList(ArrayList<Case> caseArrayList) {
         for (Case aCase : caseArrayList) {
             if (checkCase(aCase)) {

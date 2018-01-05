@@ -96,7 +96,7 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
         } else {
             if (getActivity() != null) {
                 List<TodayCaseTable> list = new TodayCaseQuery(getActivity()).getList();
-                if (list != null && list.size()!=0) {
+                if (list != null && list.size() != 0) {
                     caseList = (ArrayList<Case>) new TodayCaseQuery(getActivity()).convertListToOnLineList(list);
                     TodaysCaseAdapter todaysCaseAdapter = new TodaysCaseAdapter(getActivity(), caseList);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,
@@ -105,8 +105,7 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
                     mCustomRecyclerView.setAdapter(todaysCaseAdapter);
                     frameLayout.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
-                }
-                else{
+                } else {
                     showError();
                 }
             }
@@ -204,7 +203,8 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
     public void onDataReceived(IModel response) {
         if (response != null && response instanceof TodayResponse) {
             TodayResponse todayResponse = (TodayResponse) response;
-            if (todayResponse.getData().getCaseList() != null) {
+            if (todayResponse.getData().getCaseList() != null && todayResponse.getData().getCaseList().size() != 0) {
+                caseList.clear();
                 caseList.addAll(todayResponse.getData().getCaseList());
                 if (getActivity() != null) {
                     TodaysCaseAdapter todaysCaseAdapter = new TodaysCaseAdapter(getActivity(), caseList);
@@ -231,8 +231,11 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
                     startActivity(intent);
                     getActivity().finish();
                 }
-            } else
+            } else {
+                TodayCaseQuery todayCaseQuery = new TodayCaseQuery(getActivity());
+                todayCaseQuery.deleteAllTable();
                 showError();
+            }
         } else {
             if (getActivity() != null) {
                 Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
