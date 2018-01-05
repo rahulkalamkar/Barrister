@@ -12,6 +12,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.singular.barrister.Preferance.UserPreferance;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -54,7 +55,7 @@ public class ApplicationClass extends MultiDexApplication {
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                if (isFirstTime) {
+                if (isFirstTime && new UserPreferance(getApplicationContext()).isUserLoggedIn()) {
                     mInterstitialAd.show();
                 }
                 isFirstTime = false;
@@ -101,7 +102,7 @@ public class ApplicationClass extends MultiDexApplication {
             public void run() {
                 mTimerHandler.post(new Runnable() {
                     public void run() {
-                        if (mInterstitialAd.isLoaded()) {
+                        if (mInterstitialAd.isLoaded() && new UserPreferance(getApplicationContext()).isUserLoggedIn()) {
                             mInterstitialAd.show();
                         }
                     }

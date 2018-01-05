@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -24,7 +26,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -37,6 +41,10 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.shahroz.svlibrary.interfaces.onSearchListener;
+import com.shahroz.svlibrary.interfaces.onSimpleSearchActionsListener;
+import com.shahroz.svlibrary.utils.Util;
+import com.shahroz.svlibrary.widgets.MaterialSearchView;
 import com.singular.barrister.Activity.SubActivity.AddCaseActivity;
 import com.singular.barrister.Activity.SubActivity.AddClientActivity;
 import com.singular.barrister.Activity.SubActivity.AddCourtActivity;
@@ -53,7 +61,7 @@ import com.singular.barrister.Util.NetworkConnection;
 
 import java.lang.reflect.Field;
 
-public class HomeScreen extends AppCompatActivity {
+public class HomeScreen extends AppCompatActivity implements onSimpleSearchActionsListener, onSearchListener {
 
     FrameLayout frameLayout;
     CourtFragment courtFragment;
@@ -67,15 +75,41 @@ public class HomeScreen extends AppCompatActivity {
     private InterstitialAd mInterstitialAd;
     FloatingActionButton fab;
 
+    private boolean mSearchViewAdded = false;
+    private MaterialSearchView mSearchView;
+    private WindowManager mWindowManager;
+    private MenuItem searchItem;
+    private boolean searchActive = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         registerReceiver();
         progressBar = (ProgressBar) findViewById(R.id.progressBar4);
         frameLayout = (FrameLayout) findViewById(R.id.fragmentContainer);
+
+        mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        mSearchView = new MaterialSearchView(this);
+        mSearchView.setOnSearchListener(this);
+        mSearchView.setSearchResultsListener(this);
+        mSearchView.setHintText("Search");
+
+        if (mToolbar != null) {
+            // Delay adding SearchView until Toolbar has finished loading
+            mToolbar.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (!mSearchViewAdded && mWindowManager != null) {
+                        mWindowManager.addView(mSearchView,
+                                MaterialSearchView.getSearchViewLayoutParams(HomeScreen.this));
+                        mSearchViewAdded = true;
+                    }
+                }
+            });
+        }
 
         if (getActionBar() != null)
             getActionBar().setTitle(Html.fromHtml("<font color=\"black\">" + getString(R.string.app_name) + "</font>"));
@@ -181,7 +215,19 @@ public class HomeScreen extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.menuSearch).getActionView();
+
+        searchItem = menu.findItem(R.id.menuSearch);
+        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                mSearchView.display();
+                openKeyboard();
+                return true;
+            }
+        });
+        if(searchActive)
+            mSearchView.display();
+        /* SearchView searchView = (SearchView) menu.findItem(R.id.menuSearch).getActionView();
 
         SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
@@ -206,10 +252,17 @@ public class HomeScreen extends AppCompatActivity {
                 searchInFragment(newText);
                 return false;
             }
-        });
+        });*/
         return true;
     }
-
+    private void openKeyboard(){
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                mSearchView.getSearchView().dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0, 0, 0));
+                mSearchView.getSearchView().dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0, 0, 0));
+            }
+        }, 200);
+    }
     public void searchInFragment(String text) {
         if (tabLayout.getSelectedTabPosition() == 0) {
             if (todaysFragment != null)
@@ -363,6 +416,41 @@ public class HomeScreen extends AppCompatActivity {
             receiver = null;
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onSearch(String query) {
+        searchInFragment(query);
+    }
+
+    @Override
+    public void searchViewOpened() {
+
+    }
+
+    @Override
+    public void searchViewClosed() {
+
+    }
+
+    @Override
+    public void onItemClicked(String item) {
+    }
+
+    @Override
+    public void onCancelSearch() {
+        searchActive = false;
+        mSearchView.hide();
+    }
+
+    @Override
+    public void onScroll() {
+
+    }
+
+    @Override
+    public void error(String localizedMessage) {
+
     }
 
     public class MyReceiver extends BroadcastReceiver {
