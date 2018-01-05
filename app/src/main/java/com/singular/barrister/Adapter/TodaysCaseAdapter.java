@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +40,7 @@ public class TodaysCaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.today_case_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.today_layout_new, parent, false);
         return new TodayViewHolder(v);
     }
 
@@ -47,7 +48,18 @@ public class TodaysCaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TodayViewHolder) {
             TodayViewHolder todayViewHolder = (TodayViewHolder) holder;
-            todayViewHolder.txtClientOne.setText(caseList.get(position).getClient().getFirst_name() + " " + caseList.get(position).getClient()
+
+            if (caseList.get(position).getClient() != null) {
+                if (caseList.get(position).getPersons().get(0).getType().equalsIgnoreCase("Client")) {
+                    todayViewHolder.txtClientOne.setText(caseList.get(position).getClient().getFirst_name() + " " + caseList.get(position).getClient()
+                            .getLast_name() + " VS " + caseList.get(position).getPersons().get(0).getOpp_name());
+
+                } else {
+                    todayViewHolder.txtClientOne.setText(caseList.get(position).getClient().getFirst_name() + " " + caseList.get(position).getClient()
+                            .getLast_name() + " VS " + caseList.get(position).getPersons().get(1).getOpp_name());
+                }
+            }
+            /*     todayViewHolder.txtClientOne.setText(caseList.get(position).getClient().getFirst_name() + " " + caseList.get(position).getClient()
                     .getLast_name());
             if (caseList.get(position).getClient() != null) {
                 if (caseList.get(position).getPersons().get(0).getType().equalsIgnoreCase("Client")) {
@@ -56,7 +68,25 @@ public class TodaysCaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 } else {
                     todayViewHolder.txtClientTwo.setText(caseList.get(position).getPersons().get(1).getOpp_name());
                 }
+            }*/
+
+
+            if (position % 2 == 0) {
+                if (position % 4 == 0) {
+                    todayViewHolder.rltColor.setBackgroundResource(R.drawable.gradient_four);
+                } else
+                    todayViewHolder.rltColor.setBackgroundResource(R.drawable.gradient_green);
+            } else if (position % 3 == 0) {
+                if (position % 6 == 0) {
+                    todayViewHolder.rltColor.setBackgroundResource(R.drawable.circle_five);
+                } else
+                    todayViewHolder.rltColor.setBackgroundResource(R.drawable.gradient_blue);
+            } else {
+                todayViewHolder.rltColor.setBackgroundResource(R.drawable.gradient_red);
             }
+
+            todayViewHolder.txtNotes.setText("Notes : " + (caseList.get(position).getHearing() != null ? (caseList.get(position).getHearing().getCase_decision() != null ? caseList.get(position).getHearing().getCase_decision() : "") : ""));
+            todayViewHolder.txtCNRNumber.setText("CNR : " + caseList.get(position).getCase_cnr_number());
 
             todayViewHolder.txtCourtName.setText(caseList.get(position).getCourt().getCourt_name());
             todayViewHolder.txtAddress.setText(getAddress(caseList.get(position).getCourt()));
@@ -88,8 +118,9 @@ public class TodaysCaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public class TodayViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtClientOne, txtClientTwo, txtCourtName, txtAddress, txtViewHearing;
+        TextView txtClientOne, txtClientTwo, txtCourtName, txtAddress, txtViewHearing, txtCNRNumber, txtNotes;
         ImageView imageViewCall, imageViewMessage, imageViewEmail, imageViewWhatsApp;
+        RelativeLayout rltColor;
 
         public TodayViewHolder(View itemView) {
             super(itemView);
@@ -98,6 +129,11 @@ public class TodaysCaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             txtCourtName = (TextView) itemView.findViewById(R.id.textViewCourtName);
             txtAddress = (TextView) itemView.findViewById(R.id.textViewCourtAddress);
             txtViewHearing = (TextView) itemView.findViewById(R.id.txtViewAllHearings);
+
+            rltColor = (RelativeLayout) itemView.findViewById(R.id.colorLayout);
+
+            txtCNRNumber = (TextView) itemView.findViewById(R.id.textViewCNRNumber);
+            txtNotes = (TextView) itemView.findViewById(R.id.textViewNotes);
 
             imageViewCall = (ImageView) itemView.findViewById(R.id.ic_call);
             imageViewMessage = (ImageView) itemView.findViewById(R.id.ic_messge);
@@ -169,13 +205,14 @@ public class TodaysCaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             });
         }
     }
+
     public void sendEmail(String emailId) {
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 "mailto", emailId, null));
         emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
         emailIntent.putExtra(Intent.EXTRA_TEXT, "");
-        context.startActivity(Intent.createChooser(emailIntent,""));
+        context.startActivity(Intent.createChooser(emailIntent, ""));
     }
 
     private void openWhatsApp(String phone) {
@@ -192,6 +229,7 @@ public class TodaysCaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
     }
+
     public void sendSMS(String number) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             try {

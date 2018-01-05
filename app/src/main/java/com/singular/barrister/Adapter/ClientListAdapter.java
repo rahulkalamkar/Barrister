@@ -75,8 +75,8 @@ public class ClientListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             } else if (position % 3 == 0) {
                 if (position % 6 == 0) {
                     clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_five);
-                }
-                clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_blue);
+                } else
+                    clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_blue);
             } else {
                 clientViewHolder.txtInitial.setBackgroundResource(R.drawable.circle_red);
             }

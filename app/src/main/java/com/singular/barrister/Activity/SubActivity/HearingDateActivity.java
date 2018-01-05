@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class HearingDateActivity extends AppCompatActivity implements IDataChang
     }
 
     public void getList() {
+        mProgressBar.setVisibility(View.VISIBLE);
         List<CaseHearingListTable> caseHearingListTables = getLocalList(getIntent().getExtras().getString("Id"));
         if (caseHearingListTables.size() > 0) {
             convertList(caseHearingListTables);
@@ -121,6 +123,8 @@ public class HearingDateActivity extends AppCompatActivity implements IDataChang
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecycleView.setLayoutManager(linearLayoutManager);
         mRecycleView.setAdapter(hearingAdapter);
+
+        mProgressBar.setVisibility(View.GONE);
     }
 
     DatabaseHelper databaseHelper = null;
@@ -169,6 +173,7 @@ public class HearingDateActivity extends AppCompatActivity implements IDataChang
         } else {
 
         }
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override

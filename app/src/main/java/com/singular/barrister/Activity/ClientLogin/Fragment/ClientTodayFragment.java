@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,6 +90,7 @@ public class ClientTodayFragment extends Fragment implements IDataChangeListener
     public void onDataChanged() {
 
     }
+
     public void initRecycleView() {
         mCustomRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -163,6 +165,7 @@ public class ClientTodayFragment extends Fragment implements IDataChangeListener
             }
         });
     }
+
     @Override
     public void onDataReceived(IModel response) {
         if (response != null && response instanceof TodayResponse) {
@@ -214,6 +217,7 @@ public class ClientTodayFragment extends Fragment implements IDataChangeListener
             this.context = context;
             this.caseList = caseList;
         }
+
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.today_case_item, parent, false);
@@ -227,12 +231,42 @@ public class ClientTodayFragment extends Fragment implements IDataChangeListener
 
                 if (caseList.get(position).getClient() != null) {
                     if (caseList.get(position).getPersons().get(0).getType().equalsIgnoreCase("Client")) {
-                        todayViewHolder.txtClientTwo.setText(caseList.get(position).getPersons().get(0).getOpp_name());
+                        todayViewHolder.txtClientOne.setText(caseList.get(position).getClient().getFirst_name() + " " + caseList.get(position).getClient()
+                                .getLast_name() + " VS " + caseList.get(position).getPersons().get(0).getOpp_name());
 
                     } else {
-                        todayViewHolder.txtClientTwo.setText(caseList.get(position).getPersons().get(1).getOpp_name());
+                        todayViewHolder.txtClientOne.setText(caseList.get(position).getClient().getFirst_name() + " " + caseList.get(position).getClient()
+                                .getLast_name() + " VS " + caseList.get(position).getPersons().get(1).getOpp_name());
                     }
                 }
+            /*     todayViewHolder.txtClientOne.setText(caseList.get(position).getClient().getFirst_name() + " " + caseList.get(position).getClient()
+                    .getLast_name());
+            if (caseList.get(position).getClient() != null) {
+                if (caseList.get(position).getPersons().get(0).getType().equalsIgnoreCase("Client")) {
+                    todayViewHolder.txtClientTwo.setText(caseList.get(position).getPersons().get(0).getOpp_name());
+
+                } else {
+                    todayViewHolder.txtClientTwo.setText(caseList.get(position).getPersons().get(1).getOpp_name());
+                }
+            }*/
+
+
+                if (position % 2 == 0) {
+                    if (position % 4 == 0) {
+                        todayViewHolder.rltColor.setBackgroundResource(R.drawable.gradient_four);
+                    } else
+                        todayViewHolder.rltColor.setBackgroundResource(R.drawable.gradient_green);
+                } else if (position % 3 == 0) {
+                    if (position % 6 == 0) {
+                        todayViewHolder.rltColor.setBackgroundResource(R.drawable.circle_five);
+                    } else
+                        todayViewHolder.rltColor.setBackgroundResource(R.drawable.gradient_blue);
+                } else {
+                    todayViewHolder.rltColor.setBackgroundResource(R.drawable.gradient_red);
+                }
+
+                todayViewHolder.txtNotes.setText("Notes : " + (caseList.get(position).getHearing() != null ? (caseList.get(position).getHearing().getCase_decision() != null ? caseList.get(position).getHearing().getCase_decision() : "") : ""));
+                todayViewHolder.txtCNRNumber.setText("CNR : " + caseList.get(position).getCase_cnr_number());
 
                 todayViewHolder.txtCourtName.setText(caseList.get(position).getCourt().getCourt_name());
                 todayViewHolder.txtAddress.setText(getAddress(caseList.get(position).getCourt()));
@@ -265,9 +299,9 @@ public class ClientTodayFragment extends Fragment implements IDataChangeListener
 
         public class TodayViewHolder extends RecyclerView.ViewHolder {
 
-            TextView txtClientOne, txtClientTwo, txtCourtName, txtAddress, txtViewHearing;
+            TextView txtClientOne, txtClientTwo, txtCourtName, txtAddress, txtViewHearing, txtCNRNumber, txtNotes;
             ImageView imageViewCall, imageViewMessage, imageViewEmail, imageViewWhatsApp;
-
+            RelativeLayout rltColor;
 
             public TodayViewHolder(View itemView) {
                 super(itemView);
@@ -276,6 +310,11 @@ public class ClientTodayFragment extends Fragment implements IDataChangeListener
                 txtCourtName = (TextView) itemView.findViewById(R.id.textViewCourtName);
                 txtAddress = (TextView) itemView.findViewById(R.id.textViewCourtAddress);
                 txtViewHearing = (TextView) itemView.findViewById(R.id.txtViewAllHearings);
+
+                rltColor = (RelativeLayout) itemView.findViewById(R.id.colorLayout);
+
+                txtCNRNumber = (TextView) itemView.findViewById(R.id.textViewCNRNumber);
+                txtNotes = (TextView) itemView.findViewById(R.id.textViewNotes);
 
                 imageViewCall = (ImageView) itemView.findViewById(R.id.ic_call);
                 imageViewMessage = (ImageView) itemView.findViewById(R.id.ic_messge);
@@ -354,7 +393,7 @@ public class ClientTodayFragment extends Fragment implements IDataChangeListener
             emailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
             emailIntent.putExtra(Intent.EXTRA_TEXT, "");
-            context.startActivity(Intent.createChooser(emailIntent,""));
+            context.startActivity(Intent.createChooser(emailIntent, ""));
         }
 
         private void openWhatsApp(String phone) {
@@ -371,6 +410,7 @@ public class ClientTodayFragment extends Fragment implements IDataChangeListener
             }
 
         }
+
         public void sendSMS(String number) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 try {
