@@ -31,8 +31,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.singular.barrister.Activity.SubActivity.AddCaseActivity;
 import com.singular.barrister.Activity.SubActivity.AddClientActivity;
@@ -61,6 +64,7 @@ public class HomeScreen extends AppCompatActivity {
     FragmentTransaction transaction;
     ProgressBar progressBar;
     private AdView mAdView;
+    private InterstitialAd mInterstitialAd;
     FloatingActionButton fab;
 
     @Override
@@ -98,13 +102,16 @@ public class HomeScreen extends AppCompatActivity {
             }
         });
 
-
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        ads();
         initializeNotification();
         initializeTab();
         initializeFragments();
+    }
+
+    public void ads() {
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     public void initializeFragments() {

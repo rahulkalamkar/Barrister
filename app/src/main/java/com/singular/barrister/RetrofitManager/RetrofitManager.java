@@ -446,6 +446,7 @@ public class RetrofitManager {
         queryMap.put("case_id", caseId);
         queryMap.put("case_hearing_date", caseDate);
         queryMap.put("case_decision", caseNotes);
+        queryMap.put("case_note", caseNotes);
 
         try {
             URL url = new URL("http://singularsacademy.com/lawyer/public/api/hearing");
