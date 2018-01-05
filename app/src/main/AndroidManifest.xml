@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".ApplicationClass"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -23,7 +24,10 @@
         <meta-data
             android:name="com.facebook.accountkit.ClientToken"
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
-
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="2ebc480f86598adce4de3379e308106e42c6efb9"
+            />
         <activity
             android:name="com.facebook.accountkit.ui.AccountKitActivity"
             android:theme="@style/AppLoginTheme"

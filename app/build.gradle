@@ -34,6 +34,7 @@ repositories {
     maven {
         url "https://maven.google.com"
     }
+    maven { url 'https://maven.fabric.io/public' }
 }
 
 
@@ -62,9 +63,15 @@ dependencies {
     compile 'com.google.android.gms:play-services-base:11.8.0'
     compile 'com.google.android.gms:play-services-auth-api-phone:11.8.0'
     compile 'com.google.android.gms:play-services-auth:11.8.0'
+    compile 'com.google.android.gms:play-services-ads:11.8.0'
 
     compile 'com.android.support:multidex:1.0.1'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+        transitive = true;
+    }
     testCompile 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'io.fabric'

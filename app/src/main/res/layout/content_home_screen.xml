@@ -7,8 +7,7 @@
     android:background="#FAFAFA"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.singular.barrister.Activity.HomeScreen"
-    tools:showIn="@layout/activity_home_screen"
-    >
+    tools:showIn="@layout/activity_home_screen">
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -19,8 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1"
-        >
+        tools:layout_constraintTop_creator="1">
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
@@ -34,9 +32,19 @@
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/adView"
             android:layout_below="@+id/tabs">
 
         </FrameLayout>
+
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
 
         <ProgressBar
             android:id="@+id/progressBar4"
