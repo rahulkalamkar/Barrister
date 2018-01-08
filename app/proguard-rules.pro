@@ -23,3 +23,19 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-dontwarn retrofit2.Platform$Java8
+-dontwarn com.squareup.okhttp3.**
+-dontwarn com.squareup.okhttp.**
+
+-dontwarn okhttp3.**
+-dontwarn okio.**
+
+-keepclasseswithmembers public class * {
+    @retrofit2.http.* <methods>;
+}
+
+-keep class retrofit2.* { *; }
+
+-keep public class okhttp3.** { *; }
+-keep public interface okhttp3.** { *; }
+-keepattributes *Annotation*,Signature

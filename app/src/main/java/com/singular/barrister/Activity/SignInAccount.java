@@ -6,6 +6,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -133,6 +134,7 @@ public class SignInAccount extends AppCompatActivity implements View.OnClickList
                     edtPassword.setError("Enter password");
                     edtNumber.setError(null);
                 } else {
+                    Log.e("Retrofi call","Yes");
                     RetrofitManager retrofitManager = new RetrofitManager();
                     if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
                         progressBar.setVisibility(View.VISIBLE);
