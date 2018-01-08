@@ -14,12 +14,16 @@ public class Utils {
         if (date.length() == 10) {
             return getDateFormatTime(date);
         }
-        String[] temp = date.split("-");
-        String month = getMonth(temp[1]);
-        String dateOfMonth = temp[2].substring(0, 2);
-        String time = temp[2].substring(3);
-        String formattedDate = dateOfMonth + " " + getMonth(temp[1]) + " " + temp[0] + " " + time;
-        return formattedDate;
+        try {
+            String[] temp = date.split("-");
+            String month = getMonth(temp[1]);
+            String dateOfMonth = temp[2].substring(0, 2);
+            String time = temp[2].substring(3);
+            String formattedDate = dateOfMonth + " " + getMonth(temp[1]) + " " + temp[0] + " " + time;
+            return formattedDate;
+        } catch (Exception e) {
+            return getDateFormatTime(date);
+        }
     }
 
     public static String getDateFormatTime(String date) {
