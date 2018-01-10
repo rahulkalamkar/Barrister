@@ -79,7 +79,7 @@ public class HearingDateActivity extends AppCompatActivity implements IDataChang
         for (int i = 0; i < list.size(); i++) {
             CaseHearing caseHearing = list.get(i);
             CaseHearingListTable caseHearingListTable = new CaseHearingListTable(caseHearing.getId(), caseHearing.getCase_id(), caseHearing.getCase_hearing_date(),
-                    caseHearing.getCase_disposed(), caseHearing.getCase_decision());
+                    caseHearing.getCase_disposed(), caseHearing.getCase_decision(), caseHearing.getCase_notes());
 
             final Dao<CaseHearingListTable, Integer> caseHearingListTableIntegerDao;
             try {
@@ -115,6 +115,7 @@ public class HearingDateActivity extends AppCompatActivity implements IDataChang
                     caseHearingListTable.getCase_id(),
                     caseHearingListTable.getCase_hearing_date(),
                     caseHearingListTable.getCase_decision(),
+                    caseHearingListTable.getCase_notes(),
                     caseHearingListTable.getCase_disposed());
             hearingList.add(caseHearing);
         }

@@ -5,6 +5,7 @@ import com.singular.barrister.Model.Cases.CasesResponse;
 import com.singular.barrister.Model.CasesTypeResponse;
 import com.singular.barrister.Model.Client.ClientResponse;
 import com.singular.barrister.Model.Court.CourtResponse;
+import com.singular.barrister.Model.News.NewsResponse;
 import com.singular.barrister.Model.RegisterResponse;
 import com.singular.barrister.Model.SimpleMessageResponse;
 import com.singular.barrister.Model.States.StateResponse;
@@ -110,5 +111,11 @@ public interface API {
 
     @POST("{UPDATE_TOKEN}")
     Call<RegisterResponse> updateProfileToken(@Path(value = "UPDATE_TOKEN", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
+
+    @GET("{GET_NEWS}")
+    Call<NewsResponse> getNewsList(@Path(value = "GET_NEWS", encoded = true) String path);
+
+    @PUT("{UPDATE_HEARING}")
+    Call<SimpleMessageResponse> updateHearing(@Path(value = "UPDATE_HEARING", encoded = true) String path, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> query);
 
 }

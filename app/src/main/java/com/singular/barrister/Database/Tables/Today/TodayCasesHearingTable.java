@@ -53,8 +53,19 @@ public class TodayCasesHearingTable {
     String case_hearing_date;
     @DatabaseField(columnName = "case_decision", canBeNull = true)
     String case_decision;
+    @DatabaseField(columnName = "case_notes", canBeNull = true)
+    String case_notes;
+
+    public String getCase_notes() {
+        return case_notes;
+    }
+
+    public void setCase_notes(String case_notes) {
+        this.case_notes = case_notes;
+    }
 
     @DatabaseField(columnName = "case_disposed", canBeNull = true)
+
     String case_disposed;
 
     public TodayCasesHearingTable() {

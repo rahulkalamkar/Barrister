@@ -1,16 +1,20 @@
 package com.singular.barrister.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.singular.barrister.Activity.Update_Hearing;
 import com.singular.barrister.Model.Cases.CaseHearing;
 import com.singular.barrister.R;
 import com.singular.barrister.Util.Utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -54,6 +58,18 @@ public class HearingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
             textViewHearingDate = (TextView) itemView.findViewById(R.id.textViewCourtName);
             textViewHearingText = (TextView) itemView.findViewById(R.id.textViewState);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("CaseHearing", (Serializable) hearings.get(getAdapterPosition()));
+                    Intent i = new Intent(context, Update_Hearing.class);
+                    i.putExtras(bundle);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
+                }
+            });
         }
     }
 }

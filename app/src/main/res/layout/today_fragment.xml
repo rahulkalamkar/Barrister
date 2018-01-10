@@ -11,12 +11,43 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/linearLayoutTodayTab"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/buttonToday"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:background="@drawable/today_buttpn_clicked"
+                android:text="Cases"
+                android:textColor="#ffffff" />
+
+            <Button
+                android:id="@+id/buttonNews"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginLeft="-2dp"
+                android:layout_weight="1"
+                android:background="@drawable/today_right_corner_clicked"
+                android:text="News"
+                android:textColor="@color/colorAccent"/>
+        </LinearLayout>
+
         <FrameLayout
             android:id="@+id/frameLayout1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/adView"
-            android:layout_centerInParent="true">
+            android:layout_below="@+id/linearLayoutTodayTab"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/fab_margin">
 
             <com.singular.barrister.Custom.RecyclerViewPager
                 android:id="@+id/viewpager"
@@ -29,6 +60,26 @@
                 app:rvp_triggerOffset="0.1" />
         </FrameLayout>
 
+        <FrameLayout
+            android:id="@+id/frameLayout_News"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/adView"
+            android:layout_below="@+id/linearLayoutTodayTab"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:visibility="gone">
+
+            <com.singular.barrister.Custom.RecyclerViewPager
+                android:id="@+id/viewpagerNews"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                app:rvp_singlePageFling="true"
+                app:rvp_triggerOffset="0.1" />
+        </FrameLayout>
 
         <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView"
@@ -36,6 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:visibility="gone"
             ads:adSize="BANNER"
             ads:adUnitId="ca-app-pub-2696210102764869/6243707904" />
 

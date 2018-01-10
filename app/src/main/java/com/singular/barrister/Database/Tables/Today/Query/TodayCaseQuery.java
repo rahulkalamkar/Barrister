@@ -254,7 +254,7 @@ public class TodayCaseQuery {
             CaseHearing caseHearing = null;
             if (caseTable.getHearingTable() != null)
                 caseHearing = new CaseHearing(caseTable.getHearingTable().getHearing_id(), caseTable.getHearingTable().getCase_id(), caseTable.getHearingTable().getCase_hearing_date(),
-                        caseTable.getHearingTable().getCase_decision(), caseTable.getHearingTable().getCase_disposed());
+                        caseTable.getHearingTable().getCase_decision(), caseTable.getHearingTable().getCase_notes(), caseTable.getHearingTable().getCase_disposed());
 
             Case aCase = new Case(caseTable.getCase_id(), caseTable.getClient_id(), caseTable.getClient_type(), caseTable.getCourt_id(), caseTable.getCase_cnr_number(),
                     caseTable.getCase_register_number(), caseTable.getCase_register_date(), caseTable.getCase_type(), caseTable.getCase_sub_type(),

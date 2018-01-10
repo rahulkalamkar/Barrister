@@ -378,7 +378,7 @@ public class CaseQuery {
             CaseHearing caseHearing = null;
             if (caseTable.getHearingTable() != null)
                 caseHearing = new CaseHearing(caseTable.getHearingTable().getHearing_id(), caseTable.getHearingTable().getCase_id(), caseTable.getHearingTable().getCase_hearing_date(),
-                        caseTable.getHearingTable().getCase_decision(), caseTable.getHearingTable().getCase_disposed());
+                        caseTable.getHearingTable().getCase_decision(), caseTable.getHearingTable().getCase_notes(), caseTable.getHearingTable().getCase_disposed());
 
             Case aCase = new Case(caseTable.getCase_id(), caseTable.getClient_id(), caseTable.getClient_type(), caseTable.getCourt_id(), caseTable.getCase_cnr_number(),
                     caseTable.getCase_register_number(), caseTable.getCase_register_date(), caseTable.getCase_type(), caseTable.getCase_sub_type(),
@@ -397,7 +397,7 @@ public class CaseQuery {
     public CasesHearingTable prePareCaseHearing(CaseHearing caseHearing) {
         CasesHearingTable casesHearingTable = null;
         if (caseHearing != null)
-            casesHearingTable = new CasesHearingTable(caseHearing.getId(), caseHearing.getCase_id(), caseHearing.getCase_hearing_date(), caseHearing.getCase_decision(), caseHearing.getCase_disposed());
+            casesHearingTable = new CasesHearingTable(caseHearing.getId(), caseHearing.getCase_id(), caseHearing.getCase_hearing_date(), caseHearing.getCase_decision(), caseHearing.getCase_notes(), caseHearing.getCase_disposed());
         return casesHearingTable;
     }
 

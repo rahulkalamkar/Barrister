@@ -27,18 +27,30 @@ public class CaseHearingListTable implements Serializable {
     @DatabaseField(columnName = "case_disposed", canBeNull = true)
     String case_disposed;
 
+    public String getCase_notes() {
+        return case_notes;
+    }
+
+    public void setCase_notes(String case_notes) {
+        this.case_notes = case_notes;
+    }
+
     @DatabaseField(columnName = "case_note", canBeNull = true)
+    String case_notes;
+
+    @DatabaseField(columnName = "case_decision", canBeNull = true)
     String case_decision;
 
     public CaseHearingListTable() {
     }
 
-    public CaseHearingListTable(String hearing_id, String case_id, String case_hearing_date, String case_disposed, String case_decision) {
+    public CaseHearingListTable(String hearing_id, String case_id, String case_hearing_date, String case_disposed, String case_decision, String case_notes) {
         this.hearing_id = hearing_id;
         this.case_id = case_id;
         this.case_hearing_date = case_hearing_date;
         this.case_decision = case_decision;
         this.case_disposed = case_disposed;
+        this.case_notes = case_notes;
     }
 
     public String getHearing_id() {

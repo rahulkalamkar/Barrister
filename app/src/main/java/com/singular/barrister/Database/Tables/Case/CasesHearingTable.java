@@ -64,6 +64,18 @@ public class CasesHearingTable {
 
     String case_decision;
 
+    public String getCase_notes() {
+        return case_notes;
+    }
+
+    public void setCase_notes(String case_notes) {
+        this.case_notes = case_notes;
+    }
+
+    @DatabaseField(columnName = "case_notes", canBeNull = true)
+
+    String case_notes;
+
     @DatabaseField(columnName = "case_disposed", canBeNull = true)
     String case_disposed;
 
@@ -78,10 +90,11 @@ public class CasesHearingTable {
         this.case_disposed = case_disposed;
     }
 
-    public CasesHearingTable(String id, String case_id, String case_hearing_date, String case_decision, String case_disposed) {
+    public CasesHearingTable(String id, String case_id, String case_hearing_date, String case_decision, String case_disposed, String case_notes) {
         this.hearing_id = id;
         this.case_id = case_id;
         this.case_hearing_date = case_hearing_date;
+        this.case_notes = case_notes;
         this.case_decision = case_decision;
         this.case_disposed = case_disposed;
     }

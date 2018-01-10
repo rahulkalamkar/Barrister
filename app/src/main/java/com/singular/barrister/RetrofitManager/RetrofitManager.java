@@ -7,6 +7,7 @@ import com.singular.barrister.Model.Cases.CasesResponse;
 import com.singular.barrister.Model.CasesTypeResponse;
 import com.singular.barrister.Model.Client.ClientResponse;
 import com.singular.barrister.Model.Court.CourtResponse;
+import com.singular.barrister.Model.News.NewsResponse;
 import com.singular.barrister.Model.RegisterResponse;
 import com.singular.barrister.Model.SimpleMessageResponse;
 import com.singular.barrister.Model.States.StateResponse;
@@ -85,16 +86,16 @@ public class RetrofitManager {
             call.enqueue(new Callback<RegisterResponse>() {
                 @Override
                 public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-                    Log.e("Token","Updated");
+                    Log.e("Token", "Updated");
                 }
 
                 @Override
                 public void onFailure(Call<RegisterResponse> call, Throwable t) {
-                    Log.e("Token","error");
+                    Log.e("Token", "error");
                 }
             });
         } catch (MalformedURLException e) {
-            Log.e("Token","error");
+            Log.e("Token", "error");
             e.printStackTrace();
         }
 
@@ -901,5 +902,66 @@ public class RetrofitManager {
             e.printStackTrace();
         }
 
+    }
+
+    public void getAllNews(final IDataChangeListener<IModel> callbackListener) {
+
+        try {
+            URL url = new URL("http://www.singularsacademy.com/lawyer/public/upload/json/news.json");
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<NewsResponse> call = api.getNewsList(apiName);
+            call.enqueue(new Callback<NewsResponse>() {
+                @Override
+                public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<NewsResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
+    }
+
+    public void updateHearingStatus(final IDataChangeListener<IModel> callbackListener, String token, String caseId, String caseDecision, String caseNotes, String caseDisposed) {
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Authorization", "Bearer " + token);
+
+        HashMap<String, String> queryMap = new HashMap<String, String>();
+        queryMap.put("case_decision", caseDecision);
+        queryMap.put("case_disposed", caseDisposed);
+        queryMap.put("case_note", caseNotes);
+
+        try {
+            URL url = new URL("http://www.singularsacademy.com/lawyer/public/api/hearing/" + caseId);
+            String baseUrl = url.getProtocol() + "://" + url.getHost();
+            String apiName = url.getPath();
+            String parameters = url.getQuery();
+
+            API api = APIClient.getClient(baseUrl).create(API.class);
+            Call<SimpleMessageResponse> call = api.updateHearing(apiName, headerMap, queryMap);
+            call.enqueue(new Callback<SimpleMessageResponse>() {
+                @Override
+                public void onResponse(Call<SimpleMessageResponse> call, Response<SimpleMessageResponse> response) {
+                    callbackListener.onDataReceived(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<SimpleMessageResponse> call, Throwable t) {
+                    callbackListener.onDataReceived(null);
+                }
+            });
+        } catch (MalformedURLException e) {
+            callbackListener.onDataReceived(null);
+            e.printStackTrace();
+        }
     }
 }
