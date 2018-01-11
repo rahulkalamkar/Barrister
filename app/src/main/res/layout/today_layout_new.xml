@@ -191,8 +191,9 @@
                 <TextView
                     android:id="@+id/textViewNotes"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Mumbai High Court"
+                    android:layout_height="match_parent"
+                    android:text="anything to function the way I want it to. I can write to a text file, can read from the text anything to function the way I want it to. I can write to a text file, can read from the text "
+                    android:maxLines="3"
                     android:textColor="@color/textColorLightTitle"
                     android:textSize="16sp" />
             </LinearLayout>

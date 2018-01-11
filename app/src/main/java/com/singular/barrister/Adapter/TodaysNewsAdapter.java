@@ -54,13 +54,11 @@ public class TodaysNewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             todayViewHolder.headLine.setText(newsArrayList.get(position).getTitle());
 
-            if (new NetworkConnection(context).isNetworkAvailable()) {
-                Picasso.with(context)
-                        .load(newsArrayList.get(position).getUrlToImage())
-                        .error(R.drawable.gradient_blue)
-                        .placeholder(R.drawable.gradient_blue)
-                        .into(todayViewHolder.imageViewNews);
-            }
+            Picasso.with(context)
+                    .load(newsArrayList.get(position).getUrlToImage())
+                    .error(R.drawable.gradient_blue)
+                    .placeholder(R.drawable.gradient_blue)
+                    .into(todayViewHolder.imageViewNews);
         }
     }
 

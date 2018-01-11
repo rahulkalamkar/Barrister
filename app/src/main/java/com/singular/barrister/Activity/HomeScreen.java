@@ -217,7 +217,7 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
                 return true;
             }
         });
-        if(searchActive)
+        if (searchActive)
             mSearchView.display();
         /* SearchView searchView = (SearchView) menu.findItem(R.id.menuSearch).getActionView();
 
@@ -247,7 +247,8 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
         });*/
         return true;
     }
-    private void openKeyboard(){
+
+    private void openKeyboard() {
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 mSearchView.getSearchView().dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0, 0, 0));
@@ -255,6 +256,7 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
             }
         }, 200);
     }
+
     public void searchInFragment(String text) {
         if (tabLayout.getSelectedTabPosition() == 0) {
             if (todaysFragment != null)
@@ -407,6 +409,13 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
             unregisterReceiver(receiver);
             receiver = null;
         }
+
+        try {
+            mWindowManager.removeView(mSearchView);
+            mSearchViewAdded = false;
+        } catch (Exception e) {
+
+        }
         super.onDestroy();
     }
 
@@ -532,6 +541,13 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+
+        try {
+            mWindowManager.removeView(mSearchView);
+            mSearchViewAdded = false;
+        } catch (Exception e) {
+
+        }
         super.onPause();
     }
 }

@@ -172,7 +172,7 @@ public class Update_Hearing extends AppCompatActivity implements IDataChangeList
 
     public void updateValues(String case_notes, String case_decision, String case_disposed) {
         RetrofitManager retrofitManager = new RetrofitManager();
-        retrofitManager.updateHearingStatus(this, new UserPreferance(getApplicationContext()).getToken(), caseHearing.getCase_id(), case_decision, case_notes, case_disposed);
+        retrofitManager.updateHearingStatus(this, new UserPreferance(getApplicationContext()).getToken(), caseHearing.getId(), case_decision, case_notes, case_disposed);
     }
 
     public void checkValues() {

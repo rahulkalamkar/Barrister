@@ -8,13 +8,20 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.singular.barrister.R;
 import com.singular.barrister.WebActivity;
 
-public class ShowNewsActivity extends AppCompatActivity {
+public class ShowNewsActivity extends AppCompatActivity implements RewardedVideoAdListener{
     String name, url;
     WebView mWebView;
     ProgressBar mProgressBar;
+    private RewardedVideoAd mRewardedVideoAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +38,7 @@ public class ShowNewsActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(name);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
+        initiateAds();
         mWebView = (WebView) findViewById(R.id.webView);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -44,6 +51,15 @@ public class ShowNewsActivity extends AppCompatActivity {
         mWebView.setWebViewClient(new MyBrowser());
     }
 
+    public void initiateAds() {
+
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAd.setRewardedVideoAdListener(this);
+        mRewardedVideoAd.loadAd("ca-app-pub-2696210102764869/4979996617",
+                new AdRequest.Builder().build());
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -54,6 +70,43 @@ public class ShowNewsActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onRewardedVideoAdLoaded() {
+        if (mRewardedVideoAd.isLoaded()) {
+            mRewardedVideoAd.show();
+        }
+    }
+
+    @Override
+    public void onRewardedVideoAdOpened() {
+
+    }
+
+    @Override
+    public void onRewardedVideoStarted() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdClosed() {
+
+    }
+
+    @Override
+    public void onRewarded(RewardItem rewardItem) {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdLeftApplication() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdFailedToLoad(int i) {
+
+    }
+
     private class MyBrowser extends WebViewClient {
 
         @Override
@@ -61,6 +114,7 @@ public class ShowNewsActivity extends AppCompatActivity {
             view.loadUrl(url);
             return true;
         }
+
         @Override
         public void onPageFinished(WebView view, String url) {
             mProgressBar.setVisibility(View.GONE);

@@ -151,7 +151,7 @@ public class SelectClient extends AppCompatActivity implements IDataChangeListen
     public void fetchAndDisplayClient() {
         retrofitManager = new RetrofitManager();
         List<BaseClientTable> list = getLocalData();
-        if (list != null) {
+        if (list != null && list.size() > 0) {
             convertAndDisplay(list);
         } else if (new NetworkConnection(this).isNetworkAvailable()) {
             retrofitManager.getClientList(this, new UserPreferance(this).getToken());

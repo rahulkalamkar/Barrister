@@ -1,8 +1,20 @@
 package com.singular.barrister.Util;
 
+import android.content.Context;
 import android.text.TextUtils;
 
+import com.singular.barrister.Model.News.News;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -131,4 +143,33 @@ public class Utils {
         return str;
     }
 
+    public static void saveArrayList(Context context, ArrayList<News> arrayList) {
+        try {
+            FileOutputStream fileOutputStream = context.openFileOutput("brrister.txt", Context.MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(fileOutputStream);
+            out.writeObject(arrayList);
+            out.close();
+            fileOutputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<News> getSavedArrayList(Context context) {
+        ArrayList<News> savedArrayList = null;
+
+        try {
+            FileInputStream inputStream = context.openFileInput("brrister.txt");
+            ObjectInputStream in = new ObjectInputStream(inputStream);
+            savedArrayList = (ArrayList<News>) in.readObject();
+            in.close();
+            inputStream.close();
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return savedArrayList;
+    }
 }

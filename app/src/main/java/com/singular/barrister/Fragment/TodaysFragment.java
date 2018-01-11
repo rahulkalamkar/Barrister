@@ -42,6 +42,7 @@ import com.singular.barrister.RetrofitManager.RetrofitManager;
 import com.singular.barrister.Util.IDataChangeListener;
 import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
+import com.singular.barrister.Util.Utils;
 import com.singular.barrister.Util.WebServiceError;
 
 import java.util.ArrayList;
@@ -178,7 +179,20 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
             progressBar.setVisibility(View.VISIBLE);
             retrofitManager.getAllNews(this);
         } else {
-            Toast.makeText(getActivity(), "No internet", Toast.LENGTH_SHORT).show();
+            try {
+                newsList = new ArrayList<>();
+                newsList.addAll(Utils.getSavedArrayList(getActivity()));
+                TodaysNewsAdapter todaysNewsAdapter = new TodaysNewsAdapter(getActivity(), newsList);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,
+                        false);
+                mCustomRecyclerViewNews.setLayoutManager(linearLayoutManager);
+                mCustomRecyclerViewNews.setAdapter(todaysNewsAdapter);
+                frameLayoutNews.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+            } catch (Exception e) {
+                Log.e("Write error", "" + e);
+            }
+          //  Toast.makeText(getActivity(), "No internet", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -406,6 +420,12 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
             newsList.clear();
             if (newsResponse.getArticles() != null && newsResponse.getArticles().size() > 0) {
                 newsList.addAll(newsResponse.getArticles());
+
+                try {
+                    Utils.saveArrayList(getActivity(), newsList);
+                } catch (Exception e) {
+                    Log.e("Write error", "" + e);
+                }
                 TodaysNewsAdapter todaysNewsAdapter = new TodaysNewsAdapter(getActivity(), newsList);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,
                         false);

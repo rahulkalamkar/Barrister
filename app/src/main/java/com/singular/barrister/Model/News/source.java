@@ -1,10 +1,14 @@
 package com.singular.barrister.Model.News;
 
+import com.singular.barrister.Util.IModel;
+
+import java.io.Serializable;
+
 /**
  * Created by rahul.kalamkar on 1/9/2018.
  */
 
-public class source {
+public class source implements Serializable,IModel {
     String id;
 
     public String getId() {

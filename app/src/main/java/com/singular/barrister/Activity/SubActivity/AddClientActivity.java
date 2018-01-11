@@ -1,6 +1,8 @@
 package com.singular.barrister.Activity.SubActivity;
 
 import android.content.Intent;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -23,7 +25,8 @@ import com.singular.barrister.Util.WebServiceError;
 
 public class AddClientActivity extends AppCompatActivity implements IDataChangeListener<IModel> {
 
-    EditText edtFirstName, edtLastName, edtPhone, edtEmailId, edtPassword;
+    TextInputLayout ltedtFirstName, ltedtLastName, ltedtPhone, ltedtEmailId, ltedtPassword;
+    TextInputEditText edtFirstName, edtLastName, edtPhone, edtEmailId, edtPassword;
     ProgressBar mProgressBar;
 
     @Override
@@ -38,48 +41,54 @@ public class AddClientActivity extends AppCompatActivity implements IDataChangeL
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        edtFirstName = (EditText) findViewById(R.id.editTextFirstName);
-        edtLastName = (EditText) findViewById(R.id.editTextLastName);
-        edtEmailId = (EditText) findViewById(R.id.editTextEmailId);
-        edtPhone = (EditText) findViewById(R.id.editTextPhoneNumber);
-        edtPassword = (EditText) findViewById(R.id.editTextPassword);
+        ltedtFirstName = (TextInputLayout) findViewById(R.id.LayoutEditTextFirstName);
+        ltedtLastName = (TextInputLayout) findViewById(R.id.LayoutEditTextLastName);
+        ltedtEmailId = (TextInputLayout) findViewById(R.id.LayoutEditTextEMail);
+        ltedtPhone = (TextInputLayout) findViewById(R.id.LayoutEditTextNumber);
+        ltedtPassword = (TextInputLayout) findViewById(R.id.LayoutEditTextPassword);
+
+        edtFirstName = (TextInputEditText) findViewById(R.id.editTextFirstName);
+        edtLastName = (TextInputEditText) findViewById(R.id.editTextLastName);
+        edtEmailId = (TextInputEditText) findViewById(R.id.editTextEMail);
+        edtPhone = (TextInputEditText) findViewById(R.id.editTextNumber);
+        edtPassword = (TextInputEditText) findViewById(R.id.editTextPassword);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
     }
 
     public void setOtherErrorNull() {
-        edtPhone.setError(null);
-        edtEmailId.setError(null);
-        edtPassword.setError(null);
-        edtFirstName.setError(null);
-        edtLastName.setError(null);
+        ltedtFirstName.setError(null);
+        ltedtLastName.setError(null);
+        ltedtEmailId.setError(null);
+        ltedtPhone.setError(null);
+        ltedtPassword.setError(null);
     }
 
     public void checkValues() {
         if (TextUtils.isEmpty(edtFirstName.getText().toString())) {
             setOtherErrorNull();
-            edtFirstName.setError("Enter first name");
+            ltedtFirstName.setError("Enter first name");
         } else if (TextUtils.isEmpty(edtLastName.getText().toString())) {
             setOtherErrorNull();
-            edtLastName.setError("Enter last name");
+            ltedtLastName.setError("Enter last name");
         } else if (TextUtils.isEmpty(edtPhone.getText().toString())) {
             setOtherErrorNull();
-            edtPhone.setError("Enter phone number");
+            ltedtPhone.setError("Enter phone number");
         } else if (edtPhone.getText().toString().trim().length() < 10) {
             setOtherErrorNull();
-            edtPhone.setError("Enter valid phone number");
+            ltedtPhone.setError("Enter valid phone number");
         }
         if (TextUtils.isEmpty(edtEmailId.getText().toString())) {
             setOtherErrorNull();
-            edtEmailId.setError("Enter email id");
+            ltedtEmailId.setError("Enter email id");
         } else if (TextUtils.isEmpty(edtPassword.getText().toString())) {
             setOtherErrorNull();
             edtPassword.setError("Enter password");
         } else {
-            edtPhone.setError(null);
-            edtEmailId.setError(null);
-            edtPassword.setError(null);
-            edtFirstName.setError(null);
-            edtLastName.setError(null);
+            ltedtFirstName.setError(null);
+            ltedtLastName.setError(null);
+            ltedtEmailId.setError(null);
+            ltedtPhone.setError(null);
+            ltedtPassword.setError(null);
             RetrofitManager retrofitManager = new RetrofitManager();
             if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
                 mProgressBar.setVisibility(View.VISIBLE);

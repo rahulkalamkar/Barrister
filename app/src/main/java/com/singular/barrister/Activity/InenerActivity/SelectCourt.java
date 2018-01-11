@@ -167,7 +167,7 @@ public class SelectCourt extends AppCompatActivity implements IDataChangeListene
     RetrofitManager retrofitManager;
 
     public void convertList(List<CourtTable> list) {
-        if (list == null) {
+        if (list == null || list.size() == 0) {
             retrofitManager = new RetrofitManager();
             if (new NetworkConnection(this).isNetworkAvailable()) {
                 retrofitManager.getCourtList(this, new UserPreferance(this).getToken());
