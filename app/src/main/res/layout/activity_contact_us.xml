@@ -204,12 +204,13 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/website"
                         android:layout_width="match_parent"
                         android:layout_height="36dp"
                         android:layout_marginTop="@dimen/fab_margin"
                         android:gravity="center_vertical"
                         android:paddingLeft="10dp"
-                        android:text="http://www.barristerdiary.com"
+                        android:text="www.barristerdiary.com"
                         android:textColor="@color/colorTextBlack"
                         android:textSize="16sp" />
 

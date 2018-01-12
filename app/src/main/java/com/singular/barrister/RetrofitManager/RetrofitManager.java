@@ -317,7 +317,7 @@ public class RetrofitManager {
         HashMap<String, String> queryMap = new HashMap<String, String>();
         queryMap.put("first_name", first_name);
         queryMap.put("last_name", last_name);
-        queryMap.put("address", address);
+        queryMap.put("address", "");
 
         try {
             URL url = new URL("http://singularsacademy.com/lawyer/public/api/profile");

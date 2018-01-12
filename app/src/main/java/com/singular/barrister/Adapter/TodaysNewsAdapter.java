@@ -80,6 +80,20 @@ public class TodaysNewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             imageViewNews = (ImageView) itemView.findViewById(R.id.imageView);
             viewAll = (TextView) itemView.findViewById(R.id.txtViewAll);
 
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Name", "News");
+                    bundle.putString("Url", "" + newsArrayList.get(getAdapterPosition()).getUrl());
+                    Intent i = new Intent(context, ShowNewsActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.putExtras(bundle);
+                    context.startActivity(i);
+                }
+            });
+
             viewAll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

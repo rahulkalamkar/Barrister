@@ -459,11 +459,33 @@ public class EditCourtActivity extends AppCompatActivity implements IDataChangeL
             edtSubDistrict.setText(selectedSubDistrict.getName());
         } else if (data != null && data.getExtras() != null) {
             if (data.getExtras().getSerializable("State") != null) {
-                selectedState = (State) data.getExtras().getSerializable("State");
-                edtState.setText(selectedState.getName());
+                State s = (State) data.getExtras().getSerializable("State");
+                if (selectedState != null) {
+                    if (!selectedState.getName().equalsIgnoreCase(s.getName())) {
+                        selectedState = (State) data.getExtras().getSerializable("State");
+                        edtState.setText(selectedState.getName());
+                        selectedDistrict = null;
+                        selectedSubDistrict = null;
+                        edtDistrict.setText("");
+                        edtSubDistrict.setText("");
+                    }
+                } else {
+                    selectedState = (State) data.getExtras().getSerializable("State");
+                    edtState.setText(selectedState.getName());
+                }
             } else if (data.getExtras().getSerializable("District") != null) {
-                selectedDistrict = (District) data.getExtras().getSerializable("District");
-                edtDistrict.setText(selectedDistrict.getName());
+                District d = (District) data.getExtras().getSerializable("District");
+                if (selectedDistrict != null) {
+                    if (!selectedDistrict.getName().equalsIgnoreCase(d.getName())) {
+                        selectedDistrict = (District) data.getExtras().getSerializable("District");
+                        edtDistrict.setText(selectedDistrict.getName());
+                        selectedSubDistrict = null;
+                        edtSubDistrict.setText("");
+                    }
+                }else {
+                    selectedDistrict = (District) data.getExtras().getSerializable("District");
+                    edtDistrict.setText(selectedDistrict.getName());
+                }
             } else if (data.getExtras().getSerializable("SubDistrict") != null) {
                 selectedSubDistrict = (SubDistrict) data.getExtras().getSerializable("SubDistrict");
                 edtSubDistrict.setText(selectedSubDistrict.getName());

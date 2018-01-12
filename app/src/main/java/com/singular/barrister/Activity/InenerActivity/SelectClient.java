@@ -3,6 +3,7 @@ package com.singular.barrister.Activity.InenerActivity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +27,8 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.singular.barrister.Activity.LandingScreen;
 import com.singular.barrister.Activity.SubActivity.AddCaseActivity;
+import com.singular.barrister.Activity.SubActivity.AddClientActivity;
+import com.singular.barrister.Activity.SubActivity.AddCourtActivity;
 import com.singular.barrister.Adapter.ClientListAdapter;
 import com.singular.barrister.Database.DB.DatabaseHelper;
 import com.singular.barrister.Database.Tables.Client.BaseClientTable;
@@ -51,6 +54,7 @@ import java.util.List;
 
 public class SelectClient extends AppCompatActivity implements IDataChangeListener<IModel> {
 
+    FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,14 +66,31 @@ public class SelectClient extends AppCompatActivity implements IDataChangeListen
             getSupportActionBar().setTitle("Select Client");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        horizontalLine = (View) findViewById(R.id.horizontalView);
 
-        txtName = (TextView) findViewById(R.id.textViewName);
-        recyclerView = (RecyclerView) findViewById(R.id.caseSubTypeRecycleView);
-        horizontalLine.setVisibility(View.GONE);
+        txtName = (TextView) findViewById(R.id.textViewErrorText);
+        recyclerView = (RecyclerView) findViewById(R.id.courtRecycleView);
         fetchAndDisplayClient();
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent;
+                intent = new Intent(getApplicationContext(), AddClientActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (new NetworkConnection(this).isNetworkAvailable()) {
+            retrofitManager.getClientList(SelectClient.this, new UserPreferance(SelectClient.this).getToken());
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -128,7 +149,6 @@ public class SelectClient extends AppCompatActivity implements IDataChangeListen
     }
 
 
-    View horizontalLine;
     TextView txtName;
     RecyclerView recyclerView;
 
@@ -153,8 +173,11 @@ public class SelectClient extends AppCompatActivity implements IDataChangeListen
         List<BaseClientTable> list = getLocalData();
         if (list != null && list.size() > 0) {
             convertAndDisplay(list);
-        } else if (new NetworkConnection(this).isNetworkAvailable()) {
-            retrofitManager.getClientList(this, new UserPreferance(this).getToken());
+        } else if (new NetworkConnection(SelectClient.this).isNetworkAvailable()) {
+            if (clientList == null)
+                clientList = new ArrayList<Client>();
+            clientList.clear();
+            retrofitManager.getClientList(SelectClient.this, new UserPreferance(SelectClient.this).getToken());
         } else {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
@@ -213,6 +236,9 @@ public class SelectClient extends AppCompatActivity implements IDataChangeListen
     public void onDataReceived(IModel response) {
         if (response != null && response instanceof ClientResponse) {
             ClientResponse clientResponse = (ClientResponse) response;
+            if (clientList == null)
+                clientList = new ArrayList<Client>();
+            clientList.clear();
             if (clientResponse.getData().getClient() != null) {
                 clientList.addAll(clientResponse.getData().getClient());
                 show();

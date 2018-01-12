@@ -76,13 +76,18 @@ public class AddClientActivity extends AppCompatActivity implements IDataChangeL
         } else if (edtPhone.getText().toString().trim().length() < 10) {
             setOtherErrorNull();
             ltedtPhone.setError("Enter valid phone number");
-        }
-        if (TextUtils.isEmpty(edtEmailId.getText().toString())) {
+        } else if (TextUtils.isEmpty(edtEmailId.getText().toString())) {
             setOtherErrorNull();
             ltedtEmailId.setError("Enter email id");
+        } else if (!isValidEmail(edtEmailId.getText().toString())) {
+            setOtherErrorNull();
+            ltedtEmailId.setError("Enter valid email id");
         } else if (TextUtils.isEmpty(edtPassword.getText().toString())) {
             setOtherErrorNull();
-            edtPassword.setError("Enter password");
+            ltedtPassword.setError("Enter password");
+        } else if (edtPassword.getText().toString().length() < 6) {
+            setOtherErrorNull();
+            ltedtPassword.setError("Password should be at least of 6 digit");
         } else {
             ltedtFirstName.setError(null);
             ltedtLastName.setError(null);
@@ -104,6 +109,10 @@ public class AddClientActivity extends AppCompatActivity implements IDataChangeL
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private static boolean isValidEmail(String email) {
+        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     public void returnDataToHome(int resultCode) {

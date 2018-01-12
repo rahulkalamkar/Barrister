@@ -47,7 +47,8 @@ public class ReferralActivity extends AppCompatActivity {
     public void shareData() {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Download this amazing app and add my referral code" + new UserPreferance(getApplicationContext()).getReferral_code() + "to get free subscription");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out Barrister for your smart phone, apply the referral code " + new UserPreferance(getApplicationContext()).getReferral_code() + " while creating account. We both will get 1 credit. when credit score reach up to 50, both will get surprise gift from us. Download the app today from \n\n" +
+                "https://play.google.com/store/apps/details?id=com.singular.barrister");
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
     }

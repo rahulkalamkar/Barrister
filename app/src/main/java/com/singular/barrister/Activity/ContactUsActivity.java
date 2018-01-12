@@ -9,13 +9,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.singular.barrister.R;
+import com.singular.barrister.WebActivity;
 
 public class ContactUsActivity extends AppCompatActivity {
 
     RelativeLayout email;
     LinearLayout callFirstNumber, callSecondNumber;
+    TextView Web;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,14 @@ public class ContactUsActivity extends AppCompatActivity {
         callFirstNumber = (LinearLayout) findViewById(R.id.textViewFirstNumber);
         callSecondNumber = (LinearLayout) findViewById(R.id.textViewSecondNumber);
         email = (RelativeLayout) findViewById(R.id.relativeLayoutEmail);
+        Web = (TextView) findViewById(R.id.website);
 
+        Web.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showWeb();
+            }
+        });
         email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,6 +64,16 @@ public class ContactUsActivity extends AppCompatActivity {
                 call("+919724283616");
             }
         });
+    }
+
+
+    public void showWeb() {
+        Bundle bundle = new Bundle();
+        bundle.putString("Name", "Barrister");
+        bundle.putString("Url", "www.barristerdiary.com");
+        Intent i = new Intent(getApplicationContext(), WebActivity.class);
+        i.putExtras(bundle);
+        startActivity(i);
     }
 
     @Override

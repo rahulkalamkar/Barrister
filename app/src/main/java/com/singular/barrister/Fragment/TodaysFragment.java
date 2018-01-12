@@ -44,7 +44,8 @@ import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.Utils;
 import com.singular.barrister.Util.WebServiceError;
-
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +72,12 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.today_fragment, container, false);
     }
-
+    private AdView mAdView;
+    public void ads() {
+        mAdView = getView().findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+    }
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -79,7 +85,7 @@ public class TodaysFragment extends Fragment implements IDataChangeListener<IMod
         frameLayoutNews = (FrameLayout) getView().findViewById(R.id.frameLayout_News);
         mCustomRecyclerView = (RecyclerViewPager) getView().findViewById(R.id.viewpager);
         mCustomRecyclerViewNews = (RecyclerViewPager) getView().findViewById(R.id.viewpagerNews);
-
+        ads();
         initRecycleView();
         initRecycleViewNews();
 

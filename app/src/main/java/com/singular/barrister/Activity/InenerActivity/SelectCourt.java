@@ -3,6 +3,7 @@ package com.singular.barrister.Activity.InenerActivity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +25,8 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.singular.barrister.Activity.LandingScreen;
 import com.singular.barrister.Activity.SubActivity.AddCaseActivity;
+import com.singular.barrister.Activity.SubActivity.AddClientActivity;
+import com.singular.barrister.Activity.SubActivity.AddCourtActivity;
 import com.singular.barrister.Adapter.CourtListAdapter;
 import com.singular.barrister.Database.DB.DatabaseHelper;
 import com.singular.barrister.Database.Tables.CourtTable;
@@ -52,6 +55,8 @@ public class SelectCourt extends AppCompatActivity implements IDataChangeListene
     TextView txtName;
     RecyclerView recyclerView;
 
+    FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,17 +68,35 @@ public class SelectCourt extends AppCompatActivity implements IDataChangeListene
             getSupportActionBar().setTitle("Select Court");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        horizontalLine = (View) findViewById(R.id.horizontalView);
 
-        txtName = (TextView) findViewById(R.id.textViewName);
+        txtName = (TextView) findViewById(R.id.textViewErrorText);
         recyclerView = (RecyclerView) findViewById(R.id.caseSubTypeRecycleView);
-        horizontalLine.setVisibility(View.GONE);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent;
+                intent = new Intent(getApplicationContext(), AddCourtActivity.class);
+                startActivityForResult(intent, 2);
+            }
+        });
         fetchData();
     }
 
     public void fetchData() {
         List<CourtTable> list = getAllCourt();
         convertList(list);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (new NetworkConnection(this).isNetworkAvailable()) {
+            retrofitManager.getCourtList(this, new UserPreferance(this).getToken());
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -169,6 +192,9 @@ public class SelectCourt extends AppCompatActivity implements IDataChangeListene
     public void convertList(List<CourtTable> list) {
         if (list == null || list.size() == 0) {
             retrofitManager = new RetrofitManager();
+            if (courtList == null)
+                courtList = new ArrayList<>();
+            courtList.clear();
             if (new NetworkConnection(this).isNetworkAvailable()) {
                 retrofitManager.getCourtList(this, new UserPreferance(this).getToken());
             } else {
@@ -209,7 +235,7 @@ public class SelectCourt extends AppCompatActivity implements IDataChangeListene
 
     public void showError() {
         txtName.setVisibility(View.VISIBLE);
-        txtName.setText("No court available!");
+        txtName.setText("You have not added any court yet,\\nclick on + to add new");
     }
 
     @Override
@@ -221,6 +247,9 @@ public class SelectCourt extends AppCompatActivity implements IDataChangeListene
     public void onDataReceived(IModel response) {
         if (response != null && response instanceof CourtResponse) {
             CourtResponse courtResponse = (CourtResponse) response;
+            if (courtList == null)
+                courtList = new ArrayList<>();
+            courtList.clear();
             if (courtResponse.getData().getCourt() != null) {
                 courtList.addAll(courtResponse.getData().getCourt());
                 show();

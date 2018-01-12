@@ -2,6 +2,7 @@ package com.singular.barrister.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
@@ -16,7 +17,7 @@ import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.singular.barrister.R;
 import com.singular.barrister.WebActivity;
 
-public class ShowNewsActivity extends AppCompatActivity implements RewardedVideoAdListener{
+public class ShowNewsActivity extends AppCompatActivity implements RewardedVideoAdListener {
     String name, url;
     WebView mWebView;
     ProgressBar mProgressBar;
@@ -52,7 +53,6 @@ public class ShowNewsActivity extends AppCompatActivity implements RewardedVideo
     }
 
     public void initiateAds() {
-
         mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
         mRewardedVideoAd.setRewardedVideoAdListener(this);
         mRewardedVideoAd.loadAd("ca-app-pub-2696210102764869/4979996617",
@@ -104,7 +104,7 @@ public class ShowNewsActivity extends AppCompatActivity implements RewardedVideo
 
     @Override
     public void onRewardedVideoAdFailedToLoad(int i) {
-
+        Log.e("Ad ", "Failed");
     }
 
     private class MyBrowser extends WebViewClient {

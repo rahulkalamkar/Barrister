@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -139,8 +140,19 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
         initializeFragments();
     }
 
+    public void openPlayStore() {
+        final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+        }
+    }
 
     public void initializeFragments() {
+        if (searchItem != null && searchItem.isVisible())
+            searchItem.setVisible(false);
+        hideSearchView();
         fab.setVisibility(View.GONE);
         todaysFragment = new TodaysFragment();
         fragmentManager = getSupportFragmentManager();
@@ -164,30 +176,35 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
+                    if (searchItem != null && searchItem.isVisible())
+                        searchItem.setVisible(false);
+                    hideSearchView();
                     fab.setVisibility(View.GONE);
                     todaysFragment = new TodaysFragment();
                     fragmentManager = getSupportFragmentManager();
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.fragmentContainer, todaysFragment, "Today's Fragment").commit();
                 } else if (tab.getPosition() == 1) {
+                    showSearch();
                     fab.setVisibility(View.VISIBLE);
                     casesFragment = new CasesFragment();
                     fragmentManager = getSupportFragmentManager();
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.fragmentContainer, casesFragment, "Cases Fragment").commit();
                 } else if (tab.getPosition() == 2) {
+                    showSearch();
                     fab.setVisibility(View.VISIBLE);
                     courtFragment = new CourtFragment();
                     fragmentManager = getSupportFragmentManager();
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.fragmentContainer, courtFragment, "Court Fragment").commit();
                 } else if (tab.getPosition() == 3) {
+                    showSearch();
                     fab.setVisibility(View.VISIBLE);
                     clientFragment = new ClientFragment();
                     fragmentManager = getSupportFragmentManager();
                     transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.fragmentContainer, clientFragment, "Client Fragment").commit();
-
                 }
             }
 
@@ -208,6 +225,27 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option, menu);
 
+        return true;
+    }
+
+    public void showSearch() {
+        if (searchItem != null && !searchItem.isVisible()) {
+            searchItem.setVisible(true);
+        }
+        hideSearchView();
+    }
+
+    public void hideSearchView() {
+        if (mSearchView != null) {
+            searchActive = false;
+            mSearchView.hide();
+        }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        searchItem = (MenuItem) menu.findItem(R.id.menuSearch).getActionView();
+
         searchItem = menu.findItem(R.id.menuSearch);
         searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -219,33 +257,8 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
         });
         if (searchActive)
             mSearchView.display();
-        /* SearchView searchView = (SearchView) menu.findItem(R.id.menuSearch).getActionView();
 
-        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-        searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
-
-        AutoCompleteTextView searchTextView = (AutoCompleteTextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        try {
-            Field mCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
-            mCursorDrawableRes.setAccessible(true);
-            mCursorDrawableRes.set(searchTextView, R.drawable.cursor); //This sets the cursor resource ID to 0 or @null which will make it visible on white background
-        } catch (Exception e) {
-        }
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                searchInFragment(newText);
-                return false;
-            }
-        });*/
-        return true;
+        return super.onPrepareOptionsMenu(menu);
     }
 
     private void openKeyboard() {
@@ -280,6 +293,10 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
 
         Intent intent;
         switch (id) {
+            case R.id.menuRateApp:
+                openPlayStore();
+                break;
+
             case R.id.menuProfile:
                 intent = new Intent(HomeScreen.this, ProfileActivity.class);
                 startActivity(intent);
@@ -366,24 +383,30 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == requestCode) {
             if (tabLayout.getSelectedTabPosition() == 0) {
+                if (searchItem != null && searchItem.isVisible())
+                    searchItem.setVisible(false);
+                hideSearchView();
                 fab.setVisibility(View.GONE);
                 todaysFragment = new TodaysFragment();
                 fragmentManager = getSupportFragmentManager();
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContainer, todaysFragment, "Today's Fragment").commit();
             } else if (tabLayout.getSelectedTabPosition() == 1) {
+                showSearch();
                 fab.setVisibility(View.VISIBLE);
                 casesFragment = new CasesFragment();
                 fragmentManager = getSupportFragmentManager();
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContainer, casesFragment, "Cases Fragment").commit();
             } else if (tabLayout.getSelectedTabPosition() == 2) {
+                showSearch();
                 fab.setVisibility(View.VISIBLE);
                 courtFragment = new CourtFragment();
                 fragmentManager = getSupportFragmentManager();
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContainer, courtFragment, "Court Fragment").commit();
             } else if (tabLayout.getSelectedTabPosition() == 3) {
+                showSearch();
                 fab.setVisibility(View.VISIBLE);
                 clientFragment = new ClientFragment();
                 fragmentManager = getSupportFragmentManager();
@@ -408,13 +431,6 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
         if (receiver != null) {
             unregisterReceiver(receiver);
             receiver = null;
-        }
-
-        try {
-            mWindowManager.removeView(mSearchView);
-            mSearchViewAdded = false;
-        } catch (Exception e) {
-
         }
         super.onDestroy();
     }
@@ -541,13 +557,6 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
-
-        try {
-            mWindowManager.removeView(mSearchView);
-            mSearchViewAdded = false;
-        } catch (Exception e) {
-
-        }
         super.onPause();
     }
 }

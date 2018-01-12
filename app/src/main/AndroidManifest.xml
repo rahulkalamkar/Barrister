@@ -28,7 +28,8 @@
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="2ebc480f86598adce4de3379e308106e42c6efb9" />
+            android:value="e3ef593d1229b9efba2e99aeb3841f6d21898093"
+            />
 
         <activity
             android:name="com.facebook.accountkit.ui.AccountKitActivity"

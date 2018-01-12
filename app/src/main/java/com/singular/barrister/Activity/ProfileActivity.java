@@ -1,5 +1,6 @@
 package com.singular.barrister.Activity;
 
+import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -75,7 +77,7 @@ public class ProfileActivity extends AppCompatActivity implements IDataChangeLis
             //mProgressBar.setVisibility(View.VISIBLE);
             retrofitManager.getProfile(this, new UserPreferance(getApplicationContext()).getToken());
         } else {
-          //  Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
             setDataWithoutNetwork();
         }
     }
@@ -138,7 +140,16 @@ public class ProfileActivity extends AppCompatActivity implements IDataChangeLis
 
     boolean isEditing = true;
 
+    public void hideKeyBoard() {
+        InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
     public void updateProfile() {
+        hideKeyBoard();
         if (!TextUtils.isEmpty(editProfileFragment.getFirstName()) &&
                 !TextUtils.isEmpty(editProfileFragment.getLastName())) {
             if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {

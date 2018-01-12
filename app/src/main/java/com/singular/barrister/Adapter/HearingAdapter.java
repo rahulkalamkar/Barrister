@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,8 +42,26 @@ public class HearingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HearingViewHolder) {
             HearingViewHolder hearingViewHolder = (HearingViewHolder) holder;
-            hearingViewHolder.textViewHearingDate.setText(Utils.getDateFormat(hearings.get(position).getCase_hearing_date()));
-            hearingViewHolder.textViewHearingText.setText(hearings.get(position).getCase_decision());
+
+            if (TextUtils.isEmpty(hearings.get(position).getCase_disposed())) {
+                hearingViewHolder.textViewHearingDate.setText(Utils.getDateFormat(hearings.get(position).getCase_hearing_date()));
+            } else {
+                hearingViewHolder.textViewHearingDate.setText(Utils.getDateFormat(hearings.get(position).getCase_hearing_date()) + " (" + hearings.get(position).getCase_disposed() + ") ");
+            }
+
+            if (TextUtils.isEmpty(hearings.get(position).getCase_notes())) {
+                hearingViewHolder.textViewHearingText.setVisibility(View.GONE);
+            } else {
+                hearingViewHolder.textViewHearingText.setText("Notes:\n" + hearings.get(position).getCase_notes());
+                hearingViewHolder.textViewHearingText.setVisibility(View.VISIBLE);
+            }
+            if (TextUtils.isEmpty(hearings.get(position).getCase_decision())) {
+                hearingViewHolder.txtDecision.setVisibility(View.GONE);
+            } else {
+                hearingViewHolder.txtDecision.setText("Decision:\n" + hearings.get(position).getCase_decision());
+                hearingViewHolder.txtDecision.setVisibility(View.VISIBLE);
+            }
+
         }
     }
 
@@ -52,13 +71,13 @@ public class HearingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class HearingViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewHearingDate, textViewHearingText;
+        TextView textViewHearingDate, textViewHearingText, txtDecision;
 
         public HearingViewHolder(View itemView) {
             super(itemView);
             textViewHearingDate = (TextView) itemView.findViewById(R.id.textViewCourtName);
             textViewHearingText = (TextView) itemView.findViewById(R.id.textViewState);
-
+            txtDecision = (TextView) itemView.findViewById(R.id.textViewNotes);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

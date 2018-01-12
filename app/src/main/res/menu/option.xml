@@ -12,6 +12,9 @@
         android:id="@+id/menuImportantWebSite"
         android:title="@string/menu_important_link" />
     <item
+        android:id="@+id/menuRateApp"
+        android:title="Rate and Review" />
+    <item
         android:id="@+id/menuLoveApp"
         android:title="@string/menu_love_app" />
     <item
@@ -26,5 +29,6 @@
         android:id="@+id/menuSearch"
         android:icon="@mipmap/ic_search_icon"
         android:title="Search"
+        android:visible="false"
         app:showAsAction="ifRoom|collapseActionView"/>
 </menu>

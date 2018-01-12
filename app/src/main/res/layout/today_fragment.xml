@@ -87,7 +87,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:visibility="gone"
             ads:adSize="BANNER"
             ads:adUnitId="ca-app-pub-2696210102764869/6243707904" />
 

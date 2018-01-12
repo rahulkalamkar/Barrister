@@ -1,36 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
-
-    <TextView
-        android:id="@+id/textViewName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorTextBlack"
-        android:textSize="16sp"
-        android:padding="8dp"/>
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.singular.barrister.Fragment.CourtFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/caseSubTypeRecycleView"
+        android:id="@+id/courtRecycleView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/adView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:scrollbars="none" />
 
     <TextView
-        android:id="@+id/textViewSubName"
-        android:layout_width="match_parent"
+        android:id="@+id/textViewErrorText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorTextBlackLight"
-        android:text="16sp"
-        android:padding="4dp"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:visibility="gone"/>
-    <View
-        android:id="@+id/horizontalView"
-        android:layout_width="match_parent"
-        android:layout_height="0.2dp"
-        android:background="@color/colorTextBlackLight"/>
-</LinearLayout>
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:padding="@dimen/fab_margin"
+        android:text="You have not added any court yet,\nclick on + to add new "
+        android:textColor="@color/colorTextBlack"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        app:srcCompat="@mipmap/ic_add_icon" />
+</RelativeLayout>

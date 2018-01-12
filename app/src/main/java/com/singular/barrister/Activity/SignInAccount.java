@@ -106,7 +106,6 @@ public class SignInAccount extends AppCompatActivity implements View.OnClickList
             case R.id.textViewForgotPassword:
                 Intent intent = new Intent(SignInAccount.this, ForgotPassword.class);
                 startActivity(intent);
-                finish();
                 break;
             case R.id.textViewPrivacyPolicy:
                 Intent intent3 = new Intent(SignInAccount.this, PrivacyPolicy.class);
@@ -128,11 +127,11 @@ public class SignInAccount extends AppCompatActivity implements View.OnClickList
         switch (item.getItemId()) {
             case R.id.menuSubmit:
                 if (TextUtils.isEmpty(edtNumber.getText().toString())) {
-                    edtNumber.setError("Enter phone number");
-                    edtPassword.setError(null);
+                    txtILEdtNumber.setError("Enter phone number");
+                    txtILEdtPassword.setError(null);
                 } else if (TextUtils.isEmpty(edtPassword.getText().toString())) {
-                    edtPassword.setError("Enter password");
-                    edtNumber.setError(null);
+                    txtILEdtPassword.setError("Enter password");
+                    txtILEdtNumber.setError(null);
                 } else {
                     Log.e("Retrofi call","Yes");
                     RetrofitManager retrofitManager = new RetrofitManager();

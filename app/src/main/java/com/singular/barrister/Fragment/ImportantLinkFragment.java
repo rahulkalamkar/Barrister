@@ -45,22 +45,35 @@ public class ImportantLinkFragment extends Fragment {
 
         edtWebName = (TextInputEditText) getView().findViewById(R.id.editTextWebSiteName);
         edtWebSite = (TextInputEditText) getView().findViewById(R.id.editTextWebSiteUrl);
+        hideError();
+    }
+
+    public void hideError(){
+        txtILWebNameError.setErrorEnabled(true);
+        txtILWebsiteError.setErrorEnabled(true);
     }
 
     public boolean checkValues() {
         if (TextUtils.isEmpty(edtWebName.getText().toString())) {
+            txtILWebNameError.setErrorEnabled(true);
             txtILWebNameError.setError("enter website name");
             txtILWebsiteError.setError(null);
+            hideError();
             return false;
         } else if (TextUtils.isEmpty(edtWebSite.getText().toString())) {
+            txtILWebsiteError.setErrorEnabled(true);
             txtILWebNameError.setError(null);
             txtILWebsiteError.setError("enter website url");
+            hideError();
             return false;
         } else if (!isValidUrl(edtWebSite.getText().toString())) {
             txtILWebNameError.setError(null);
+            txtILWebsiteError.setErrorEnabled(true);
             txtILWebsiteError.setError("enter valid url");
+            hideError();
             return false;
         } else {
+            hideError();
             return true;
         }
     }

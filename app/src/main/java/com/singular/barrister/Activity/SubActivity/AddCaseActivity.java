@@ -377,11 +377,11 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         } else if (TextUtils.isEmpty(edtOpoNumber.getText().toString())) {
             disableError();
             txtILOpoNumber.setErrorEnabled(true);
-            txtILOpoNumber.setError("enter  opposition number");
+            txtILOpoNumber.setError("enter opposition number");
         } else if (edtOpoNumber.getText().toString().length() < 10 || edtOpoNumber.getText().toString().length() != 10) {
             disableError();
             txtILOpoNumber.setErrorEnabled(true);
-            txtILOpoNumber.setError("enter  valid opposition number");
+            txtILOpoNumber.setError("enter valid opposition number");
         } else if (TextUtils.isEmpty(edtOpoLawyerName.getText().toString())) {
             disableError();
             txtILOpoLawName.setErrorEnabled(true);
@@ -402,15 +402,20 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
                 disableError();
                 mProgressBar.setVisibility(View.VISIBLE);
-                retrofitManager.addCase(this, new UserPreferance(getApplicationContext()).getToken(), selectedClient.getClient_id(), selectedClientType, selectedCourt.getId(), edtCaseCNRNumber.getText().toString(),
-                        edtCaseRegisterNumber.getText().toString(),
-                        selectedRegisterDate,
-                        selectedCaseType.getCase_type_id(), selectedCaseSubType.getSubcase_type_id(),
-                        edtCaseStatus.getText().toString(),
-                        getJSONFORMAT(edtOpoLawyerName.getText().toString(), "91", edtOpoLawyerNumber.getText().toString()),
-                        getJSONFORMAT(edtOpoName.getText().toString(), "91", edtOpoNumber.getText().toString()),
-                        getJSONFORMAT(edtOpoName.getText().toString(), "91", edtOpoNumber.getText().toString()),
-                        getJSON());
+                if (selectedClient != null) {
+                    retrofitManager.addCase(this, new UserPreferance(getApplicationContext()).getToken(), selectedClient.getClient_id(), selectedClientType, selectedCourt.getId(), edtCaseCNRNumber.getText().toString(),
+                            edtCaseRegisterNumber.getText().toString(),
+                            selectedRegisterDate,
+                            selectedCaseType.getCase_type_id(), selectedCaseSubType.getSubcase_type_id(),
+                            edtCaseStatus.getText().toString(),
+                            getJSONFORMAT(edtOpoLawyerName.getText().toString(), "91", edtOpoLawyerNumber.getText().toString()),
+                            getJSONFORMAT(edtOpoName.getText().toString(), "91", edtOpoNumber.getText().toString()),
+                            getJSONFORMAT(edtOpoName.getText().toString(), "91", edtOpoNumber.getText().toString()),
+                            getJSON());
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "try after sometime", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(getApplicationContext(), "Check internet connection", Toast.LENGTH_SHORT).show();
             }
