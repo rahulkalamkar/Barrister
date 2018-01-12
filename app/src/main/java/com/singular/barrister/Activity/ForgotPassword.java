@@ -1,6 +1,8 @@
 package com.singular.barrister.Activity;
 
 import android.content.Intent;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,11 +23,13 @@ import com.singular.barrister.Util.IModel;
 import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
 
-public class ForgotPassword extends AppCompatActivity implements IDataChangeListener<IModel>{
+public class ForgotPassword extends AppCompatActivity implements IDataChangeListener<IModel> {
 
-    EditText edtEmailId;
+    TextInputEditText edtEmailId;
+    TextInputLayout layoutEdtEmailId;
     ProgressBar mProgressBar;
-RetrofitManager retrofitManager;
+    RetrofitManager retrofitManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,19 +43,17 @@ RetrofitManager retrofitManager;
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        edtEmailId=(EditText)findViewById(R.id.editTextEmailId);
-        mProgressBar=(ProgressBar)findViewById(R.id.progressBar2);
-        retrofitManager=new RetrofitManager();
+        layoutEdtEmailId = (TextInputLayout) findViewById(R.id.LayoutEditTextEmailId);
+        edtEmailId = (TextInputEditText) findViewById(R.id.editTextEmailId);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
+        retrofitManager = new RetrofitManager();
     }
 
-    public void requestForgotPassword(String emailId)
-    {
-        if(new NetworkConnection(getApplicationContext()).isNetworkAvailable())
-        {
-retrofitManager.forgotPassword(this,emailId);
-        }
-        else {
-            Toast.makeText(getApplicationContext(),getResources().getString(R.string.network_error),Toast.LENGTH_SHORT).show();
+    public void requestForgotPassword(String emailId) {
+        if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+            retrofitManager.forgotPassword(this, emailId);
+        } else {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -62,14 +64,11 @@ retrofitManager.forgotPassword(this,emailId);
         return true;
     }
 
-    public void checkEntry()
-    {
-        if(TextUtils.isEmpty(edtEmailId.getText().toString()))
-        {
-            edtEmailId.setError("Enter emailId");
-        }
-        else{
-            edtEmailId.setError(null);
+    public void checkEntry() {
+        if (TextUtils.isEmpty(edtEmailId.getText().toString())) {
+            layoutEdtEmailId.setError("Enter emailId");
+        } else {
+            layoutEdtEmailId.setError(null);
             mProgressBar.setVisibility(View.VISIBLE);
             requestForgotPassword(edtEmailId.getText().toString());
         }
@@ -77,21 +76,17 @@ retrofitManager.forgotPassword(this,emailId);
 
     @Override
     public void onDataReceived(IModel response) {
-        if (response!=null && response instanceof SimpleMessageResponse)
-        {
-            SimpleMessageResponse simpleMessageResponse=(SimpleMessageResponse)response;
-            if(simpleMessageResponse.getStatus_code() ==404)
-            {
-                edtEmailId.setError("Enter correct emailId");
-                Toast.makeText(getApplicationContext(),"Enter correct emailId",Toast.LENGTH_SHORT).show();
+        if (response != null && response instanceof SimpleMessageResponse) {
+            SimpleMessageResponse simpleMessageResponse = (SimpleMessageResponse) response;
+            if (simpleMessageResponse.getStatus_code() == 404) {
+                layoutEdtEmailId.setError("Enter correct emailId");
+                Toast.makeText(getApplicationContext(), "Enter correct emailId", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Password has been sent your mail id", Toast.LENGTH_SHORT).show();
             }
-            else {
-                Toast.makeText(getApplicationContext(),"Password has been sent your mail id",Toast.LENGTH_SHORT).show();
-            }
-        }
-        else {
-            edtEmailId.setError("Enter correct emailId");
-            Toast.makeText(getApplicationContext(),"Enter correct emailId",Toast.LENGTH_SHORT).show();
+        } else {
+            layoutEdtEmailId.setError("Enter correct emailId");
+            Toast.makeText(getApplicationContext(), "Enter correct emailId", Toast.LENGTH_SHORT).show();
         }
 
         mProgressBar.setVisibility(View.GONE);
@@ -112,9 +107,9 @@ retrofitManager.forgotPassword(this,emailId);
         switch (item.getItemId()) {
             case R.id.menuSubmit:
                 checkEntry();
-                Intent intent1 = new Intent(ForgotPassword.this, SignInAccount.class);
+                /*Intent intent1 = new Intent(ForgotPassword.this, SignInAccount.class);
                 startActivity(intent1);
-                finish();
+                finish();*/
                 break;
 
             case android.R.id.home:

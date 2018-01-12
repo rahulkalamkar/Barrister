@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.singular.barrister.DisplayCaseActivity;
@@ -32,6 +33,7 @@ public class Update_Hearing extends AppCompatActivity implements IDataChangeList
     TextInputEditText edtHearingStatus, edtHearingNotes, edtHearingDecision;
     TextInputLayout ltHearingStatus, ltHearingNotes, ltHearingDecision;
     ProgressBar mProgressBar;
+    TextView txt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,8 @@ public class Update_Hearing extends AppCompatActivity implements IDataChangeList
         edtHearingStatus = (TextInputEditText) findViewById(R.id.editTextCaseStatus);
         edtHearingNotes = (TextInputEditText) findViewById(R.id.editTextCaseNotes);
         edtHearingDecision = (TextInputEditText) findViewById(R.id.editTextCaseDecision);
+
+        txt = (TextView) findViewById(R.id.textView);
 
         ltHearingStatus.setFocusable(false);
         edtHearingStatus.setFocusable(false);
@@ -72,6 +76,11 @@ public class Update_Hearing extends AppCompatActivity implements IDataChangeList
         });
     }
 
+    public void dateYetToCome(String date) {
+        ltHearingDecision.setVisibility(View.GONE);
+        txt.setVisibility(View.VISIBLE);
+        txt.setText("Hearing date for this case is " + date + " means hearing is not completed, You can add case decision once hearing is completed.");
+    }
 
     public void setData() {
 
@@ -79,7 +88,9 @@ public class Update_Hearing extends AppCompatActivity implements IDataChangeList
             ltHearingStatus.setVisibility(View.GONE);
             ltHearingNotes.setVisibility(View.VISIBLE);
             ltHearingDecision.setVisibility(View.GONE);
+            dateYetToCome(Utils.getDateFormat(caseHearing.getCase_hearing_date()));
         } else {
+            txt.setVisibility(View.GONE);
             ltHearingStatus.setVisibility(View.VISIBLE);
             ltHearingNotes.setVisibility(View.VISIBLE);
             ltHearingDecision.setVisibility(View.VISIBLE);
@@ -178,7 +189,7 @@ public class Update_Hearing extends AppCompatActivity implements IDataChangeList
     public void checkValues() {
         String case_decision = "", case_notes = "", case_status = "";
         if (edtHearingStatus.getText().toString() != null) {
-            case_status= edtHearingStatus.getText().toString();
+            case_status = edtHearingStatus.getText().toString();
         }
 
         if (edtHearingNotes.getText().toString() != null) {

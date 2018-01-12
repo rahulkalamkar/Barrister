@@ -20,6 +20,7 @@ import com.singular.barrister.Database.Tables.CaseHearingListTable;
 import com.singular.barrister.Database.Tables.StateTable;
 import com.singular.barrister.Model.CaseHearingResponse;
 import com.singular.barrister.Model.Cases.CaseHearing;
+import com.singular.barrister.Model.Client.Client;
 import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.R;
 import com.singular.barrister.RetrofitManager.RetrofitManager;
@@ -29,8 +30,16 @@ import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class HearingDateActivity extends AppCompatActivity implements IDataChangeListener<IModel> {
     RecyclerView mRecycleView;
@@ -119,13 +128,56 @@ public class HearingDateActivity extends AppCompatActivity implements IDataChang
                     caseHearingListTable.getCase_disposed());
             hearingList.add(caseHearing);
         }
-        hearingAdapter = new HearingAdapter(getApplicationContext(), hearingList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecycleView.setLayoutManager(linearLayoutManager);
-        mRecycleView.setAdapter(hearingAdapter);
-
+        setHearingAdapter(reverse(hearingList));
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    public static ArrayList<CaseHearing> reverse(final ArrayList<CaseHearing> list) {
+        final int size = list.size();
+        final int last = size - 1;
+
+        // create a new list, with exactly enough initial capacity to hold the (reversed) list
+        final ArrayList<CaseHearing> result = new ArrayList<>(size);
+
+        // iterate through the list in reverse order and append to the result
+        for (int i = last; i >= 0; --i) {
+            final CaseHearing element = list.get(i);
+            result.add(element);
+        }
+
+        // result now holds a reversed copy of the original list
+        return result;
+    }
+
+    public void sort(ArrayList<CaseHearing> list) {
+        Collections.sort(list, new Comparator<CaseHearing>() {
+
+            public int compare(CaseHearing lhs, CaseHearing rhs) {
+
+                try {
+                    String[] split = lhs.getCase_hearing_date().split(" ");
+                    SimpleDateFormat dateFormatlhs = new SimpleDateFormat("yyyy-MM-dd");
+                    Date convertedDatelhs = dateFormatlhs.parse(split[0]);
+                    Calendar calendarlhs = Calendar.getInstance();
+                    calendarlhs.setTime(convertedDatelhs);
+
+                    String[] split1 = rhs.getCase_hearing_date().split(" ");
+                    SimpleDateFormat dateFormatrhs = new SimpleDateFormat("yyyy-MM-dd");
+                    Date convertedDaterhs = dateFormatrhs.parse(split1[0]);
+                    Calendar calendarrhs = Calendar.getInstance();
+                    calendarrhs.setTime(convertedDaterhs);
+
+                    if (calendarlhs.getTimeInMillis() > calendarrhs.getTimeInMillis()) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
     }
 
     DatabaseHelper databaseHelper = null;
@@ -165,16 +217,23 @@ public class HearingDateActivity extends AppCompatActivity implements IDataChang
             if (hearingAdapter != null) {
                 hearingAdapter.notifyDataSetChanged();
             } else {
-                hearingAdapter = new HearingAdapter(getApplicationContext(), hearingList);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                mRecycleView.setLayoutManager(linearLayoutManager);
-                mRecycleView.setAdapter(hearingAdapter);
+                setHearingAdapter(reverse(hearingList));
+
             }
         } else {
 
         }
         mProgressBar.setVisibility(View.GONE);
+    }
+
+
+    public void setHearingAdapter(ArrayList<CaseHearing> list) {
+        sort(list);
+        hearingAdapter = new HearingAdapter(getApplicationContext(), list);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecycleView.setLayoutManager(linearLayoutManager);
+        mRecycleView.setAdapter(hearingAdapter);
     }
 
     @Override

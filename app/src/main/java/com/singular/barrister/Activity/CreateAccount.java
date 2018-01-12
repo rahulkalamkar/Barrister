@@ -36,6 +36,8 @@ import com.singular.barrister.Util.NetworkConnection;
 import com.singular.barrister.Util.WebServiceError;
 import com.singular.barrister.WebActivity;
 
+import org.w3c.dom.Text;
+
 public class CreateAccount extends AppCompatActivity implements View.OnClickListener, IDataChangeListener<IModel> {
 
     private TextView txtPrivacyPolicy;
@@ -144,19 +146,21 @@ public class CreateAccount extends AppCompatActivity implements View.OnClickList
             if (loginResult.getError() != null) {
                 toastMessage = loginResult.getError().getErrorType().getMessage();
             } else if (loginResult.wasCancelled()) {
-                toastMessage = "Login Cancelled";
+                toastMessage = "";
             } else {
                 if (loginResult.getAccessToken() != null) {
                     toastMessage = "Success:" + loginResult.getAccessToken().getAccountId();
                     getAccount();
                 }
             }
+            progressBar.setVisibility(View.GONE);
             // Surface the result to your user in an appropriate way.
-            Toast.makeText(
-                    this,
-                    toastMessage,
-                    Toast.LENGTH_LONG)
-                    .show();
+            if (!TextUtils.isEmpty(toastMessage))
+                Toast.makeText(
+                        this,
+                        toastMessage,
+                        Toast.LENGTH_LONG)
+                        .show();
         }
     }
 

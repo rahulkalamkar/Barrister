@@ -195,8 +195,8 @@ public class SignInAccount extends AppCompatActivity implements View.OnClickList
     }
 
     public void showError() {
-        edtNumber.setError("Enter registered number");
-        edtPassword.setError("Incorrect password");
+        txtILEdtNumber.setError("Enter registered number");
+        txtILEdtPassword.setError("Incorrect password");
     }
 
     @Override
