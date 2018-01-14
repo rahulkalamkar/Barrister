@@ -49,8 +49,8 @@ public class ImportantLinkFragment extends Fragment {
     }
 
     public void hideError(){
-        txtILWebNameError.setErrorEnabled(true);
-        txtILWebsiteError.setErrorEnabled(true);
+        txtILWebNameError.setErrorEnabled(false);
+        txtILWebsiteError.setErrorEnabled(false);
     }
 
     public boolean checkValues() {

@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -42,6 +43,8 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.shahroz.svlibrary.interfaces.onSearchListener;
 import com.shahroz.svlibrary.interfaces.onSimpleSearchActionsListener;
 import com.shahroz.svlibrary.utils.Util;
@@ -49,6 +52,13 @@ import com.shahroz.svlibrary.widgets.MaterialSearchView;
 import com.singular.barrister.Activity.SubActivity.AddCaseActivity;
 import com.singular.barrister.Activity.SubActivity.AddClientActivity;
 import com.singular.barrister.Activity.SubActivity.AddCourtActivity;
+import com.singular.barrister.Database.DB.DatabaseHelper;
+import com.singular.barrister.Database.Tables.Case.CaseTable;
+import com.singular.barrister.Database.Tables.Case.Query.CaseQuery;
+import com.singular.barrister.Database.Tables.Client.BaseClientTable;
+import com.singular.barrister.Database.Tables.CourtTable;
+import com.singular.barrister.Database.Tables.Today.Query.TodayCaseQuery;
+import com.singular.barrister.Database.Tables.Today.TodayCaseTable;
 import com.singular.barrister.Fragment.CasesFragment;
 import com.singular.barrister.Fragment.ClientFragment;
 import com.singular.barrister.Fragment.CourtFragment;
@@ -61,6 +71,8 @@ import com.singular.barrister.Util.FCM.Utils.NotificationUtils;
 import com.singular.barrister.Util.NetworkConnection;
 
 import java.lang.reflect.Field;
+import java.sql.SQLException;
+import java.util.List;
 
 public class HomeScreen extends AppCompatActivity implements onSimpleSearchActionsListener, onSearchListener {
 
@@ -331,19 +343,116 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
         return true;
     }
 
+    public void deleteAllData() {
+        // delete all  today's cases
+        TodayCaseQuery todayCaseQuery = new TodayCaseQuery(getApplicationContext());
+        todayCaseQuery.deleteAllTable();
+
+        // delete all clients
+        deleteClient();
+
+        // delete all court
+        deleteCourt();
+
+        // delete all cases
+
+        List<CaseTable> list = new CaseQuery(getApplicationContext()).getList();
+        for (CaseTable caseTable : list) {
+            deleteCase(caseTable);
+        }
+    }
+
+    DatabaseHelper databaseHelper;
+
+    private DatabaseHelper getHelper(Context context) {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
+    public void deleteCourt() {
+        List<CourtTable> list = getAllCourt();
+        for (CourtTable courtTable : list) {
+            Dao<CourtTable, Integer> courtTableDao = null;
+            try {
+                if (getHelper(getApplicationContext()) != null)
+                    courtTableDao = getHelper(getApplicationContext()).getCourtTableDao();
+                courtTableDao.delete(courtTable);
+            } catch (SQLException e) {
+            }
+        }
+    }
+
+    public void deleteCase(CaseTable caseTable) {
+        Dao<CaseTable, Integer> caseTableIntegerDao;
+        try {
+            if (getHelper(getApplicationContext()) != null) {
+                caseTableIntegerDao = getHelper(getApplicationContext()).getACaseTableDao();
+                caseTableIntegerDao.delete(caseTable);
+                Log.e("Case table", "deleted");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Log.e("Case table", "" + e.getMessage());
+        }
+    }
+
+    public List<CourtTable> getAllCourt() {
+        Dao<CourtTable, Integer> courtTableDao = null;
+        try {
+            if (getHelper(getApplicationContext()) != null)
+                courtTableDao = getHelper(getApplicationContext()).getCourtTableDao();
+            return courtTableDao.queryForAll();
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+
+    public void deleteClient() {
+
+        List<BaseClientTable> list;
+        list = getClientList();
+
+        for (BaseClientTable baseClientTable : list) {
+            deleteClient(baseClientTable);
+        }
+
+    }
+
+    public List<BaseClientTable> getClientList() {
+        Dao<BaseClientTable, Integer> baseClientTables = null;
+        try {
+            if (getHelper(getApplicationContext()) != null) {
+                baseClientTables = getHelper(getApplicationContext()).getBaseClientTableDao();
+            }
+            return baseClientTables.queryForAll();
+        } catch (SQLException e) {
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void deleteClient(BaseClientTable baseClientTable) {
+        Dao<BaseClientTable, Integer> baseClientTables;
+        try {
+            if (getHelper(getApplicationContext()) != null) {
+                baseClientTables = getHelper(getApplicationContext()).getBaseClientTableDao();
+                baseClientTables.delete(baseClientTable);
+            }
+            Log.e("BAseClient table", "deleted");
+        } catch (Exception e) {
+            Log.e("BAseClient table", "" + e);
+        }
+    }
+
     public void logOut() {
         if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
-            try {
-                getApplicationContext().deleteDatabase("barrister.db");
-            } catch (Exception e) {
 
-            }
-            RetrofitManager retrofitManager = new RetrofitManager();
-            retrofitManager.setLogOut(new UserPreferance(getApplicationContext()).getToken());
-            new UserPreferance(getApplicationContext()).logOut();
-            Intent intent = new Intent(HomeScreen.this, LandingScreen.class);
-            startActivity(intent);
-            finish();
+            new LogoutAsync().execute();
+
         } else {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
         }
@@ -558,5 +667,31 @@ public class HomeScreen extends AppCompatActivity implements onSimpleSearchActio
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
+    }
+
+    public class LogoutAsync extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            deleteAllData();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+            try {
+                getApplicationContext().deleteDatabase("barrister.db");
+            } catch (Exception e) {
+
+            }
+            RetrofitManager retrofitManager = new RetrofitManager();
+            retrofitManager.setLogOut(new UserPreferance(getApplicationContext()).getToken());
+            new UserPreferance(getApplicationContext()).logOut();
+            Intent intent = new Intent(HomeScreen.this, LandingScreen.class);
+            startActivity(intent);
+            finish();
+            super.onPostExecute(aVoid);
+        }
     }
 }

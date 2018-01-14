@@ -88,20 +88,72 @@ public class HearingDateActivity extends AppCompatActivity implements IDataChang
         for (int i = 0; i < list.size(); i++) {
             CaseHearing caseHearing = list.get(i);
             CaseHearingListTable caseHearingListTable = new CaseHearingListTable(caseHearing.getId(), caseHearing.getCase_id(), caseHearing.getCase_hearing_date(),
-                    caseHearing.getCase_disposed(), caseHearing.getCase_decision(), caseHearing.getCase_notes());
+                    caseHearing.getCase_disposed() != null ? caseHearing.getCase_disposed() : "", caseHearing.getCase_decision() != null ?
+                    caseHearing.getCase_decision() : "", caseHearing.getCase_notes());
 
             final Dao<CaseHearingListTable, Integer> caseHearingListTableIntegerDao;
             try {
                 if (getHelper(getApplicationContext()) != null) {
                     caseHearingListTableIntegerDao = getHelper(getApplicationContext()).getCaseHearingListDao();
-                    caseHearingListTableIntegerDao.create(caseHearingListTable);
-                    Log.e("caseHearingListTable", "Value added ");
-                }
+                    if(!getHearing(caseHearingListTable)) {
+                        caseHearingListTableIntegerDao.create(caseHearingListTable);
+                        Log.e("caseHearingListTable", "Value added ");
+                    }
+                    else
+                    {
+                        caseHearingListTableIntegerDao.update(updateHearing(caseHearingListTable));
+                        Log.e("caseHearingListTable", "updated");
+                    }}
             } catch (SQLException e) {
                 e.printStackTrace();
                 Log.e("caseHearingListTable", "Error " + e);
             }
         }
+    }
+
+    public CaseHearingListTable updateHearing(CaseHearingListTable caseHearingListTable) {
+        List<CaseHearingListTable> caseHearingList = getHearingItem(caseHearingListTable);
+
+        caseHearingListTable.setId(caseHearingList.get(0).getId());
+        return caseHearingListTable;
+    }
+
+    public List<CaseHearingListTable>  getHearingItem(CaseHearingListTable caseHearingListTable) {
+        boolean isAvailable = false;
+        List<CaseHearingListTable> list = null;
+        Dao<CaseHearingListTable, Integer> caseHearingListTableIntegerDao;
+        try {
+            if (getHelper(getApplicationContext()) != null) {
+                caseHearingListTableIntegerDao = getHelper(getApplicationContext()).getCaseHearingListDao();
+                list = caseHearingListTableIntegerDao.queryForEq("hearing_id", caseHearingListTable.getHearing_id());
+                Log.e("caseHearingListTable", "Value added ");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Log.e("caseHearingListTable", "Error " + e);
+        }
+        return list;
+    }
+
+    public boolean getHearing(CaseHearingListTable caseHearingListTable) {
+        boolean isAvailable = false;
+        List<CaseHearingListTable> list = null;
+        Dao<CaseHearingListTable, Integer> caseHearingListTableIntegerDao;
+        try {
+            if (getHelper(getApplicationContext()) != null) {
+                caseHearingListTableIntegerDao = getHelper(getApplicationContext()).getCaseHearingListDao();
+                list = caseHearingListTableIntegerDao.queryForEq("hearing_id", caseHearingListTable.getHearing_id());
+                Log.e("caseHearingListTable", "Value added ");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Log.e("caseHearingListTable", "Error " + e);
+        }
+
+        if (list != null && list.size() > 0) {
+            isAvailable = true;
+        }
+        return isAvailable;
     }
 
     public List<CaseHearingListTable> getLocalList(String caseId) {
@@ -214,18 +266,23 @@ public class HearingDateActivity extends AppCompatActivity implements IDataChang
             if (hearingList != null && hearingList.size() != 0) {
                 insertData(hearingList);
             }
-            if (hearingAdapter != null) {
-                hearingAdapter.notifyDataSetChanged();
-            } else {
+           // if (hearingAdapter != null) {
+         //       hearingAdapter.notifyDataSetChanged();
+       //     } else {
                 setHearingAdapter(reverse(hearingList));
 
-            }
+            //}
         } else {
 
         }
         mProgressBar.setVisibility(View.GONE);
     }
 
+    @Override
+    protected void onResume() {
+        getList();
+        super.onResume();
+    }
 
     public void setHearingAdapter(ArrayList<CaseHearing> list) {
         sort(list);

@@ -177,7 +177,7 @@ public class CreateAccount extends AppCompatActivity implements View.OnClickList
 
                 // Get phone number
                 PhoneNumber phoneNumber = account.getPhoneNumber();
-                String phoneNumberString = phoneNumber.toString();
+                String phoneNumberString = phoneNumber.getPhoneNumber();
                 country_code = phoneNumber.getCountryCode();
                 edtNumber.setText(phoneNumberString);
                 progressBar.setVisibility(View.GONE);

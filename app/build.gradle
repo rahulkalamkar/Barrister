@@ -1,11 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
+
     signingConfigs {
         config {
             keyAlias 'Barrister'
             keyPassword 'android'
-            storeFile file('C:/Users/rahul.kalamkar/KeyStore/Barrister.jks')
+            storeFile file('/Users/rahulbabanaraokalamkar/Desktop/Rahul\'Project/Mukesh Projects/Barrister.jks')
             storePassword 'android'
         }
     }
@@ -25,12 +26,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
             signingConfig signingConfigs.config
         }
         debug {
             minifyEnabled false
-            signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
     productFlavors {
@@ -54,8 +56,6 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true;
     }
-
-
     compile project(path: ':library')
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'

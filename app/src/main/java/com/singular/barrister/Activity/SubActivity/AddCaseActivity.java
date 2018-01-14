@@ -401,8 +401,9 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         } else {
             if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
                 disableError();
-                mProgressBar.setVisibility(View.VISIBLE);
                 if (selectedClient != null) {
+                    txtSelectClient.setTextColor(Color.parseColor("#777777"));
+                    mProgressBar.setVisibility(View.VISIBLE);
                     retrofitManager.addCase(this, new UserPreferance(getApplicationContext()).getToken(), selectedClient.getClient_id(), selectedClientType, selectedCourt.getId(), edtCaseCNRNumber.getText().toString(),
                             edtCaseRegisterNumber.getText().toString(),
                             selectedRegisterDate,
@@ -412,9 +413,9 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
                             getJSONFORMAT(edtOpoName.getText().toString(), "91", edtOpoNumber.getText().toString()),
                             getJSONFORMAT(edtOpoName.getText().toString(), "91", edtOpoNumber.getText().toString()),
                             getJSON());
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "try after sometime", Toast.LENGTH_SHORT).show();
+                } else {
+                    txtSelectClient.setTextColor(Color.parseColor("#ff0000"));
+                    Toast.makeText(getApplicationContext(), "Select client first", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Toast.makeText(getApplicationContext(), "Check internet connection", Toast.LENGTH_SHORT).show();

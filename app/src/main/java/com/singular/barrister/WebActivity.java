@@ -22,7 +22,11 @@ public class WebActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         name = bundle.getString("Name");
-        url = bundle.getString("Url");
+
+
+        if (!bundle.getString("Url").startsWith("http://") || !bundle.getString("Url").startsWith("https://")) {
+            url = "http://" + bundle.getString("Url");
+        }
 
         if (getActionBar() != null) {
             getActionBar().setTitle(name);
@@ -62,6 +66,7 @@ public class WebActivity extends AppCompatActivity {
             view.loadUrl(url);
             return true;
         }
+
         @Override
         public void onPageFinished(WebView view, String url) {
             mProgressBar.setVisibility(View.GONE);

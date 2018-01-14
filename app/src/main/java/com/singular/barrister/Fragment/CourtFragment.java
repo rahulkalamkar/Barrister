@@ -153,7 +153,7 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
     public void onDataReceived(IModel response) {
         if (response != null && response instanceof CourtResponse) {
             CourtResponse courtResponse = (CourtResponse) response;
-            if (courtResponse.getData().getCourt() != null) {
+            if (courtResponse.getData().getCourt() != null && courtResponse.getData().getCourt().size()>0) {
                 courtList.clear();
                 courtList.addAll(courtResponse.getData().getCourt());
                 if (getActivity() != null) {

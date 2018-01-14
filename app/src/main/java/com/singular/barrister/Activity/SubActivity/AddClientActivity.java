@@ -56,6 +56,13 @@ public class AddClientActivity extends AppCompatActivity implements IDataChangeL
     }
 
     public void setOtherErrorNull() {
+        ltedtFirstName.setErrorEnabled(false);
+        ltedtLastName.setErrorEnabled(false);
+        ltedtEmailId.setErrorEnabled(false);
+        ltedtPhone.setErrorEnabled(false);
+        ltedtPassword.setErrorEnabled(false);
+
+
         ltedtFirstName.setError(null);
         ltedtLastName.setError(null);
         ltedtEmailId.setError(null);
@@ -66,29 +73,38 @@ public class AddClientActivity extends AppCompatActivity implements IDataChangeL
     public void checkValues() {
         if (TextUtils.isEmpty(edtFirstName.getText().toString())) {
             setOtherErrorNull();
+            ltedtFirstName.setErrorEnabled(true);
             ltedtFirstName.setError("Enter first name");
         } else if (TextUtils.isEmpty(edtLastName.getText().toString())) {
             setOtherErrorNull();
+            ltedtLastName.setErrorEnabled(true);
             ltedtLastName.setError("Enter last name");
         } else if (TextUtils.isEmpty(edtPhone.getText().toString())) {
             setOtherErrorNull();
+            ltedtPhone.setErrorEnabled(true);
             ltedtPhone.setError("Enter phone number");
         } else if (edtPhone.getText().toString().trim().length() < 10) {
             setOtherErrorNull();
+            ltedtPhone.setErrorEnabled(true);
             ltedtPhone.setError("Enter valid phone number");
         } else if (TextUtils.isEmpty(edtEmailId.getText().toString())) {
             setOtherErrorNull();
+            ltedtEmailId.setErrorEnabled(true);
             ltedtEmailId.setError("Enter email id");
         } else if (!isValidEmail(edtEmailId.getText().toString())) {
             setOtherErrorNull();
+            ltedtEmailId.setErrorEnabled(true);
             ltedtEmailId.setError("Enter valid email id");
         } else if (TextUtils.isEmpty(edtPassword.getText().toString())) {
             setOtherErrorNull();
+            ltedtPassword.setErrorEnabled(true);
             ltedtPassword.setError("Enter password");
         } else if (edtPassword.getText().toString().length() < 6) {
             setOtherErrorNull();
+            ltedtPassword.setErrorEnabled(true);
             ltedtPassword.setError("Password should be at least of 6 digit");
         } else {
+            setOtherErrorNull();
             ltedtFirstName.setError(null);
             ltedtLastName.setError(null);
             ltedtEmailId.setError(null);

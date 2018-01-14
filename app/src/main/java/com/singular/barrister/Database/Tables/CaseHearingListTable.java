@@ -27,6 +27,14 @@ public class CaseHearingListTable implements Serializable {
     @DatabaseField(columnName = "case_disposed", canBeNull = true)
     String case_disposed;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getCase_notes() {
         return case_notes;
     }

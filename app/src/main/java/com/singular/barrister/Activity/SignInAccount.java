@@ -1,5 +1,6 @@
 package com.singular.barrister.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -17,7 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.singular.barrister.Activity.ClientLogin.ClientHomeScreen;
+import com.singular.barrister.Database.DB.DatabaseHelper;
 import com.singular.barrister.Model.RegisterResponse;
 import com.singular.barrister.Preferance.UserPreferance;
 import com.singular.barrister.R;
@@ -69,6 +72,15 @@ public class SignInAccount extends AppCompatActivity implements View.OnClickList
 
     }
 
+    DatabaseHelper databaseHelper;
+    private DatabaseHelper getHelper(Context context) {
+        if (context == null)
+            return null;
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -89,6 +101,7 @@ public class SignInAccount extends AppCompatActivity implements View.OnClickList
                         progressBar.setVisibility(View.VISIBLE);
                         try {
                             getApplicationContext().deleteDatabase("barrister.db");
+                            getHelper(getApplicationContext());
                         } catch (Exception e) {
 
                         }

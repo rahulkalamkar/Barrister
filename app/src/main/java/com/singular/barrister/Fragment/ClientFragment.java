@@ -203,7 +203,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
     public void onDataReceived(IModel response) {
         if (response != null && response instanceof ClientResponse) {
             ClientResponse clientResponse = (ClientResponse) response;
-            if (clientResponse.getData().getClient() != null) {
+            if (clientResponse.getData().getClient() != null && clientResponse.getData().getClient().size()>0) {
                 clientList.clear();
                 clientList.addAll(clientResponse.getData().getClient());
                 Collections.sort(clientList, Client.ClientComparator);

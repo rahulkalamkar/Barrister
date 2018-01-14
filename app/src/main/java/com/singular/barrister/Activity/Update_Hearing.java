@@ -130,7 +130,7 @@ public class Update_Hearing extends AppCompatActivity implements IDataChangeList
             } else if (caseHearing.getCase_disposed().equalsIgnoreCase("hearing postponed")) {
                 i = 1;
             } else {
-                i = 0;
+                i = 3;
             }
         }
         //list of items
@@ -215,6 +215,7 @@ public class Update_Hearing extends AppCompatActivity implements IDataChangeList
     @Override
     public void onDataReceived(IModel response) {
         Toast.makeText(getApplicationContext(), "Data updated", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override

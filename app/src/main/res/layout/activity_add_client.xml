@@ -25,7 +25,7 @@
                 android:id="@+id/LayoutEditTextFirstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true">
+                app:errorEnabled="false">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/editTextFirstName"
@@ -40,7 +40,7 @@
                 android:id="@+id/LayoutEditTextLastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true">
+                app:errorEnabled="false">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/editTextLastName"
@@ -54,7 +54,7 @@
                 android:id="@+id/LayoutEditTextNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true">
+                app:errorEnabled="false">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/editTextNumber"
@@ -70,7 +70,7 @@
                 android:id="@+id/LayoutEditTextEMail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true">
+                app:errorEnabled="false">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/editTextEMail"
@@ -85,7 +85,7 @@
                 android:id="@+id/LayoutEditTextPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:errorEnabled="true">
+                app:errorEnabled="false">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/editTextPassword"
