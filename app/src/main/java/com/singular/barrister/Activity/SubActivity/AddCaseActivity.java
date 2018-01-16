@@ -81,12 +81,11 @@ import java.util.List;
 public class AddCaseActivity extends AppCompatActivity implements CaseListeners, IDataChangeListener<IModel> {
 
     TextInputLayout txtILCaseStatus, txtILNextHearingDate, txtILCaseType, txtILSelectCourt, txtILCaseCNRNumber, txtILCaseRegisterNumber, txtILCaseRegisterDate,
-            txtILCaseNotes, txtILOpoName, txtILOpoNumber, txtILOpoLawName, txtILOpoLawNumber;
+            txtILCaseNotes, txtILOpoName, txtILOpoNumber, txtILOpoLawName, txtILOpoLawNumber,txtILSelectClient;
 
     TextInputEditText edtCaseStatus, edtNextHearingDate, edtCaseType, edtSelectCourt, edtCaseCNRNumber, edtCaseRegisterNumber, edtCaseRegisterDate,
-            edtCaseNotes, edtOpoName, edtOpoNumber, edtOpoLawyerName, edtOpoLawyerNumber;
+            edtCaseNotes, edtOpoName, edtOpoNumber, edtOpoLawyerName, edtOpoLawyerNumber,edtSelectClient;
 
-    TextView txtSelectClient;
     ProgressBar mProgressBar;
     RadioButton rdtPetitioner, rdtDefender, rdtThirdParty;
     ArrayList<CasesTypeData> caseTypeDataList;
@@ -109,6 +108,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
     }
 
     public void disableError() {
+        txtILSelectClient.setErrorEnabled(false);
         txtILCaseStatus.setErrorEnabled(false);
         txtILNextHearingDate.setErrorEnabled(false);
         txtILCaseType.setErrorEnabled(false);
@@ -124,7 +124,6 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
     }
 
     public void initView() {
-        txtSelectClient = (TextView) findViewById(R.id.textViewSelectClient);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         rdtPetitioner = (RadioButton) findViewById(R.id.radioButtonPetitioner);
@@ -167,6 +166,8 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         txtILOpoLawNumber = (TextInputLayout) findViewById(R.id.EditTextOPOLawyerPhoneError);
         edtOpoLawyerNumber = (TextInputEditText) findViewById(R.id.EditTextOPOLawyerPhone);
 
+        txtILSelectClient=(TextInputLayout) findViewById(R.id.EditTextSelectClientError);
+        edtSelectClient=(TextInputEditText) findViewById(R.id.EditTextSelectClient);
 
         edtCaseStatus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,6 +191,14 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
                 convertList(list);*/
                 Intent i = new Intent(getApplicationContext(), SelectCourt.class);
                 startActivityForResult(i, 11);
+            }
+        });
+
+        edtSelectClient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), SelectClient.class);
+                startActivityForResult(i, 22);
             }
         });
 
@@ -219,16 +228,6 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
                 } else {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                 }*/
-            }
-        });
-
-        txtSelectClient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), SelectClient.class);
-                startActivityForResult(i, 22);
-
-                //  fetchAndDisplayClient();
             }
         });
 
@@ -394,15 +393,17 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             disableError();
             txtILOpoLawNumber.setErrorEnabled(true);
             txtILOpoLawNumber.setError("enter valid opposition lawyer number");
-        } else if (txtSelectClient.getText().toString().equalsIgnoreCase("")) {
-            Toast.makeText(getApplicationContext(), "Select client name", Toast.LENGTH_SHORT).show();
+        } else if (edtSelectClient.getText().toString().equalsIgnoreCase("")) {
+            disableError();
+            txtILSelectClient.setErrorEnabled(true);
+            txtILSelectClient.setError("Select client");
+          //  Toast.makeText(getApplicationContext(), "Select client name", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(selectedClientType)) {
             Toast.makeText(getApplicationContext(), "select client type", Toast.LENGTH_SHORT).show();
         } else {
             if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
                 disableError();
                 if (selectedClient != null) {
-                    txtSelectClient.setTextColor(Color.parseColor("#777777"));
                     mProgressBar.setVisibility(View.VISIBLE);
                     retrofitManager.addCase(this, new UserPreferance(getApplicationContext()).getToken(), selectedClient.getClient_id(), selectedClientType, selectedCourt.getId(), edtCaseCNRNumber.getText().toString(),
                             edtCaseRegisterNumber.getText().toString(),
@@ -414,8 +415,9 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
                             getJSONFORMAT(edtOpoName.getText().toString(), "91", edtOpoNumber.getText().toString()),
                             getJSON());
                 } else {
-                    txtSelectClient.setTextColor(Color.parseColor("#ff0000"));
-                    Toast.makeText(getApplicationContext(), "Select client first", Toast.LENGTH_SHORT).show();
+                    disableError();
+                    txtILSelectClient.setErrorEnabled(true);
+                    txtILSelectClient.setError("Select client");
                 }
             } else {
                 Toast.makeText(getApplicationContext(), "Check internet connection", Toast.LENGTH_SHORT).show();
@@ -732,7 +734,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
 
     public void selectedClient(Client client) {
         selectedClient = client;
-        txtSelectClient.setText(client.getClient().getFirst_name() + " " + client.getClient().getLast_name());
+        edtSelectClient.setText(client.getClient().getFirst_name() + " " + client.getClient().getLast_name());
     }
 
     @Override
