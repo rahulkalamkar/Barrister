@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'Barrister'
             keyPassword 'android'
-            storeFile file('C:/Users/rahul.kalamkar/KeyStore/Barrister.jks')
+            storeFile file('/Users/rahulbabanaraokalamkar/Desktop/Rahul\'Project/Mukesh Projects/Barrister.jks')
             storePassword 'android'
         }
     }

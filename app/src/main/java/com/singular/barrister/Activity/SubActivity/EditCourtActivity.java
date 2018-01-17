@@ -482,7 +482,7 @@ public class EditCourtActivity extends AppCompatActivity implements IDataChangeL
                         selectedSubDistrict = null;
                         edtSubDistrict.setText("");
                     }
-                }else {
+                } else {
                     selectedDistrict = (District) data.getExtras().getSerializable("District");
                     edtDistrict.setText(selectedDistrict.getName());
                 }

@@ -44,8 +44,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                     android:hint="Next Hearing Date"
+                    android:inputType="textNoSuggestions|textCapWords|textCapSentences"
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
@@ -60,8 +60,11 @@
                     android:id="@+id/editTextCaseNotes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textNoSuggestions|textCapWords|textCapSentences"
-                    android:hint="Case Notes"/>
+                    android:gravity="top|left"
+                    android:hint="Case Notes"
+                    android:maxLines="4"
+                    android:minLines="3"
+                    android:scrollbars="vertical" />
 
             </android.support.design.widget.TextInputLayout>
 
