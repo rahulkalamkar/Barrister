@@ -48,6 +48,26 @@ public class CaseQuery {
         this.context = context;
     }
 
+    public void deleteCase(Case aCase) {
+        List<CaseTable> list = null;
+        Dao<CaseTable, Integer> caseTableIntegerDao = null;
+        try {
+            if (context != null && getHelper(context) != null) {
+                caseTableIntegerDao = getHelper(context).getACaseTableDao();
+                list = caseTableIntegerDao.queryForEq("case_id", aCase.getId());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Log.e("Case table list", "" + e);
+        }
+
+        if (list != null && list.size() > 0) {
+            for (CaseTable caseTable : list) {
+                deleteCase(caseTable);
+            }
+        }
+    }
+
     private DatabaseHelper getHelper(Context context) {
         if (databaseHelper == null && context != null) {
             databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);

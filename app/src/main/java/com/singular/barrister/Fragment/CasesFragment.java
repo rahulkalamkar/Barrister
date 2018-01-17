@@ -297,8 +297,12 @@ public class CasesFragment extends Fragment implements IDataChangeListener<IMode
         } else if (item.getTitle() == "Delete") {
             if (getActivity() != null) {
                 retrofitManager.deleteCase(new UserPreferance(getActivity()).getToken(), selectedItem.getId());
+                new CaseQuery(getActivity()).deleteCase(selectedItem);
                 caseList.remove(selectedItem);
                 courtListAdapter.notifyDataSetChanged();
+                if (caseList.size() == 0) {
+                    showError();
+                }
             }
         } else {
             return false;

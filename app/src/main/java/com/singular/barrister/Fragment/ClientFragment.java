@@ -150,7 +150,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
             if (getActivity() != null) {
                 //     Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
                 List<BaseClientTable> list = getLocalData();
-                if (list != null && list.size()!=0) {
+                if (list != null && list.size() != 0) {
                     convertAndDisplay(list);
                 } else {
                     showError();
@@ -203,7 +203,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
     public void onDataReceived(IModel response) {
         if (response != null && response instanceof ClientResponse) {
             ClientResponse clientResponse = (ClientResponse) response;
-            if (clientResponse.getData().getClient() != null && clientResponse.getData().getClient().size()>0) {
+            if (clientResponse.getData().getClient() != null && clientResponse.getData().getClient().size() > 0) {
                 clientList.clear();
                 clientList.addAll(clientResponse.getData().getClient());
                 Collections.sort(clientList, Client.ClientComparator);
@@ -226,8 +226,9 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
                     startActivity(intent);
                     getActivity().finish();
                 }
-            } else
+            } else {
                 showError();
+            }
         } else {
             if (getActivity() != null) {
                 Toast.makeText(getActivity(), "Your session is Expired", Toast.LENGTH_SHORT).show();
@@ -316,8 +317,12 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         } else if (item.getTitle() == "Delete") {
             if (getActivity() != null) {
                 retrofitManager.deleteClient(new UserPreferance(getActivity()).getToken(), selectedClient.getClient_id());
+                deleteClient(selectedClient);
                 clientList.remove(selectedClient);
                 clientListAdapter.notifyDataSetChanged();
+                if (clientList.size() == 0) {
+                    showError();
+                }
             }
         } else {
             return false;
@@ -329,6 +334,7 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 "mailto", emailId, null));
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "");
         emailIntent.putExtra(Intent.EXTRA_TEXT, "");
         startActivity(Intent.createChooser(emailIntent, ""));
     }
@@ -493,7 +499,25 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
                 deleteClient(baseClientTable);
             }
         }
+    }
 
+    public void deleteClient(Client client) {
+        List<BaseClientTable> list = null;
+        Dao<BaseClientTable, Integer> baseClientTables;
+        try {
+            if (getHelper() != null) {
+                baseClientTables = getHelper().getBaseClientTableDao();
+                list = baseClientTables.queryForEq("client_id", client.getClient_id());
+            }
+        } catch (Exception e) {
+            Log.e("BAseClient table", "" + e);
+        }
+
+        if (list != null && list.size() > 0) {
+            for (BaseClientTable baseClientTable : list) {
+                deleteClient(baseClientTable);
+            }
+        }
     }
 
     public void deleteClient(BaseClientTable baseClientTable) {
@@ -501,9 +525,9 @@ public class ClientFragment extends Fragment implements IDataChangeListener<IMod
         try {
             if (getHelper() != null) {
                 baseClientTables = getHelper().getBaseClientTableDao();
-                baseClientTables.delete(baseClientTable);
+                int l = baseClientTables.delete(baseClientTable);
+                Log.e("BAseClient table", "deleted " + l);
             }
-            Log.e("BAseClient table", "deleted");
         } catch (Exception e) {
             Log.e("BAseClient table", "" + e);
         }

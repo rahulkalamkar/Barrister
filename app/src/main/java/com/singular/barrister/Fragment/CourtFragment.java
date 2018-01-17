@@ -83,6 +83,7 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
         ads();
         getCourtList();
     }
+
     private AdView mAdView;
 
     public void ads() {
@@ -131,10 +132,9 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
         } else {
             if (getActivity() != null) {
                 List<CourtTable> list = getAllCourt();
-                if (list != null && list.size()!=0) {
+                if (list != null && list.size() != 0) {
                     convertList(list);
-                }
-                else{
+                } else {
                     showError();
                 }
                 //          Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
@@ -153,7 +153,7 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
     public void onDataReceived(IModel response) {
         if (response != null && response instanceof CourtResponse) {
             CourtResponse courtResponse = (CourtResponse) response;
-            if (courtResponse.getData().getCourt() != null && courtResponse.getData().getCourt().size()>0) {
+            if (courtResponse.getData().getCourt() != null && courtResponse.getData().getCourt().size() > 0) {
                 courtList.clear();
                 courtList.addAll(courtResponse.getData().getCourt());
                 if (getActivity() != null) {
@@ -269,6 +269,23 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
             if (delete)
                 deleteCourt(courtTable);
         }
+    }
+
+    public void deleteCourt(CourtData courtData) {
+        List<CourtTable> list = null;
+        Dao<CourtTable, Integer> courtTableDao = null;
+        try {
+            if (getActivity() != null && getHelper(getActivity()) != null)
+                courtTableDao = getHelper(getActivity()).getCourtTableDao();
+            list = courtTableDao.queryForEq("court_id", courtData.getId());
+        } catch (SQLException e) {
+        }
+        if (list != null && list.size() > 0) {
+            for (CourtTable courtTable : list) {
+                deleteCourt(courtTable);
+            }
+        }
+
     }
 
     public void deleteCourt(CourtTable courtTable) {
@@ -439,8 +456,12 @@ public class CourtFragment extends Fragment implements IDataChangeListener<IMode
         if (item.getTitle() == "Delete") {
             if (selectedItem != null && getActivity() != null) {
                 retrofitManager.deleteCourt(new UserPreferance(getActivity()).getToken(), selectedItem.getId());
+                deleteCourt(selectedItem);
                 courtList.remove(selectedItem);
                 courtListAdapter.notifyDataSetChanged();
+                if (courtList.size() == 0) {
+                    showError();
+                }
             }
         } else {
             return false;
