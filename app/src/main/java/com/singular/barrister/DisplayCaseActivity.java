@@ -138,21 +138,25 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
         txtOppositionLawyerNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                call("+91" + txtOppositionLawyerNumber.getText().toString());
+                if (txtOppositionLawyerNumber.getText() != null)
+                    call("+91" + txtOppositionLawyerNumber.getText().toString());
             }
         });
 
         txtOppositionNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                call("+91" + txtOppositionNumber.getText().toString());
+                if (txtOppositionNumber.getText() != null) {
+                    call("+91" + txtOppositionNumber.getText().toString());
+                }
             }
         });
 
         txtClientEmailId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendEmail(txtClientEmailId.getText().toString());
+                if (txtClientEmailId.getText() != null)
+                    sendEmail(txtClientEmailId.getText().toString());
             }
         });
     }
@@ -248,8 +252,10 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
 
         if (aCaseDetail.getCase_status().equalsIgnoreCase("completed")) {
             i = 1;
-        } else {
+        } else if (aCaseDetail.getCase_status().equalsIgnoreCase("in-progress")) {
             i = 0;
+        } else {
+            i = 3;
         }
 
         //list of items
@@ -267,11 +273,16 @@ public class DisplayCaseActivity extends AppCompatActivity implements IDataChang
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (selectedItem != null && !TextUtils.isEmpty(selectedItem)) {
-                            txtStatus.setText(selectedItem);
-                            mProgressBar.setVisibility(View.VISIBLE);
-                            RetrofitManager retrofitManager = new RetrofitManager();
-                            retrofitManager.changeCaseStatus(DisplayCaseActivity.this, new UserPreferance(getApplicationContext()).getToken(), aCaseDetail.getId(), selectedItem);
+                        if (new NetworkConnection(getApplicationContext()).isNetworkAvailable()) {
+                            if (selectedItem != null && !TextUtils.isEmpty(selectedItem)) {
+                                txtStatus.setText(selectedItem);
+                                mProgressBar.setVisibility(View.VISIBLE);
+                                aCaseDetail.setCase_status(selectedItem);
+                                RetrofitManager retrofitManager = new RetrofitManager();
+                                retrofitManager.changeCaseStatus(DisplayCaseActivity.this, new UserPreferance(getApplicationContext()).getToken(), aCaseDetail.getId(), selectedItem);
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Check internet connection", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

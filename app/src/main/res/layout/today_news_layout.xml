@@ -52,6 +52,7 @@
                     android:layout_marginRight="@dimen/fab_margin"
                     android:layout_weight="0.95"
                     android:text=""
+                    android:maxLines="3"
                     android:textColor="@color/textColorDark"
                     android:textSize="18sp"
                     android:textStyle="bold" />

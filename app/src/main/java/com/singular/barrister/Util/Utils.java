@@ -26,6 +26,8 @@ import java.util.HashMap;
 public class Utils {
 
     public static String getDateFormat(String date) {
+        if (date == null)
+            return "";
         if (date.length() == 10) {
             return getDateFormatTime(date);
         }
@@ -34,18 +36,27 @@ public class Utils {
             String month = getMonth(temp[1]);
             String dateOfMonth = temp[2].substring(0, 2);
             String time = temp[2].substring(3);
-            String formattedDate = dateOfMonth + " " + getMonth(temp[1]) + " " + temp[0] + " " + time;
-            return formattedDate;
+            if (getMonth(temp[1]) != null) {
+                String formattedDate = dateOfMonth + " " + getMonth(temp[1]) + " " + temp[0] + " " + time;
+                return formattedDate;
+            } else {
+                return "";
+            }
         } catch (Exception e) {
             return getDateFormatTime(date);
         }
     }
 
     public static String getDateFormatTime(String date) {
+        if (date == null)
+            return "";
         String[] temp = date.split("-");
         String dateOfMonth = temp[2];
-        String formattedDate = dateOfMonth + " " + getMonth(temp[1]) + " " + temp[0];
-        return formattedDate;
+        if (getMonth(temp[1]) != null) {
+            String formattedDate = dateOfMonth + " " + getMonth(temp[1]) + " " + temp[0];
+            return formattedDate;
+        } else
+            return "";
     }
 
 

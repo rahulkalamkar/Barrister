@@ -1,7 +1,10 @@
 package com.singular.barrister;
 
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
@@ -16,6 +19,7 @@ import com.singular.barrister.Preferance.UserPreferance;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,6 +43,36 @@ public class ApplicationClass extends MultiDexApplication {
         fullScreenAds();
     }
 
+    private boolean isAppIsInBackground(Context context) {
+        if (context == null)
+            return true;
+        boolean isInBackground = true;
+        try {
+            ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+                List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
+                for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
+                    if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                        for (String activeProcess : processInfo.pkgList) {
+                            if (activeProcess.equals(context.getPackageName())) {
+                                isInBackground = false;
+                            }
+                        }
+                    }
+                }
+            } else {
+                List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+                ComponentName componentInfo = taskInfo.get(0).topActivity;
+                if (componentInfo.getPackageName().equals(context.getPackageName())) {
+                    isInBackground = false;
+                }
+            }
+        } catch (Exception e) {
+            isInBackground = false;
+        }
+        return isInBackground;
+    }
+
     private InterstitialAd mInterstitialAd;
     private boolean isFirstTime = false;
 
@@ -56,7 +90,10 @@ public class ApplicationClass extends MultiDexApplication {
             @Override
             public void onAdLoaded() {
                 if (isFirstTime && new UserPreferance(getApplicationContext()).isUserLoggedIn()) {
-                    mInterstitialAd.show();
+                    if (!isAppIsInBackground(getApplicationContext())) {
+                        mInterstitialAd.show();
+                    }
+
                 }
                 isFirstTime = false;
                 // Code to be executed when an ad finishes loading.
@@ -103,7 +140,9 @@ public class ApplicationClass extends MultiDexApplication {
                 mTimerHandler.post(new Runnable() {
                     public void run() {
                         if (mInterstitialAd.isLoaded() && new UserPreferance(getApplicationContext()).isUserLoggedIn()) {
-                            mInterstitialAd.show();
+                            if (!isAppIsInBackground(getApplicationContext())) {
+                                mInterstitialAd.show();
+                            }
                         }
                     }
                 });

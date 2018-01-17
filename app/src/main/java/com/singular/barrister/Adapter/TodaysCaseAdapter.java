@@ -76,7 +76,7 @@ public class TodaysCaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
 
             todayViewHolder.txtNotes.setText("Notes : " + (caseList.get(position).getHearing() != null ? (caseList.get(position).getHearing().getCase_decision() != null ? caseList.get(position).getHearing().getCase_decision() : "") : ""));
-            todayViewHolder.txtCNRNumber.setText("CNR : " + caseList.get(position).getCase_cnr_number());
+            todayViewHolder.txtCNRNumber.setText("CNR : " + (caseList.get(position).getCase_cnr_number() !=null ? caseList.get(position).getCase_cnr_number() :""));
 
             todayViewHolder.txtCourtName.setText(caseList.get(position).getCourt().getCourt_name());
             todayViewHolder.txtAddress.setText(getAddress(caseList.get(position).getCourt()));

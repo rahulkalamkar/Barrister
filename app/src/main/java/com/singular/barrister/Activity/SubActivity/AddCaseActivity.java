@@ -81,10 +81,10 @@ import java.util.List;
 public class AddCaseActivity extends AppCompatActivity implements CaseListeners, IDataChangeListener<IModel> {
 
     TextInputLayout txtILCaseStatus, txtILNextHearingDate, txtILCaseType, txtILSelectCourt, txtILCaseCNRNumber, txtILCaseRegisterNumber, txtILCaseRegisterDate,
-            txtILCaseNotes, txtILOpoName, txtILOpoNumber, txtILOpoLawName, txtILOpoLawNumber,txtILSelectClient;
+            txtILCaseNotes, txtILOpoName, txtILOpoNumber, txtILOpoLawName, txtILOpoLawNumber, txtILSelectClient;
 
     TextInputEditText edtCaseStatus, edtNextHearingDate, edtCaseType, edtSelectCourt, edtCaseCNRNumber, edtCaseRegisterNumber, edtCaseRegisterDate,
-            edtCaseNotes, edtOpoName, edtOpoNumber, edtOpoLawyerName, edtOpoLawyerNumber,edtSelectClient;
+            edtCaseNotes, edtOpoName, edtOpoNumber, edtOpoLawyerName, edtOpoLawyerNumber, edtSelectClient;
 
     ProgressBar mProgressBar;
     RadioButton rdtPetitioner, rdtDefender, rdtThirdParty;
@@ -166,8 +166,8 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
         txtILOpoLawNumber = (TextInputLayout) findViewById(R.id.EditTextOPOLawyerPhoneError);
         edtOpoLawyerNumber = (TextInputEditText) findViewById(R.id.EditTextOPOLawyerPhone);
 
-        txtILSelectClient=(TextInputLayout) findViewById(R.id.EditTextSelectClientError);
-        edtSelectClient=(TextInputEditText) findViewById(R.id.EditTextSelectClient);
+        txtILSelectClient = (TextInputLayout) findViewById(R.id.EditTextSelectClientError);
+        edtSelectClient = (TextInputEditText) findViewById(R.id.EditTextSelectClient);
 
         edtCaseStatus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -341,7 +341,7 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             disableError();
             txtILCaseStatus.setErrorEnabled(true);
             txtILCaseStatus.setError("enter case status");
-        } else if (TextUtils.isEmpty(edtNextHearingDate.getText().toString())) {
+        } /*else if (TextUtils.isEmpty(edtNextHearingDate.getText().toString())) {
             disableError();
             txtILNextHearingDate.setErrorEnabled(true);
             txtILNextHearingDate.setError("enter next hearing date");
@@ -349,11 +349,11 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             disableError();
             txtILCaseType.setErrorEnabled(true);
             txtILCaseType.setError("enter case type");
-        } else if (TextUtils.isEmpty(edtSelectCourt.getText().toString())) {
+        } */ else if (TextUtils.isEmpty(edtSelectCourt.getText().toString())) {
             disableError();
             txtILSelectCourt.setErrorEnabled(true);
             txtILSelectCourt.setError("select court");
-        } else if (TextUtils.isEmpty(edtCaseCNRNumber.getText().toString())) {
+        } /*else if (TextUtils.isEmpty(edtCaseCNRNumber.getText().toString())) {
             disableError();
             txtILCaseCNRNumber.setErrorEnabled(true);
             txtILCaseCNRNumber.setError("enter case cnr number");
@@ -393,11 +393,11 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             disableError();
             txtILOpoLawNumber.setErrorEnabled(true);
             txtILOpoLawNumber.setError("enter valid opposition lawyer number");
-        } else if (edtSelectClient.getText().toString().equalsIgnoreCase("")) {
+        } */ else if (edtSelectClient.getText().toString().equalsIgnoreCase("")) {
             disableError();
             txtILSelectClient.setErrorEnabled(true);
             txtILSelectClient.setError("Select client");
-          //  Toast.makeText(getApplicationContext(), "Select client name", Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(getApplicationContext(), "Select client name", Toast.LENGTH_SHORT).show();
         } else if (TextUtils.isEmpty(selectedClientType)) {
             Toast.makeText(getApplicationContext(), "select client type", Toast.LENGTH_SHORT).show();
         } else {
@@ -405,14 +405,16 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
                 disableError();
                 if (selectedClient != null) {
                     mProgressBar.setVisibility(View.VISIBLE);
-                    retrofitManager.addCase(this, new UserPreferance(getApplicationContext()).getToken(), selectedClient.getClient_id(), selectedClientType, selectedCourt.getId(), edtCaseCNRNumber.getText().toString(),
-                            edtCaseRegisterNumber.getText().toString(),
-                            selectedRegisterDate,
-                            selectedCaseType.getCase_type_id(), selectedCaseSubType.getSubcase_type_id(),
-                            edtCaseStatus.getText().toString(),
-                            getJSONFORMAT(edtOpoLawyerName.getText().toString(), "91", edtOpoLawyerNumber.getText().toString()),
-                            getJSONFORMAT(edtOpoName.getText().toString(), "91", edtOpoNumber.getText().toString()),
-                            getJSONFORMAT(edtOpoName.getText().toString(), "91", edtOpoNumber.getText().toString()),
+                    retrofitManager.addCase(this, new UserPreferance(getApplicationContext()).getToken(),
+                            selectedClient.getClient_id(), selectedClientType, selectedCourt.getId(), getValue(edtCaseCNRNumber),
+                            getValue(edtCaseRegisterNumber),
+                            selectedRegisterDate != null ? selectedRegisterDate : "",
+                            selectedCaseType != null ? selectedCaseType.getCase_type_id() : "",
+                            selectedCaseSubType != null ? selectedCaseSubType.getSubcase_type_id() : "",
+                            getValue(edtCaseStatus),
+                            getJSONFORMAT(getValue(edtOpoLawyerName), "91", getValue(edtOpoLawyerNumber)),
+                            getJSONFORMAT(getValue(edtOpoName), "91", getValue(edtOpoNumber)),
+                            getJSONFORMAT(getValue(edtOpoName), "91", getValue(edtOpoNumber)),
                             getJSON());
                 } else {
                     disableError();
@@ -424,6 +426,14 @@ public class AddCaseActivity extends AppCompatActivity implements CaseListeners,
             }
             selectedClientType = null;
         }
+    }
+
+    public String getValue(TextInputEditText view) {
+        String str = "";
+        if (view.getText() != null)
+            return view.getText().toString();
+        else
+            return str;
     }
 
     public String getJSON() {

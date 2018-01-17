@@ -37,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Case Details"
-                    android:textColor="@color/textLightGreen"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp" />
 
                 <TextView
@@ -177,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:text="Next Hearing"
-                    android:textColor="@color/textLightGreen"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp" />
 
                 <TextView
@@ -231,7 +231,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:text="Client Details"
-                    android:textColor="@color/textLightGreen"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp" />
 
                 <TextView
@@ -345,7 +345,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/fab_margin"
                     android:text="Opposition Details"
-                    android:textColor="@color/textLightGreen"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp" />
 
                 <TextView
