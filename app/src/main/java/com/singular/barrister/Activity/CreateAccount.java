@@ -259,7 +259,8 @@ public class CreateAccount extends AppCompatActivity implements View.OnClickList
             case R.id.textViewPrivacy:
                 Bundle bundle = new Bundle();
                 bundle.putString("Name", getResources().getString(R.string.privacy_policy));
-                bundle.putString("Url", "http://www.barristerdiary.com/privacy.html");
+                //bundle.putString("Url", "http://www.barristerdiary.com/privacy.html");
+                bundle.putString("Url", "www.barristerdiary.com/privacy.html");
                 Intent i = new Intent(getApplicationContext(), WebActivity.class);
                 i.putExtras(bundle);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
